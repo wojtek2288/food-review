@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  #### Apps
+  api:
+    build:
+      context: ..
+      dockerfile: dev/Dockerfile.api
+      args:
+        - APP_VERSION=0.0.1-dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../:/app/code
+      - ~/.nuget:/home/dotnet/.nuget
