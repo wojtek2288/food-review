@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # 
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "inzynierka", "inzynierka\inzynierka.csproj", "{E99A74A2-82B7-45C4-BEB5-FF1989952EDE}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{10B95F42-C434-47CA-B9AD-8BF43EB47936}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{41FD8725-1E86-4E0F-84D7-82404A40C255}"

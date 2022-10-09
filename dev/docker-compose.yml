@@ -12,3 +12,35 @@ services:
     volumes:
       - ../:/app/code
       - ~/.nuget:/home/dotnet/.nuget
+    depends_on:
+      - mssql
+
+  migrations:
+    build:
+      context: ..
+      dockerfile: dev/Dockerfile.migrations
+      args:
+        - APP_VERSION=0.0.1-dev
+    volumes:
+      - ../:/app/code
+      - ~/.nuget:/home/dotnet/.nuget
+    depends_on:
+      - mssql
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Passw12#
+    volumes:
+      - mssql:/var/opt/mssql
+    networks:
+      default:
+        aliases:
+          - mssql
+          - mssql.local.pl
+
+volumes:
+  mssql:
