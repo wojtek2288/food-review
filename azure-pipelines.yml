@@ -1,7 +1,3 @@
-# Docker
-# Build a Docker image
-# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
-
 trigger:
 - main
 
@@ -23,8 +19,8 @@ stages:
       - bash: |
            echo "##vso[build.updatebuildnumber]$(major).$(minor).$(patch)"
         name: SetMasterBuildName
-- stage: Build
-  displayName: Build
+- stage: BuildTest
+  displayName: 'Build and Test'
   jobs:
   - job: Backend
     displayName: Backend
