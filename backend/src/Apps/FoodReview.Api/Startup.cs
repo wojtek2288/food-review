@@ -1,3 +1,4 @@
+using FoodReview.Api.Auth;
 using FoodReview.Core.Services;
 
 namespace FoodReview.Api;
@@ -23,6 +24,7 @@ public class Startup
         {
             new ApiModule(config, hostEnv),
             new CoreModule(dbConnStr),
+            new AuthModule(config, hostEnv),
         };
     }
 
@@ -36,7 +38,13 @@ public class Startup
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseRouting();
+        app
+            .UseRouting()
+            .UseAuthentication()
+            .UseForwardedHeaders()
+            .UseCors(ApiModule.ApiCorsPolicy);
+
+        app.Map("/auth", auth => auth.UseIdentityServer());
         app.UseEndpoints(endpoints => endpoints.MapGet("/", () => "Hello World!"));
     }
 }

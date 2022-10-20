@@ -9,7 +9,7 @@ else
 
     echo "Adding migration"
     dotnet ef --startup-project ../../src/Apps/FoodReview.Api/FoodReview.Api.csproj \
-    --project ../../src/Core/FoodReview.Core.Services/FoodReview.Core.Services.csproj migrations add $1
+    --project ../../src/Core/FoodReview.Core.Services/FoodReview.Core.Services.csproj migrations add $1 --context CoreDbContext
 
     echo "All done"
 fi
