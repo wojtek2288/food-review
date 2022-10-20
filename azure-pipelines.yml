@@ -1,0 +1,60 @@
+trigger:
+- main
+
+resources:
+- repo: self
+
+name: $(major).$(minor)$(Rev:.r)
+
+variables:
+  patch: $[counter(variables['minor'], 0)]
+  imageTag: $(major).$(minor).$(patch)
+
+stages:
+- stage: Version
+  displayName: Version
+  jobs:
+  - job: Version
+    steps:
+      - bash: |
+           echo "##vso[build.updatebuildnumber]$(major).$(minor).$(patch)"
+        name: SetMasterBuildName
+- stage: BuildTest
+  displayName: 'Build and Test'
+  jobs:
+  - job: Backend
+    displayName: Backend
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: 'build'
+        #workingDirectory: Backend
+        configuration: $(buildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet test"
+      inputs:
+        command: 'test'
+        #workingDirectory: Backend
+    - task: PublishTestResults@2
+      displayName: Publish .NET Core test results
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'
+- stage: Deploy
+  displayName: Deploy to dockerhub
+  jobs:
+  - job: BuildBackend
+    displayName: Build backend image
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'dockerhub'
+        repository: 'aleksanderkus/foodreview-backend'
+        command: 'buildAndPush'
+        tags: $(imageTag)
+        Dockerfile: 'dev/Dockerfile.api'
+        buildContext: '.'

@@ -1,0 +1,39 @@
+resources:
+- repo: self
+
+name: $(major).$(minor)$(Rev:.r)
+
+stages:
+- stage:
+  displayName: Version
+  jobs:
+  - job: Version
+    variables:
+       prpatch: $[counter(variables['system.pullrequest.pullrequestid'], 0)]
+    steps:
+      - bash: |
+           echo "##vso[build.updatebuildnumber]$(major).$(minor).$(prpatch)"
+        name: SetPRBuildName
+- stage: BuildTest
+  displayName: 'Build and Test'
+  jobs:
+  - job: Backend
+    displayName: Backend
+    steps:
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet build'
+      inputs:
+        command: 'build'
+        #workingDirectory: Backend
+        configuration: $(buildConfiguration)
+    - task: DotNetCoreCLI@2
+      displayName: "dotnet test"
+      inputs:
+        command: 'test'
+        #workingDirectory: Backend
+    - task: PublishTestResults@2
+      displayName: Publish .NET Core test results
+      condition: succeededOrFailed()
+      inputs:
+        testRunner: VSTest
+        testResultsFiles: '**/*.trx'
