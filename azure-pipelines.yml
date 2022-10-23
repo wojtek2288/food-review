@@ -29,32 +29,32 @@ stages:
       displayName: 'dotnet build'
       inputs:
         command: 'build'
-        #workingDirectory: Backend
+        workingDirectory: backend
         configuration: $(buildConfiguration)
     - task: DotNetCoreCLI@2
       displayName: "dotnet test"
       inputs:
         command: 'test'
-        #workingDirectory: Backend
+        workingDirectory: backend
     - task: PublishTestResults@2
       displayName: Publish .NET Core test results
       condition: succeededOrFailed()
       inputs:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'
-- stage: Deploy
-  displayName: Deploy to dockerhub
-  jobs:
-  - job: BuildBackend
-    displayName: Build backend image
-    pool:
-      vmImage: ubuntu-latest
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'dockerhub'
-        repository: 'aleksanderkus/foodreview-backend'
-        command: 'buildAndPush'
-        tags: $(imageTag)
-        Dockerfile: 'dev/Dockerfile.api'
-        buildContext: '.'
+# - stage: Deploy
+#   displayName: Deploy to dockerhub
+#   jobs:
+#   - job: BuildBackend
+#     displayName: Build backend image
+#     pool:
+#       vmImage: ubuntu-latest
+#     steps:
+#     - task: Docker@2
+#       inputs:
+#         containerRegistry: 'dockerhub'
+#         repository: 'aleksanderkus/foodreview-backend'
+#         command: 'buildAndPush'
+#         tags: $(imageTag)
+#         Dockerfile: 'dev/Dockerfile.api'
+#         buildContext: '.'
