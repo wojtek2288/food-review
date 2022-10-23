@@ -7,7 +7,7 @@ using MediatR;
 
 namespace FoodReview.Core.Services.CQRS.Example;
 
-public class ExampleCommandQH : CommandHandler<ExampleCommand>
+public class ExampleCommandCH : CommandHandler<ExampleCommand>
 {
     public class ExampleCommandCV : AbstractValidator<CommandRequest<ExampleCommand, Unit>>
     {
