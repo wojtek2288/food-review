@@ -1,4 +1,5 @@
 using FoodReview.Api.Auth;
+using FoodReview.Api.Extensions;
 using FoodReview.Core.Services;
 
 namespace FoodReview.Api;
@@ -41,11 +42,16 @@ public class Startup
         app
             .UseRouting()
             .UseAuthentication()
-            .UseForwardedHeaders()
-            .UseCors(ApiModule.ApiCorsPolicy);
+            .UseCors(ApiModule.ApiCorsPolicy)
+            .UseFluentValidationExceptionHandler()
+            .UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "api/{action}/{namespace}.{controller}");
+            });
 
         app.Map("/auth", auth => auth.UseIdentityServer());
-        app.UseEndpoints(endpoints => endpoints.MapGet("/", () => "Hello World!"));
     }
 }
 

@@ -1,4 +1,9 @@
+using System.Reflection;
+using FluentValidation;
+using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Services;
+using FoodReview.Core.Services.CQRS.Validation;
+using MediatR;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace FoodReview.Api;
@@ -18,8 +23,19 @@ internal class ApiModule : IAppModule
 
     public void ConfigureServices(IServiceCollection services)
     {
+        services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddValidatorsFromAssembly(GetServicesAssembly());
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBahavior<,>));
         services.AddCors(ConfigureCORS);
-        services.AddRouting();
+        services.AddControllers();
+        services.AddMvcCore()
+            .AddApplicationPart(GetContractsAssembly())
+            .AddControllersAsServices();
+
+#pragma warning disable ASP0000
+        var sp = services.BuildServiceProvider();
+        MediatorHelper.Instance = sp.GetService<IMediator>()!;
+#pragma warning restore ASP0000
     }
 
     private void ConfigureCORS(CorsOptions opts)
@@ -32,5 +48,15 @@ internal class ApiModule : IAppModule
                 .AllowAnyHeader()
                 .AllowCredentials();
         });
+    }
+
+    private Assembly GetContractsAssembly()
+    {
+        return Assembly.Load(new AssemblyName("FoodReview.Core.Contracts"));
+    }
+
+    private Assembly GetServicesAssembly()
+    {
+        return Assembly.Load(new AssemblyName("FoodReview.Core.Services"));
     }
 }
