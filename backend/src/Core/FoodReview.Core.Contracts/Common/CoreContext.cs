@@ -1,8 +1,7 @@
 using System.Security.Claims;
-using FoodReview.Core.Contracts;
 using Microsoft.AspNetCore.Http;
 
-namespace FoodReview.Core.Services;
+namespace FoodReview.Core.Contracts.Common;
 
 public class CoreContext
 {
