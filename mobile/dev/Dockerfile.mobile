@@ -1,0 +1,7 @@
+FROM node:19
+
+WORKDIR /app
+COPY ./src /app
+
+RUN npm install -g expo-cli
+CMD [ "npm", "start" ]
