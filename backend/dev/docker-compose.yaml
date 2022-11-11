@@ -1,31 +1,40 @@
 version: "3.9"
 services:
   #### Apps
+  webapp:
+    build:
+      context: ../webapp
+    ports:
+      - "80:80"
+    environment:
+      - API_BASE_URL=http://localhost:8080/api
+      
   api:
     build:
-      context: ..
+      context: ../backend
       dockerfile: dev/Dockerfile.api
       args:
         - APP_VERSION=0.0.1-dev
     ports:
       - "8080:8080"
     volumes:
-      - ../:/app/code
+      - ../backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget
     depends_on:
       - mssql
 
   migrations:
     build:
-      context: ..
+      context: backend
       dockerfile: dev/Dockerfile.migrations
       args:
         - APP_VERSION=0.0.1-dev
     volumes:
-      - ../:/app/code
+      - ../backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget
     depends_on:
       - mssql
+
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
