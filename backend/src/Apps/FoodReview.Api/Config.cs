@@ -28,7 +28,7 @@ public static class Config
 
         public static class Auth
         {
-            public static string Address(IConfiguration cfg) => $"{App.ApiBase}/auth";
+            public static string Address(IConfiguration cfg) => $"{App.ApiBase(cfg)}/auth";
         }
     }
 
