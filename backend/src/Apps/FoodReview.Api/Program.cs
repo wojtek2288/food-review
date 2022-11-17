@@ -1,4 +1,5 @@
 using FoodReview.Core.Services.DataAccess;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Api;
@@ -27,7 +28,9 @@ public class Program
             try
             {
                 var coreDbContext = services.GetRequiredService<CoreDbContext>();
+                var persistedGrantDbContext = services.GetRequiredService<PersistedGrantDbContext>();
                 coreDbContext.Database.Migrate();
+                persistedGrantDbContext.Database.Migrate();
             }
             catch (Exception ex)
             {

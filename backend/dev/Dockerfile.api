@@ -26,6 +26,5 @@ COPY Docker.Directory.Build.props Directory.Build.props
 
 WORKDIR /app/code/src/Apps/FoodReview.Api
 SHELL ["/bin/bash", "-c"]
-ENTRYPOINT source /app/code/dev/config/config.sh && \
-    dotnet restore && \
+ENTRYPOINT dotnet restore && \
     dotnet watch run --no-restore

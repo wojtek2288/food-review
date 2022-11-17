@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FoodReview.Core.Services.Migrations
 {
-    public partial class AddMissingAuthTables : Migration
+    public partial class InitAuthTables : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodReview.Core.Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20221117003243_AddMissingAuthTables")]
-    partial class AddMissingAuthTables
+    [Migration("20221117212547_InitAuthTables")]
+    partial class InitAuthTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
