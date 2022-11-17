@@ -43,10 +43,9 @@ internal class ApiModule : IAppModule
         opts.AddPolicy(ApiCorsPolicy, cfg =>
         {
             cfg
-                .WithOrigins(Config.Services.AllowedOrigins(config))
+                .AllowAnyOrigin()
                 .AllowAnyMethod()
-                .AllowAnyHeader()
-                .AllowCredentials();
+                .AllowAnyHeader();
         });
     }
 

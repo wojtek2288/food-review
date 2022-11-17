@@ -10,7 +10,7 @@ public class ExampleQueryQH : QueryHandler<ExampleQuery, ExampleResponseDTO>
     {
         return Task.FromResult(new ExampleResponseDTO
         {
-            Name = query.Name,
+            Name = "test1234",
         });
     }
 }

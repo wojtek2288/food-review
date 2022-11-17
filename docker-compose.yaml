@@ -1,0 +1,54 @@
+version: "3.9"
+services:
+  #### Apps
+  webapp:
+    build: webapp
+    ports:
+      - "80:80"
+    environment:
+      - API_BASE_URL=https://foodreviewbackend3.azurewebsites.net/api
+      
+  api:
+    build:
+      context: backend
+      dockerfile: dev/Dockerfile.api
+      args:
+        - APP_VERSION=0.0.1-dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/:/app/code
+      - ~/.nuget:/home/dotnet/.nuget
+    depends_on:
+      - mssql
+
+  migrations:
+    build:
+      context: backend
+      dockerfile: dev/Dockerfile.migrations
+      args:
+        - APP_VERSION=0.0.1-dev
+    volumes:
+      - ./backend/:/app/code
+      - ~/.nuget:/home/dotnet/.nuget
+    depends_on:
+      - mssql
+
+
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Passw12#
+    volumes:
+      - mssql:/var/opt/mssql
+    networks:
+      default:
+        aliases:
+          - mssql
+          - mssql.local.pl
+
+volumes:
+  mssql:

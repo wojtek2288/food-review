@@ -13,7 +13,10 @@ public static class Config
 
     public static class SqlServer
     {
-        public static string ConnectionString(IConfiguration cfg) => cfg.GetString("SqlServer:ConnectionString");
+        public static string ConnectionString(IConfiguration cfg)
+        {
+            return cfg.GetStringFromEnvVariable("connectionString");
+        }
     }
 
     public static class Services
@@ -35,6 +38,11 @@ public static class Config
     private static string GetString(this IConfiguration configuration, string key)
     {
         return configuration.GetValue<string>(key);
+    }
+
+    private static string GetStringFromEnvVariable(this IConfiguration configuration, string key)
+    {
+        return configuration.GetValue<string>(configuration.GetValue<string>(key));
     }
 }
 
