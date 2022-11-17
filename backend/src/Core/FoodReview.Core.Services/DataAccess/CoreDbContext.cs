@@ -1,11 +1,12 @@
 using FoodReview.Core.Services.DataAccess.Entities;
 using ListN.Core.Services.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.DataAccess;
 
-public class CoreDbContext : DbContext
+public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
 {
     public CoreDbContext(DbContextOptions<CoreDbContext> options)
         : base(options)
@@ -14,6 +15,7 @@ public class CoreDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+        ConfigureAuth(builder);
     }
 
     private static void ConfigureAuth(ModelBuilder builder)
