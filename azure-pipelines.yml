@@ -55,8 +55,8 @@ stages:
         repository: 'aleksanderkus/foodreview-backend'
         command: 'buildAndPush'
         tags: latest
-        Dockerfile: 'dev/Dockerfile.api'
-        buildContext: '.'
+        Dockerfile: 'backend/dev/Dockerfile.azure'
+        buildContext: 'backend'
   - job: BuildFrontend
     displayName: Build frontend image
     pool:
