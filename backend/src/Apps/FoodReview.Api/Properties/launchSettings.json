@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "FoodReview.Api": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SQL_CONNECTION_STRING": "Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false"
+      }
+    }
+  }
+}
