@@ -11,7 +11,7 @@ services:
   api:
     build:
       context: backend
-      dockerfile: dev/Dockerfile.api
+      dockerfile: dev/Dockerfile.azure
       args:
         - APP_VERSION=0.0.1-dev
     ports:
@@ -19,6 +19,8 @@ services:
     volumes:
       - ./backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget
+    environment:
+      - SQL_CONNECTION_STRING=Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false
     depends_on:
       - mssql
 
@@ -31,6 +33,8 @@ services:
     volumes:
       - ./backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget
+    environment:
+      - SQL_CONNECTION_STRING=Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false
     depends_on:
       - mssql
 
