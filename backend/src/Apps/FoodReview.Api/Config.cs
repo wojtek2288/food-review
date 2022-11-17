@@ -5,7 +5,7 @@ public static class Config
     public static class App
     {
         public static string ApiDomain(IConfiguration cfg) =>
-            cfg.GetString("Domains:Api");
+            cfg.GetStringFromEnvVariable("apiDomain");
 
         public static string ApiBase(IConfiguration cfg) =>
             $"http://{ApiDomain(cfg)}";
@@ -28,7 +28,7 @@ public static class Config
 
         public static class Auth
         {
-            public static string Address(IConfiguration cfg) => $"{App.ApiBase}/auth";
+            public static string Address(IConfiguration cfg) => $"{App.ApiBase(cfg)}/auth";
         }
     }
 

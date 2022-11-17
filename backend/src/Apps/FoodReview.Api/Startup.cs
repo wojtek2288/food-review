@@ -23,9 +23,9 @@ public class Startup
 
         return new IAppModule[]
         {
-            new ApiModule(config, hostEnv),
             new CoreModule(dbConnStr),
             new AuthModule(config, hostEnv),
+            new ApiModule(config, hostEnv),
         };
     }
 
@@ -42,14 +42,10 @@ public class Startup
         app
             .UseRouting()
             .UseAuthentication()
+            .UseAuthorization()
             .UseCors(ApiModule.ApiCorsPolicy)
             .UseFluentValidationExceptionHandler()
-            .UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "api/{action}/{namespace}.{controller}");
-            });
+            .UseEndpoints(endpoints => endpoints.MapControllers());
 
         app.Map("/auth", auth => auth.UseIdentityServer());
     }

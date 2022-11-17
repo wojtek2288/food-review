@@ -28,7 +28,12 @@ internal class ApiModule : IAppModule
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBahavior<,>));
         services.AddCors(ConfigureCORS);
         services.AddControllers();
-        services.AddMvcCore()
+        services.AddMvcCore(options =>
+            {
+                options.Conventions.Add(new CustomRouteToken(
+                    "namespace",
+                    c => c.ControllerType.Namespace));
+            })
             .AddApplicationPart(GetContractsAssembly())
             .AddControllersAsServices();
 

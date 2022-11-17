@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodReview.Core.Contracts.Common;
@@ -8,7 +7,7 @@ public abstract class QueryBase<TRequest, TResponse> : Controller
     where TRequest : class
     where TResponse : class?
 {
-    [HttpGet]
+    [HttpGet("api/[action]/[namespace].[controller]")]
     public async Task<TResponse> Query([FromBody]TRequest query)
     {
         var context = CoreContext.FromHttp(HttpContext);

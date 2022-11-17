@@ -7,37 +7,23 @@ services:
       - "80:80"
     environment:
       - API_BASE_URL=https://foodreviewbackend3.azurewebsites.net/api
-      
+
   api:
     build:
       context: backend
-      dockerfile: dev/Dockerfile.azure
+      dockerfile: dev/Dockerfile.api
       args:
         - APP_VERSION=0.0.1-dev
     ports:
-      - "8000:8000"
+      - "8080:8080"
     volumes:
       - ./backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget
     environment:
       - SQL_CONNECTION_STRING=Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false
+      - API_DOMAIN=localhost:8080
     depends_on:
       - mssql
-
-  migrations:
-    build:
-      context: backend
-      dockerfile: dev/Dockerfile.migrations
-      args:
-        - APP_VERSION=0.0.1-dev
-    volumes:
-      - ./backend/:/app/code
-      - ~/.nuget:/home/dotnet/.nuget
-    environment:
-      - SQL_CONNECTION_STRING=Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false
-    depends_on:
-      - mssql
-
 
   mssql:
     image: mcr.microsoft.com/mssql/server:2019-latest
