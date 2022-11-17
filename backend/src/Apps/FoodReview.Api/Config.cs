@@ -15,7 +15,7 @@ public static class Config
     {
         public static string ConnectionString(IConfiguration cfg)
         {
-            return cfg.GetStringFromEnvVariable("connectionString");;
+            return cfg.GetStringFromEnvVariable("connectionString");
         }
     }
 
