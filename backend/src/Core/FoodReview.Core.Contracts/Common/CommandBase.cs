@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FoodReview.Core.Contracts.Common;
@@ -7,7 +6,7 @@ namespace FoodReview.Core.Contracts.Common;
 public abstract class CommandBase<TRequest> : Controller
     where TRequest : class
 {
-    [HttpPost]
+    [HttpPost("api/[action]/[namespace].[controller]")]
     public async Task Command([FromBody]TRequest command)
     {
         var context = CoreContext.FromHttp(HttpContext);
