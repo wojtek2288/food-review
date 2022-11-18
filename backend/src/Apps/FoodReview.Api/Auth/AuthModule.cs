@@ -1,8 +1,10 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 using FoodReview.Core.Services;
 using FoodReview.Core.Services.DataAccess.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using AuthConsts = FoodReview.Core.Contracts.Auth;
 
 namespace FoodReview.Api.Auth;
@@ -41,6 +43,10 @@ public class AuthModule : IAppModule
         {
             isConfig = isConfig.AddDeveloperSigningCredential();
         }
+        else
+        {
+            isConfig = isConfig.AddSigningCredential(CreateSigningCredential());
+        }
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
@@ -62,6 +68,15 @@ public class AuthModule : IAppModule
                 cfg.TokenValidationParameters.RoleClaimType = AuthConsts.KnownClaims.Role;
                 cfg.TokenValidationParameters.NameClaimType = AuthConsts.KnownClaims.UserId;
             });
+    }
+
+    private SigningCredentials CreateSigningCredential()
+    {
+        var rsaCrpytoServiceProvider = new RSACryptoServiceProvider(2048);
+        var securityKey = new RsaSecurityKey(rsaCrpytoServiceProvider);
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.RsaSha512);
+
+        return credentials;
     }
 }
 
