@@ -9,7 +9,7 @@ interface RestaurantCardProps {
 
 export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant: dish }) => {
     return (
-        <View style={styles.feedItemContainer}>
+        <View style={styles.restaurantContainer}>
             <Card style={styles.card}>
                 <View style={styles.cardContainer}>
                     <View style={styles.cardImage}>
@@ -30,7 +30,7 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant: dish
 }
 
 const styles = StyleSheet.create({
-    feedItemContainer: {
+    restaurantContainer: {
         marginTop: '5 %',
         flexDirection: 'row',
     },
