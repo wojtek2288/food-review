@@ -1,4 +1,4 @@
-export default interface FeedDish {
+export default interface Dish {
     id: number;
     name: string;
     restaurantName: string;

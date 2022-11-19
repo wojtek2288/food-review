@@ -1,26 +1,23 @@
-import FeedDish from '../types/FeedDish';
-import { Card } from 'react-native-ui-kitten';
+import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import { Rating } from './Rating';
+import { Rating } from '../Common/Rating';
+import Restaurant from '../../types/Restaurant';
 
-interface FeedItemProps {
-    dish: FeedDish;
+interface RestaurantCardProps {
+    restaurant: Restaurant;
 }
 
-export const FeedItem: React.FC<FeedItemProps> = ({ dish }) => {
+export const RestaurantCard: React.FC<RestaurantCardProps> = ({ restaurant: dish }) => {
     return (
         <View style={styles.feedItemContainer}>
             <Card style={styles.card}>
                 <View style={styles.cardContainer}>
                     <View style={styles.cardImage}>
-                        <Image style={styles.dishImage} source={{ uri: dish.imageUrl }} />
+                        <Image style={styles.restaurantImage} source={{ uri: dish.imageUrl }} />
                     </View>
                     <View style={styles.cardDescription}>
-                        <Text style={styles.dishName}>
-                            {dish.name}
-                        </Text>
                         <Text style={styles.restaurantName}>
-                            {dish.restaurantName}
+                            {dish.name}
                         </Text>
                     </View>
                     <View style={styles.cardRating}>
@@ -60,15 +57,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    dishName: {
+    restaurantName: {
         fontWeight: 'bold',
         fontSize: 20,
     },
-    restaurantName: {
-        marginTop: '10 %',
-        fontSize: 18,
-    },
-    dishImage: {
+    restaurantImage: {
         width: '100 %',
         aspectRatio: 1,
         borderRadius: 10,

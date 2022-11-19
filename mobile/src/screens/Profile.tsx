@@ -1,15 +1,28 @@
 import { StyleSheet } from 'react-native';
-
+import { FontAwesome } from '@expo/vector-icons';
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from 'react-native';
+import { Text, View, Pressable } from 'react-native';
 import Colors from '../constants/Colors';
+import { RootTabScreenProps } from '../types';
 
-export default function Profile() {
+export default function Profile({ navigation }: RootTabScreenProps<'Profile'>) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Profile</Text>
             <View style={styles.separator} />
             <EditScreenInfo path="/screens/Profile.tsx" />
+            <Pressable
+                onPress={() => navigation.navigate('Modal')}
+                style={({ pressed }) => ({
+                    opacity: pressed ? 0.5 : 1,
+                })}>
+                <FontAwesome
+                    name="info-circle"
+                    size={25}
+                    color={Colors.text}
+                    style={{ marginRight: 15 }}
+                />
+            </Pressable>
         </View>
     );
 }

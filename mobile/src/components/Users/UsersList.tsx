@@ -1,20 +1,20 @@
 import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import FeedDish from '../types/FeedDish';
-import { FeedItem } from './FeedItem';
+import User from '../../types/User';
+import { UserCard } from './UserCard';
 
-interface FeedListProps {
-    dishes: FeedDish[];
+interface UsersListProps {
+    users: User[];
 }
 
-export const FeedList: React.FC<FeedListProps> = ({ dishes }) => {
+export const UsersList: React.FC<UsersListProps> = ({ users }) => {
     return (
         <View style={styles.feedContainer}>
             <FlatList
-                data={dishes}
-                renderItem={(dish) => {
+                data={users}
+                renderItem={(user) => {
                     return (
-                        <FeedItem dish={dish.item} />
+                        <UserCard user={user.item} />
                     );
                 }}
                 keyExtractor={(item, index) => {
@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        marginTop: '8 %',
         width: '85 %'
     }
 });

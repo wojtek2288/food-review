@@ -1,46 +1,62 @@
-import { StyleSheet } from 'react-native';
-import { FontAwesome } from '@expo/vector-icons';
-import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View, Pressable } from 'react-native';
+import React, { useState } from 'react';
 import Colors from '../constants/Colors';
-import { RootTabScreenProps } from '../types';
+import { View, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { SearchBar } from '../components/Search/SearchBar';
+import { RestaurantsSearch } from '../components/Search/RestaurantsSearch';
+import { DishesSearch } from '../components/Search/DishesSearch';
+import { UsersSearch } from '../components/Search/UsersSearch';
 
-export default function Search({ navigation }: RootTabScreenProps<'Search'>) {
+export default function Search() {
+  const [searchPhrase, setSearchPhrase] = useState('');
+  const Tab = createMaterialTopTabNavigator();
+  const NavigationTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: Colors.background,
+    },
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Search</Text>
-      <View style={styles.separator} />
-      <EditScreenInfo path="/screens/Search.tsx" />
-      <Pressable
-        onPress={() => navigation.navigate('Modal')}
-        style={({ pressed }) => ({
-          opacity: pressed ? 0.5 : 1,
-        })}>
-        <FontAwesome
-          name="info-circle"
-          size={25}
-          color={Colors.text}
-          style={{ marginRight: 15 }}
-        />
-      </Pressable>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.mainContainer}>
+        <View style={styles.searchContainer}>
+          <SearchBar searchPhrase={searchPhrase} setSearchPhrase={setSearchPhrase} />
+        </View>
+        <NavigationContainer independent={true} theme={NavigationTheme}>
+          <Tab.Navigator
+            screenOptions={
+              {
+                tabBarLabelStyle:
+                {
+                  fontSize: 12,
+                  textTransform: 'none',
+                },
+                tabBarStyle: {
+                  backgroundColor: 'transparent'
+                }
+              }}>
+            <Tab.Screen name="Dishes" children={() => <DishesSearch searchPhrase={searchPhrase} />} />
+            <Tab.Screen name="Restaurants" children={() => <RestaurantsSearch searchPhrase={searchPhrase} />} />
+            <Tab.Screen name="Users" children={() => <UsersSearch searchPhrase={searchPhrase} />} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  mainContainer: {
+    flex: 2
   },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
+  searchContainer: {
+    marginTop: '15 %',
+    marginHorizontal: '8 %'
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
-    color: Colors.background,
-  },
+  navigationContainer: {
+    fontSize: 10
+  }
 });
