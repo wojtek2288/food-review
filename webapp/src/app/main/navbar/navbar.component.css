@@ -1,0 +1,16 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.routing-button {
+    color: rgb(182, 182, 182);
+    font-size: 18px;
+}
+.active-link {
+    color: white;
+}
+
+.mat-button{
+    height: 100%;
+
+}
