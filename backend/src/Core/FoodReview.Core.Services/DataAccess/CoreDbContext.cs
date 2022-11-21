@@ -1,3 +1,4 @@
+using FoodReview.Core.Domain;
 using FoodReview.Core.Services.DataAccess.Entities;
 using ListN.Core.Services.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -12,10 +13,29 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
         : base(options)
     { }
 
+    public DbSet<Restaurant> Restaurants => Set<Restaurant>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
         ConfigureAuth(builder);
+
+        builder.Entity<Restaurant>(cfg =>
+        {
+            cfg.HasKey(e => e.Id);
+            cfg.Property(e => e.Name).IsRequired();
+            cfg.Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
+            cfg.Property(e => e.Description).HasMaxLength(StringLengths.LongString);
+
+            cfg.OwnsMany(e => e.Dishes, dishes =>
+            {
+                dishes.ToTable("Dishes");
+                dishes.HasKey(e => e.Id);
+                dishes.Property(e => e.Name).IsRequired();
+                dishes.Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
+                dishes.Property(e => e.Description).HasMaxLength(StringLengths.LongString);
+            });
+        });
     }
 
     private static void ConfigureAuth(ModelBuilder builder)
