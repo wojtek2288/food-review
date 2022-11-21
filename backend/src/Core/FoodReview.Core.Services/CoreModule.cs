@@ -4,6 +4,8 @@ using FoodReview.Core.Services.DataAccess;
 using FoodReview.Core.Services.DataAccess.Entities;
 using ListN.Core.Services.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
+using FoodReview.Core.Services.DataAccess.Repositories;
+using FoodReview.Core.Domain;
 
 namespace FoodReview.Core.Services;
 
@@ -25,6 +27,8 @@ public class CoreModule : IAppModule
             .AddIdentity<AuthUser, AuthRole>()
             .AddEntityFrameworkStores<CoreDbContext>()
             .AddDefaultTokenProviders();
+
+        services.AddScoped<Repository<Restaurant>, RestaurantsRepository>();
 
         services.Configure<IdentityOptions>(options =>
         {
