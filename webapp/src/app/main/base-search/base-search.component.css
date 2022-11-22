@@ -1,0 +1,32 @@
+.background{
+    background-color: rgb(230, 230, 230);
+    padding: 50px;
+}
+
+table{
+    width: 100%;
+}
+
+/* .mat-header-cell {
+    text-align: center;
+}
+
+.mat-cell {
+    text-align: center;
+} */
+
+.card-header .left{
+    float: left;
+}
+
+.card-header .right{
+    float: right;
+}
+
+.search-field {
+    width: 300px;
+}
+
+.show-details {
+    color: white;
+}

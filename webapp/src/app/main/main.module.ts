@@ -5,21 +5,32 @@ import {MatButtonModule} from "@angular/material/button"
 import { NavbarComponent } from './navbar/navbar.component';
 import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from '@angular/router';
+import { BaseSearchComponent } from './base-search/base-search.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    BaseSearchComponent
   ],
   imports: [
     CommonModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    RouterModule
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    RouterModule,
   ],
   exports: [
-    NavbarComponent
+    NavbarComponent,
+    BaseSearchComponent
   ]
 })
 export class MainModule { }
