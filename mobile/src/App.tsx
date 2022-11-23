@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ApplicationProvider } from 'react-native-ui-kitten'
+import { ApplicationProvider } from '@ui-kitten/components'
 import useCachedResources from './hooks/useCachedResources';
 import Navigation from './navigation';
 import * as eva from '@eva-design/eva';

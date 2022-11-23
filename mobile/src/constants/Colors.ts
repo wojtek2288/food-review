@@ -1,11 +1,8 @@
-const tintColorDark = '#000';
-
 export default {
   text: '#000',
   backgroundText: '#fff',
-  inactiveBackgroundText: '#d3d3d3',
+  inActive: '#d3d3d3',
   background: '#f7931e',
-  tint: tintColorDark,
+  tint: '#000',
   tabIconDefault: '#ccc',
-  tabIconSelected: tintColorDark,
 };

@@ -56,7 +56,7 @@ function BottomTabNavigator() {
       initialRouteName="Feed"
       screenOptions={{
         tabBarActiveTintColor: Colors.backgroundText,
-        tabBarInactiveTintColor: Colors.inactiveBackgroundText,
+        tabBarInactiveTintColor: Colors.inActive,
         tabBarActiveBackgroundColor: Colors.background,
         tabBarInactiveBackgroundColor: Colors.background,
         headerShown: false,
