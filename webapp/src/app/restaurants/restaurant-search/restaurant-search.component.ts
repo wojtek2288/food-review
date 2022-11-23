@@ -7,11 +7,11 @@ import { BaseSearchComponent } from 'src/app/main/base-search/base-search.compon
   styleUrls: ['./restaurant-search.component.css']
 })
 export class RestaurantSearchComponent extends BaseSearchComponent implements OnInit {
-
   constructor() {
     super();
   }
 
   ngOnInit(): void {
+    this.header = "Restaurant";
   }
 }

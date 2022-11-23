@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { BaseSearchComponent } from './base-search/base-search.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
@@ -26,6 +27,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatTableModule,
     MatPaginatorModule,
     MatFormFieldModule,
+    MatInputModule,
     RouterModule,
   ],
   exports: [
