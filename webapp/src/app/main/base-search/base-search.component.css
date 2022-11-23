@@ -29,3 +29,19 @@ table{
 .show-details {
     color: white;
 }
+
+.mat-column-id {
+    width: 20%;
+}
+
+.mat-column-name {
+    width: 10%;
+}
+
+.mat-column-showDetails {
+    width: 10%;
+}
+
+.mat-column-description {
+    padding: 10px;
+}

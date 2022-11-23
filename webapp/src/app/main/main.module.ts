@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSortModule } from '@angular/material/sort';
 
 
 @NgModule({
@@ -28,11 +29,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatPaginatorModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSortModule,
     RouterModule,
   ],
   exports: [
     NavbarComponent,
-    BaseSearchComponent
+    BaseSearchComponent,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatSortModule,
+    MatInputModule,
   ]
 })
 export class MainModule { }
