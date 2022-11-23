@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DishSearchComponent } from './dish-search/dish-search.component';
+import { MainModule } from '../main/main.module';
 
 
 
@@ -9,7 +10,8 @@ import { DishSearchComponent } from './dish-search/dish-search.component';
     DishSearchComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    MainModule
   ],
   exports: [
     DishSearchComponent

@@ -12,6 +12,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { MatSortModule } from '@angular/material/sort';
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
-    RouterModule,
+    ReactiveFormsModule,
+    RouterModule
   ],
   exports: [
     NavbarComponent,
@@ -44,6 +46,7 @@ import { MatSortModule } from '@angular/material/sort';
     MatFormFieldModule,
     MatSortModule,
     MatInputModule,
+    ReactiveFormsModule
   ]
 })
 export class MainModule { }

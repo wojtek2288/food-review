@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, Input, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -12,6 +13,7 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   header: string = "";
   dataSource!: MatTableDataSource<T>;
   displayedColumns: string[] = ['id', 'name', 'description', 'showDetails'];
+  searchFormControl = new FormControl('');
   constructor() { }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -20,5 +22,9 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.empTbSort;
+  }
+
+  onSearch()
+  {
   }
 }
