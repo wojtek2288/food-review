@@ -43,7 +43,7 @@ const styles = (color: string) => StyleSheet.create({
         borderRadius: 8,
     },
     ratingText: {
-        color: Colors.backgroundText,
+        color: Colors.lightText,
         fontWeight: 'bold',
     }
 });

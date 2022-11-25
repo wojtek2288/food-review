@@ -55,12 +55,12 @@ function BottomTabNavigator() {
     <BottomTab.Navigator
       initialRouteName="Feed"
       screenOptions={{
-        tabBarActiveTintColor: Colors.backgroundText,
+        tabBarActiveTintColor: Colors.lightText,
         tabBarInactiveTintColor: Colors.inActive,
         tabBarActiveBackgroundColor: Colors.background,
         tabBarInactiveBackgroundColor: Colors.background,
         headerShown: false,
-        headerTintColor: Colors.backgroundText,
+        headerTintColor: Colors.darkText,
         headerStyle: {
           backgroundColor: Colors.background,
         },
