@@ -1,16 +1,21 @@
-import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import React, { useCallback } from 'react';
+import { FlatList, View, StyleSheet, Text } from 'react-native';
 import Dish from '../../types/Dish';
 import { DishCard } from './DishCard';
 
 interface DishesListProps {
     dishes: Dish[];
+    headerText?: string;
 }
 
-export const DishesList: React.FC<DishesListProps> = ({ dishes }) => {
+export const DishesList: React.FC<DishesListProps> = ({ dishes, headerText }) => {
     return (
         <View style={styles.dishesContainer}>
             <FlatList
+                ListHeaderComponent={() =>
+                    headerText == null
+                        ? null
+                        : <Text style={styles.headerText}>{headerText}</Text>}
                 data={dishes}
                 renderItem={(dish) => {
                     return (
@@ -32,5 +37,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '85 %'
-    }
+    },
+    headerText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: '5 %',
+    },
 });

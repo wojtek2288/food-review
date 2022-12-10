@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 24,
     textAlign: 'center',
-    color: Colors.text,
+    color: Colors.darkText,
   },
   helpContainer: {
     marginTop: 15,

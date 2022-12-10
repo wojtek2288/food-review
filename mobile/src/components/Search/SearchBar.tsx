@@ -18,7 +18,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ searchPhrase, setSearchPhr
                 <FontAwesome
                     name="close"
                     size={20}
-                    color={Colors.text}
+                    color={Colors.darkText}
                 />
             </TouchableOpacity>
     );

@@ -36,4 +36,11 @@ export const dishes: Dish[] = [
         imageUrl: 'https://pliki.horecatrends.pl/i/01/11/51/011151_r0_940.jpg',
         rating: 8.4,
     },
+    {
+        id: 6,
+        name: 'Łosoś ze szpinakiem',
+        restaurantName: 'North fish',
+        imageUrl: 'http://streetfoodpolska.pl/web/wp-content/uploads/2017/09/%C4%9Aoso%C4%97-Stek-Buraczki-North-Fish.jpg',
+        rating: 5.2,
+    },
 ];
