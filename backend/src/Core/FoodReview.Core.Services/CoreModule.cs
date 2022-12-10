@@ -29,6 +29,7 @@ public class CoreModule : IAppModule
             .AddDefaultTokenProviders();
 
         services.AddScoped<Repository<Restaurant>, RestaurantsRepository>();
+        services.AddScoped<Repository<User>, UsersRepository>();
 
         services.Configure<IdentityOptions>(options =>
         {

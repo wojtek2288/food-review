@@ -8,11 +8,17 @@ public class Dish : IEntity
     public Restaurant Restaurant { get; private init; } = default!;
     public string Name { get; private set; } = default!;
     public string? Description { get; private set; }
+    public string ImageUrl { get; private set; } = default!;
     public decimal Price { get; private set; }
 
     private Dish() { }
 
-    public static Dish Create(Restaurant restaurant, string name, string? description, decimal price)
+    public static Dish Create(
+        Restaurant restaurant,
+        string name,
+        string? description,
+        string imageUrl,
+        decimal price)
     {
         return new Dish
         {
@@ -20,11 +26,12 @@ public class Dish : IEntity
             Restaurant = restaurant,
             Name = name,
             Description = description,
+            ImageUrl = imageUrl,
             Price = price,
         };
     }
 
-    public void Edit(string name, string? description, decimal price)
+    public void Edit(string name, string? description, string imageUrl, decimal price)
     {
         Name = name;
         Description = description;

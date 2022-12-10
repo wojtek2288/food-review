@@ -7,7 +7,7 @@ public abstract class QueryBase<TRequest, TResponse> : Controller
     where TRequest : class
     where TResponse : class?
 {
-    [HttpGet("api/[action]/[namespace].[controller]")]
+    [HttpPost("api/[action]/[namespace].[controller]")]
     public async Task<TResponse> Query([FromBody]TRequest query)
     {
         var context = CoreContext.FromHttp(HttpContext);
