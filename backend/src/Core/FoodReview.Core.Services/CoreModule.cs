@@ -30,6 +30,7 @@ public class CoreModule : IAppModule
 
         services.AddScoped<Repository<Restaurant>, RestaurantsRepository>();
         services.AddScoped<Repository<User>, UsersRepository>();
+        services.AddScoped<Repository<Review>, ReviewsRepository>();
 
         services.Configure<IdentityOptions>(options =>
         {

@@ -39,9 +39,9 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
                 .WithMessage("Name is too long.");
 
         RuleFor(x => x.Command.Description)
-            .MaximumLength(StringLengths.ShortString)
-                .WithCode(AddRestaurant.ErrorCodes.NameTooLong)
-                .WithMessage("Name is too long.")
+            .MaximumLength(StringLengths.MediumString)
+                .WithCode(AddRestaurant.ErrorCodes.DescriptionTooLong)
+                .WithMessage("Description is too long.")
             .When(e => e.Command.Description is not null);
 
         RuleFor(x => x.Command.ImageLink)

@@ -20,6 +20,7 @@ public class SearchDishesQH : QueryHandler<SearchDishes, PaginatedResult<DishSum
     {
         var totalCount = await dbContext.Restaurants
             .SelectMany(r => r.Dishes)
+            .Where(d => d.Name.Replace(@"\s", "").ToLower().Contains(query.SearchPhrase.Replace(@"\s", "").ToLower()))
             .CountAsync(context.CancellationToken);
 
         var dishes = await dbContext.Restaurants
@@ -29,7 +30,9 @@ public class SearchDishesQH : QueryHandler<SearchDishes, PaginatedResult<DishSum
                 Name = d.Name,
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
-                Rating = 5,
+                Rating = dbContext.Reviews
+                    .Where(r => r.DishId != null)
+                    .Average(r => r.Rating),
             })
             .Where(d => d.Name.Replace(@"\s", "").ToLower().Contains(query.SearchPhrase.Replace(@"\s", "").ToLower()))
             .Skip(query.PageCount * query.PageSize)

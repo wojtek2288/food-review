@@ -29,7 +29,9 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
                 Name = d.Name,
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
-                Rating = 5,
+                Rating = dbContext.Reviews
+                    .Where(r => r.DishId != null)
+                    .Average(r => r.Rating),
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

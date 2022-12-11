@@ -35,4 +35,10 @@ public class Review : IAggregateRoot
             Rating = rating,
         };
     }
+
+    public void Edit(string description, double rating)
+    {
+        Description = description;
+        Rating = rating;
+    }
 }

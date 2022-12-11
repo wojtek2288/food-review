@@ -19,6 +19,7 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
     public override async Task<PaginatedResult<RestaurantSummaryDTO>> HandleAsync(SearchRestaurants query, CoreContext context)
     {
         var totalCount = await dbContext.Restaurants
+            .Where(r => r.Name.Trim().ToLower().Contains(query.SearchPhrase.Trim().ToLower()))
             .CountAsync(context.CancellationToken);
 
         var restaurants = await dbContext.Restaurants
@@ -28,7 +29,9 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
                 Id = r.Id,
                 Name = r.Name,
                 ImageUrl = r.ImageUrl,
-                Rating = 5,
+                Rating = dbContext.Reviews
+                    .Where(r => r.DishId == null)
+                    .Average(r => r.Rating),
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)
