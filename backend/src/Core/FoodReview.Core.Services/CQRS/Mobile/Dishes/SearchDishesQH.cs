@@ -19,11 +19,13 @@ public class SearchDishesQH : QueryHandler<SearchDishes, PaginatedResult<DishSum
     public override async Task<PaginatedResult<DishSummaryDTO>> HandleAsync(SearchDishes query, CoreContext context)
     {
         var totalCount = await dbContext.Restaurants
+            .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes)
             .Where(d => d.Name.Replace(@"\s", "").ToLower().Contains(query.SearchPhrase.Replace(@"\s", "").ToLower()))
             .CountAsync(context.CancellationToken);
 
         var dishes = await dbContext.Restaurants
+            .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes, (r, d) => new DishSummaryDTO
             {
                 Id = d.Id,

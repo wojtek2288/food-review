@@ -1,27 +1,34 @@
+import { Spinner } from '@ui-kitten/components';
 import React from 'react';
 import { FlatList, View, StyleSheet } from 'react-native';
-import Restaurant from '../../types/Restaurant';
+import Restaurant from '../../responseTypes/Restaurant';
 import { RestaurantCard } from './RestaurantCard';
 
 interface RestaurantsListProps {
     restaurants: Restaurant[];
+    onEndReached?: () => void;
+    isLoading: boolean;
 }
 
-export const RestaurantsList: React.FC<RestaurantsListProps> = ({ restaurants }) => {
+export const RestaurantsList: React.FC<RestaurantsListProps> = ({ restaurants, onEndReached, isLoading }) => {
     return (
         <View style={styles.restaurantsContainer}>
-            <FlatList
-                data={restaurants}
-                renderItem={(restaurant) => {
-                    return (
-                        <RestaurantCard restaurant={restaurant.item} />
-                    );
-                }}
-                keyExtractor={(item, index) => {
-                    return item.id.toString();
-                }}
-                showsVerticalScrollIndicator={false}
-            />
+            {isLoading
+                ? <Spinner status='warning' />
+                : <FlatList
+                    data={restaurants}
+                    renderItem={(restaurant) => {
+                        return (
+                            <RestaurantCard restaurant={restaurant.item} />
+                        );
+                    }}
+                    keyExtractor={(item, index) => {
+                        return item.id.toString();
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={onEndReached}
+                />}
+
         </View>
     );
 }

@@ -21,7 +21,8 @@ public class CoreModule : IAppModule
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<CoreDbContext>(
-            opts => opts.UseSqlServer(connectionString));
+            opts => opts.UseSqlServer(connectionString),
+            ServiceLifetime.Transient);
 
         services
             .AddIdentity<AuthUser, AuthRole>()

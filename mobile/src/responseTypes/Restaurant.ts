@@ -1,6 +1,6 @@
 export default interface Restaurant {
-    id: number;
+    id: string;
     name: string;
     imageUrl: string;
-    rating: number;
+    rating: number | null;
 }

@@ -1,4 +1,4 @@
-import Dish from '../../types/Dish';
+import Dish from '../../responseTypes/Dish';
 import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { Rating } from '../Common/Rating';

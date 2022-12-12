@@ -19,10 +19,12 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
     public override async Task<PaginatedResult<DishSummaryDTO>> HandleAsync(Feed query, CoreContext context)
     {
         var totalCount = await dbContext.Restaurants
+            .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes)
             .CountAsync(context.CancellationToken);
 
         var dishes = await dbContext.Restaurants
+            .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes, (r, d) => new DishSummaryDTO
             {
                 Id = d.Id,
@@ -30,7 +32,7 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(r => r.DishId != null)
+                    .Where(r => r.DishId == d.Id)
                     .Average(r => r.Rating),
             })
             .Skip(query.PageCount * query.PageSize)
