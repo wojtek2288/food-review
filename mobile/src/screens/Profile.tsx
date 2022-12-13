@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, FlatList, NativeSyntheticEvent, NativeScrollEvent, Animated, Dimensions } from 'react-native';
+import React from 'react';
+import { ScrollView, StyleSheet, FlatList } from 'react-native';
 import { Text, View, Image, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -11,49 +11,15 @@ import { DishCard } from '../components/Dishes/DishCard';
 
 export default function Profile({ navigation }: RootTabScreenProps<'Profile'>) {
     var user = users[0];
-    const [flex, setFlex] = useState(new Animated.Value(2));
-    var [flexValue, setFlexValue] = useState(2);
-    flex.addListener(({ value }) => setFlexValue(value));
-
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        let yOffset = event.nativeEvent.contentOffset.y;
-        let contentHeight = event.nativeEvent.contentSize.height;
-        let value = yOffset / contentHeight;
-
-        if (contentHeight > 0.6 * Dimensions.get('window').height) {
-            if (value > 0.1) {
-                if (flexValue === 2) {
-                    Animated.timing(
-                        flex,
-                        {
-                            toValue: 4.3,
-                            duration: 170,
-                            useNativeDriver: true
-                        })
-                        .start()
-                }
-            }
-            else {
-                if (flexValue !== 2) {
-                    Animated.timing(
-                        flex,
-                        {
-                            toValue: 2,
-                            duration: 170,
-                            useNativeDriver: true
-                        })
-                        .start()
-                }
-            }
-        }
-    }
 
     return (
         <View style={styles.container}>
             <View style={styles.profile}>
                 <View style={styles.upperContainer}>
                     <View style={styles.avatarContainer}>
-                        <Image style={styles.profileAvatar} source={{ uri: user.avatarUrl }} />
+                        <Image style={styles.profileAvatar} source={user.imageUrl == null
+                            ? require('../assets/images/userEmpty.png')
+                            : { uri: user.imageUrl }} />
                     </View>
                     <View style={styles.settingsContainer}>
                         <Pressable
@@ -73,7 +39,7 @@ export default function Profile({ navigation }: RootTabScreenProps<'Profile'>) {
                 </ScrollView>
                 <Button onPress={() => navigation.navigate('Modal')} style={styles.button}>Edit</Button>
             </View>
-            <View style={ratingStyles(flexValue).review}>
+            <View style={styles.ratings}>
                 <FlatList
                     ListHeaderComponent={() => <Text style={styles.headerText}>My Reviews:</Text>}
                     data={dishes}
@@ -86,7 +52,6 @@ export default function Profile({ navigation }: RootTabScreenProps<'Profile'>) {
                         return item.id.toString();
                     }}
                     showsVerticalScrollIndicator={false}
-                    onScroll={(event) => handleScroll(event)}
                 />
             </View>
         </View>
@@ -100,7 +65,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     profile: {
-        flex: 2.2,
+        flex: 1.5,
         borderRadius: 15,
         alignItems: 'center',
         justifyContent: 'center',
@@ -165,12 +130,9 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginTop: '5 %',
-    }
-});
-
-const ratingStyles = (flexNumber: number) => StyleSheet.create({
-    review: {
-        flex: flexNumber,
+    },
+    ratings: {
+        flex: 2,
         alignItems: 'center',
         justifyContent: 'center',
         width: '85 %',

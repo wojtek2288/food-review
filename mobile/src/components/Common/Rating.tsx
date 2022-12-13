@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import Colors from '../../constants/Colors';
 
 interface RatingProps {
-    rating: number;
+    rating: number | null;
 }
 
 export const Rating: React.FC<RatingProps> = ({ rating }) => {
@@ -12,15 +12,18 @@ export const Rating: React.FC<RatingProps> = ({ rating }) => {
 
     return (
         <View style={styles(color).ratingContainer}>
-            <Text style={styles(color).ratingText}>{rating}</Text>
+            <Text style={styles(color).ratingText}>{rating == null ? '?' : rating}</Text>
         </View>
     );
 }
 
 
-const getRatingColor = (rating: number): string => {
+const getRatingColor = (rating: number | null): string => {
     let color: string;
-    if (rating < 5) {
+    if (rating == null) {
+        color = '#D3D3D3'
+    }
+    else if (rating < 5) {
         color = 'red';
     }
     else if (rating >= 5 && rating < 7.5) {

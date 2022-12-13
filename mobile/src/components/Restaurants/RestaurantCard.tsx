@@ -1,7 +1,7 @@
 import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { Rating } from '../Common/Rating';
-import Restaurant from '../../types/Restaurant';
+import Restaurant from '../../responseTypes/Restaurant';
 
 interface RestaurantCardProps {
     restaurant: Restaurant;

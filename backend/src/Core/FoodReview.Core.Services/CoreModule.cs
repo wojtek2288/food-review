@@ -21,7 +21,8 @@ public class CoreModule : IAppModule
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<CoreDbContext>(
-            opts => opts.UseSqlServer(connectionString));
+            opts => opts.UseSqlServer(connectionString),
+            ServiceLifetime.Transient);
 
         services
             .AddIdentity<AuthUser, AuthRole>()
@@ -29,6 +30,8 @@ public class CoreModule : IAppModule
             .AddDefaultTokenProviders();
 
         services.AddScoped<Repository<Restaurant>, RestaurantsRepository>();
+        services.AddScoped<Repository<User>, UsersRepository>();
+        services.AddScoped<Repository<Review>, ReviewsRepository>();
 
         services.Configure<IdentityOptions>(options =>
         {

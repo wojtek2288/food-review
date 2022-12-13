@@ -1,32 +1,38 @@
-import React, { useCallback } from 'react';
+import { Spinner } from '@ui-kitten/components';
+import React from 'react';
 import { FlatList, View, StyleSheet, Text } from 'react-native';
-import Dish from '../../types/Dish';
+import Dish from '../../responseTypes/Dish';
 import { DishCard } from './DishCard';
 
 interface DishesListProps {
-    dishes: Dish[];
     headerText?: string;
+    dishes: Dish[];
+    onEndReached?: () => void;
+    isLoading: boolean;
 }
 
-export const DishesList: React.FC<DishesListProps> = ({ dishes, headerText }) => {
+export const DishesList: React.FC<DishesListProps> = ({ headerText, dishes, onEndReached, isLoading }) => {
     return (
         <View style={styles.dishesContainer}>
-            <FlatList
-                ListHeaderComponent={() =>
-                    headerText == null
-                        ? null
-                        : <Text style={styles.headerText}>{headerText}</Text>}
-                data={dishes}
-                renderItem={(dish) => {
-                    return (
-                        <DishCard dish={dish.item} />
-                    );
-                }}
-                keyExtractor={(item, index) => {
-                    return item.id.toString();
-                }}
-                showsVerticalScrollIndicator={false}
-            />
+            {isLoading
+                ? <Spinner status='warning' />
+                : <FlatList
+                    ListHeaderComponent={() =>
+                        headerText == null
+                            ? null
+                            : <Text style={styles.headerText}>{headerText}</Text>}
+                    data={dishes}
+                    renderItem={(dish) => {
+                        return (
+                            <DishCard dish={dish.item} />
+                        );
+                    }}
+                    keyExtractor={(item, _) => {
+                        return item.id.toString();
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    onEndReached={onEndReached}
+                />}
         </View>
     );
 }

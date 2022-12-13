@@ -26,7 +26,7 @@ public abstract class Repository<T> where T : class, IAggregateRoot
         await DbContext.SaveChangesAsync(ct);
     }
 
-    public async Task Update(T entity, CancellationToken ct = default)
+    public async Task UpdateAsync(T entity, CancellationToken ct = default)
     {
         DbSet.Update(entity);
         await DbContext.SaveChangesAsync(ct);

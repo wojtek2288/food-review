@@ -13,21 +13,19 @@ public class ValidationBahavior<TRequest, Unit> : IPipelineBehavior<TRequest, Un
         this.validators = validators;
     }
 
-    public Task<Unit> Handle(TRequest request, RequestHandlerDelegate<Unit> next, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(TRequest request, RequestHandlerDelegate<Unit> next, CancellationToken cancellationToken)
     {
         var context = new ValidationContext<TRequest>(request);
 
-        var failures = validators
-            .Select(x => x.Validate(context))
-            .SelectMany(x => x.Errors)
-            .Where(x => x is not null)
-            .ToList();
+        var validationTasks = validators.Select(x => x.ValidateAsync(context));
+        var results = await Task.WhenAll(validationTasks);
+        var failures = results.SelectMany(x => x.Errors).Where(x => x is not null).ToList();
 
         if (failures.Any())
         {
             throw new ValidationException(failures);
         }
 
-        return next();
+        return await next();
     }
 }

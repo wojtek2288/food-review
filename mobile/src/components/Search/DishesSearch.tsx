@@ -1,16 +1,25 @@
 import { View } from 'react-native';
-import { dishes } from '../../data/dishes';
 import { DishesEmptyState } from '../EmptyStates/DishesEmptyState';
 import { DishesList } from '../Dishes/DishesList';
+import Dish from '../../responseTypes/Dish';
+import { NoResultsEmptyState } from '../EmptyStates/NoResultsEmptyState';
+import PaginatedResult from '../../responseTypes/PaginatedResult';
 
 interface DishesSearchProps {
+    dishes: PaginatedResult<Dish>;
     searchPhrase: string;
+    isLoading: boolean;
 }
 
-export const DishesSearch: React.FC<DishesSearchProps> = ({ searchPhrase }) => {
+export const DishesSearch: React.FC<DishesSearchProps> = ({ dishes, searchPhrase, isLoading }) => {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {searchPhrase === '' ? <DishesEmptyState /> : <DishesList dishes={dishes} />}
+            {searchPhrase === ''
+                ? <DishesEmptyState />
+                : dishes.items.length == 0
+                    ? <NoResultsEmptyState isLoading={isLoading} />
+                    :
+                    <DishesList dishes={dishes.items} isLoading={isLoading} />}
         </View>
     );
 }
