@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Colors from '../constants/Colors';
-import { View, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SearchBar } from '../components/Search/SearchBar';
@@ -43,47 +43,47 @@ export default function Search() {
   }, [searchPhrase]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.mainContainer}>
-        <View style={styles.searchContainer}>
-          <SearchBar searchPhrase={searchPhrase} setSearchPhrase={setSearchPhrase} />
-        </View>
-        <NavigationContainer independent={true} theme={NavigationTheme}>
-          <Tab.Navigator
-            screenOptions={
-              {
-                tabBarLabelStyle:
-                {
-                  fontSize: 12,
-                  textTransform: 'none',
-                },
-                tabBarStyle: {
-                  backgroundColor: 'transparent'
-                },
-                swipeEnabled: true,
-              }
-            }
-            initialRouteName='Dishes'>
-            <Tab.Screen name="Dishes" children={() =>
-              <DishesSearch
-                dishes={dishes.response ? dishes.response : { items: [], totalCount: 0 }}
-                searchPhrase={searchPhrase}
-                isLoading={dishes.isLoading}
-              />} />
-            <Tab.Screen name="Restaurants" children={() =>
-              <RestaurantsSearch
-                restaurants={restaurants.response ? restaurants.response : { items: [], totalCount: 0 }}
-                isLoading={restaurants.isLoading}
-                searchPhrase={searchPhrase} />} />
-            <Tab.Screen name="Users" children={() =>
-              <UsersSearch
-                users={users.response ? users.response : { items: [], totalCount: 0 }}
-                isLoading={users.isLoading}
-                searchPhrase={searchPhrase} />} />
-          </Tab.Navigator>
-        </NavigationContainer>
+    <View style={styles.mainContainer}>
+      <View style={styles.searchContainer}>
+        <SearchBar searchPhrase={searchPhrase} setSearchPhrase={setSearchPhrase} />
       </View>
-    </TouchableWithoutFeedback>
+      <NavigationContainer independent={true} theme={NavigationTheme}>
+        <Tab.Navigator
+          screenOptions={
+            {
+              tabBarLabelStyle:
+              {
+                fontSize: 12,
+                textTransform: 'none',
+              },
+              tabBarStyle: {
+                backgroundColor: 'transparent'
+              },
+              swipeEnabled: true,
+            }
+          }
+          initialRouteName='Dishes'>
+          <Tab.Screen name="Dishes" children={() =>
+            <DishesSearch
+              dishes={dishes.response ? dishes.response : { items: [], totalCount: 0 }}
+              searchPhrase={searchPhrase}
+              isLoading={dishes.isLoading} />
+          } />
+          <Tab.Screen name="Restaurants" children={() =>
+            <RestaurantsSearch
+              restaurants={restaurants.response ? restaurants.response : { items: [], totalCount: 0 }}
+              isLoading={restaurants.isLoading}
+              searchPhrase={searchPhrase} />
+          } />
+          <Tab.Screen name="Users" children={() =>
+            <UsersSearch
+              users={users.response ? users.response : { items: [], totalCount: 0 }}
+              isLoading={users.isLoading}
+              searchPhrase={searchPhrase} />
+          } />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </View>
   );
 }
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     marginTop: '15 %',
-    marginHorizontal: '8 %'
+    marginHorizontal: '8 %',
   },
   navigationContainer: {
     fontSize: 10
