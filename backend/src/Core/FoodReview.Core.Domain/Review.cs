@@ -38,6 +38,11 @@ public class Review : IAggregateRoot
 
     public void Edit(string description, double rating)
     {
+        if (rating > 10 || rating < 1)
+        {
+            throw new InvalidOperationException("Rating has to be within 1-10 range.");
+        }
+
         Description = description;
         Rating = rating;
     }
