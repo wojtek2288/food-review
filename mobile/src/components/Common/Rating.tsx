@@ -12,7 +12,7 @@ export const Rating: React.FC<RatingProps> = ({ rating }) => {
 
     return (
         <View style={styles(color).ratingContainer}>
-            <Text style={styles(color).ratingText}>{rating == null ? '?' : rating}</Text>
+            <Text style={styles(color).ratingText}>{rating == null ? '?' : rating.toFixed(1)}</Text>
         </View>
     );
 }
