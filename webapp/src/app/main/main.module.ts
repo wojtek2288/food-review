@@ -13,12 +13,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    BaseSearchComponent
+    BaseSearchComponent,
+    LoginComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +39,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   exports: [
     NavbarComponent,
     BaseSearchComponent,
+    LoginComponent,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,

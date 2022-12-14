@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiURL: "http://localhost:8000/api"
+  apiURL: "http://localhost:8000/api",
+  authURL: "https://foodreviewbackend3.azurewebsites.net/auth"
 };
 
 /*
