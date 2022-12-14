@@ -41,6 +41,20 @@ stages:
       inputs:
         testRunner: VSTest
         testResultsFiles: '**/*.trx'
+  - job: Frontend
+    displayName: Frontend
+    steps:
+      - task: Npm@1
+        displayName: 'npm install'
+        inputs:
+          command: install
+          workingDir: webapp
+      - task: Npm@1
+        displayName: 'npm build'
+        inputs:
+          command: custom
+          workingDir: webapp
+          customCommand: run build
 - stage: Deploy
   displayName: Deploy to dockerhub
   jobs:

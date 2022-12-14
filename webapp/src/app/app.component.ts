@@ -16,11 +16,11 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient){}
 
   ngOnInit(): void {
-    var headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    })
-    console.log(`${this.serverAddress}/query/FoodReview.Core.Contracts.Example.ExampleQuery`)
-    this.http.get(`${this.serverAddress}/query/FoodReview.Core.Contracts.Example.ExampleQuery`, {headers: headers}).subscribe(response => this.name = (<any>response).name)
+    // var headers = new HttpHeaders({
+    //   'Content-Type': 'application/json'
+    // })
+    // console.log(`${this.serverAddress}/query/FoodReview.Core.Contracts.Example.ExampleQuery`)
+    // this.http.get(`${this.serverAddress}/query/FoodReview.Core.Contracts.Example.ExampleQuery`, {headers: headers}).subscribe(response => this.name = (<any>response).name)
   }
 
 }

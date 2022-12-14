@@ -1,0 +1,29 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.routing-button {
+    color: rgb(207, 207, 207);
+    font-size: 18px;
+}
+
+.active-link {
+    color: white;
+}
+
+.title {
+    color: white;
+    padding: 0px;
+}
+
+.mat-button{
+    height: 100%;
+}
+
+.icon-image {
+    height: 50px;
+}
+
+.icon-button {
+    padding: 0px;
+}
