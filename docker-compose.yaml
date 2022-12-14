@@ -9,14 +9,14 @@ services:
       - API_BASE_URL=https://foodreviewbackend3.azurewebsites.net/api
 
   api:
-    image: aleksanderkus/foodreview-backend:latest
-    # build:
-    #   context: backend
-    #   dockerfile: dev/Dockerfile.api
-    #   args:
-    #     - APP_VERSION=0.0.1-dev
+    #image: aleksanderkus/foodreview-backend:latest
+    build:
+      context: backend
+      dockerfile: dev/Dockerfile.api
+      args:
+        - APP_VERSION=0.0.1-dev
     ports:
-      - "8080:8080"
+      - "8000:8000"
     volumes:
       - ./backend/:/app/code
       - ~/.nuget:/home/dotnet/.nuget

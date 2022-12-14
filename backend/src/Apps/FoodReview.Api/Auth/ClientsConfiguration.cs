@@ -19,7 +19,6 @@ internal static class ClientsConfiguration
                     RequireClientSecret = false,
 
                     AbsoluteRefreshTokenLifetime = (int)TimeSpan.FromDays(365 * 10).TotalSeconds,
-
                     AllowedScopes = new List<string>
                     {
                         StandardScopes.OpenId,

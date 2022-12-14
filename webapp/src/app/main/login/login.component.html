@@ -1,1 +1,19 @@
-<p>login works!</p>
+<div class="container">
+  <mat-card>
+    <h3>Please log in</h3>
+    <form>
+      <mat-form-field appearance="fill">
+        <mat-label>Login</mat-label>
+        <input matInput type="email" matInput [formControl]="loginControl">
+      </mat-form-field>
+      <div></div>
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input type="password" matInput [formControl]="passwordControl">
+      </mat-form-field>
+    </form>
+    <div class="button-div">
+      <button color="primary" type="submit" mat-raised-button (click)="login()">Log in</button>
+    </div>
+  </mat-card>
+</div>

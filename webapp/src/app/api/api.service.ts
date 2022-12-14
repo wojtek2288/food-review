@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
@@ -14,20 +14,20 @@ export class ApiService {
 
     getHeaders(token: string): HttpHeaders{
         return new HttpHeaders({
-            'Content-Type':  'application/x-www-form-urlencoded',
-            //'Authorization': `Bearer ${token}`
+            'Content-Type':  'application/json',
+            'Authorization': `Bearer ${token}`
         })
     }
 
     loginAdmin(username: string, password: string): Observable<ApiUser> {
-        const authData = {
-            //client_id: "client_app",
-            grant_type: "password",
-            client_secret: "secret",
-            username: username,
-            password: password
-        }
-        console.log(authData)
-        return this.http.post<ApiUser>(`${environment.authURL}/connect/token`, authData, {headers: this.getHeaders("")});
+        const body = new HttpParams()
+            .set('client_id', 'admin_app')
+            .set('grant_type', 'password')
+            .set('username', username)
+            .set('password', password);
+        const headers = new HttpHeaders({
+            'Content-Type':  'application/x-www-form-urlencoded',
+        })
+        return this.http.post<ApiUser>(`${environment.authURL}/connect/token`, body, {headers: headers});
     }
 }
