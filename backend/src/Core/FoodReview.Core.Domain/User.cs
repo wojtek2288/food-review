@@ -24,4 +24,9 @@ public class User : IAggregateRoot
             Email = email,
         };
     }
+
+    public void EditDescription(string description)
+    {
+        Description = description;
+    }
 }

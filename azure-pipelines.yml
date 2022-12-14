@@ -34,7 +34,7 @@ stages:
       displayName: "dotnet test"
       inputs:
         command: 'test'
-        workingDirectory: backend
+        workingDirectory: backend/tests
     - task: PublishTestResults@2
       displayName: Publish .NET Core test results
       condition: succeededOrFailed()

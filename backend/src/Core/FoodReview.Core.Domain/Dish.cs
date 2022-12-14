@@ -36,5 +36,6 @@ public class Dish : IEntity
         Name = name;
         Description = description;
         Price = price;
+        ImageUrl = imageUrl;
     }
 }
