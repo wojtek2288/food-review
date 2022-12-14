@@ -15,4 +15,8 @@ export class NavbarComponent implements OnInit {
       this.shouldDisplayButtons = x;
     });
   }
+
+  logout(): void {
+    this.authService.logout();
+  }
 }

@@ -17,6 +17,7 @@ import { LoginComponent } from './login/login.component';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { LoggedInGuard } from './auth/logged-in.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { NotLoggedInGuard } from './auth/not-logged-in.guard';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     ReactiveFormsModule
   ],
   providers: [
-    LoggedInGuard
+    LoggedInGuard,
+    NotLoggedInGuard
   ]
 })
 export class MainModule { }

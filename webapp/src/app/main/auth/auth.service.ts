@@ -32,4 +32,12 @@ import { Router } from "@angular/router";
         () => this.snackBar.open("Login failed", "", {duration: 3000}),
         () => this.router.navigate(['/restaurants']));
      }
+
+     logout(): void 
+     {
+         localStorage.clear();
+         this.loggedInUser = null;
+         this.isUserLoggedIn$.next(false);
+         this.router.navigate(['/login']);
+     }
  }

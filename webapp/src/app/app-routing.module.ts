@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DishSearchComponent } from './dishes/dish-search/dish-search.component';
 import { LoggedInGuard } from './main/auth/logged-in.guard';
+import { NotLoggedInGuard } from './main/auth/not-logged-in.guard';
 import { LoginComponent } from './main/login/login.component';
 import { NotFoundComponent } from './main/not-found/not-found.component';
 import { RestaurantSearchComponent } from './restaurants/restaurant-search/restaurant-search.component';
@@ -25,7 +26,8 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    canActivate: [NotLoggedInGuard]
   },
   {
     path: '',
