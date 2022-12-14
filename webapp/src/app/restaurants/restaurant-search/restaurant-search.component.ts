@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { ApiService } from 'src/app/api/api.service';
+import { AuthService } from 'src/app/main/auth/auth.service';
 import { BaseSearchComponent } from 'src/app/main/base-search/base-search.component';
 import { Restaurant } from '../model/restaurant.interface';
 
@@ -9,13 +11,18 @@ import { Restaurant } from '../model/restaurant.interface';
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
 export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> implements OnInit {
-  constructor() {
+  constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Restaurant>(ELEMENT_DATA);
     this.displayedColumns = ['id', 'name','description', 'showDetails'];
   }
 
   ngOnInit(): void {
+    this.apiService.getRestaurants({
+      pageCount: 0,
+      pageSize: 10,
+      searchPhrase: ""
+    }, this.authService.loggedInUser?.access_token!). subscribe(x => console.log(x));
     this.header = "Restaurants";
     this.dataSource.filterPredicate = (restuaurant, filter) => restuaurant.name.toLowerCase().includes(filter.toLowerCase()) || 
       restuaurant.description.toLowerCase().includes(filter.toLowerCase());
