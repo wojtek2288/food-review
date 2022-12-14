@@ -32,7 +32,7 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
                 Name = r.Name,
                 ImageUrl = r.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(r => r.DishId == null)
+                    .Where(rev => rev.DishId == null && rev.RestaurantId == r.Id)
                     .Average(r => r.Rating),
             })
             .Skip(query.PageCount * query.PageSize)
