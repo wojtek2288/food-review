@@ -2,7 +2,7 @@ using Xunit;
 using FoodReview.Core.Domain;
 using System;
 
-namespace FoodReview.Tests.Core.Restaurants;
+namespace FoodReview.Tests.Core.Reviews;
 
 public class EditingReviewsTests
 {
