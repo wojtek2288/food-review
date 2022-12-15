@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
     environment:
-      - API_BASE_URL=https://foodreviewbackend3.azurewebsites.net/api
+      - API_BASE_URL=https://foodreviewbackend3.azurewebsites.net
 
   api:
     #image: aleksanderkus/foodreview-backend:latest
