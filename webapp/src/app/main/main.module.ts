@@ -13,12 +13,19 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './login/login.component';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LoggedInGuard } from './auth/logged-in.guard';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { NotLoggedInGuard } from './auth/not-logged-in.guard';
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
-    BaseSearchComponent
+    BaseSearchComponent,
+    LoginComponent,
+    NotFoundComponent
   ],
   imports: [
     CommonModule,
@@ -32,11 +39,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatInputModule,
     MatSortModule,
     ReactiveFormsModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ],
   exports: [
     NavbarComponent,
     BaseSearchComponent,
+    LoginComponent,
+    NotFoundComponent,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
@@ -47,6 +57,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatSortModule,
     MatInputModule,
     ReactiveFormsModule
+  ],
+  providers: [
+    LoggedInGuard,
+    NotLoggedInGuard
   ]
 })
 export class MainModule { }
