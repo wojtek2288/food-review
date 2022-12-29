@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { queryUrl, commandUrl, authUrl } from '../api/urlProvider';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import ErrorResponse from '../responseTypes/ErrorResponse';
 
 export enum RequestType {
     Command,
@@ -73,8 +74,9 @@ const getToken = async (): Promise<string | null> => {
 
 export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: string, req: TRequest) => {
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<any>(null);
+    const [error, setError] = useState<ErrorResponse[] | null>(null);
     const [response, setRespone] = useState<TResponse>();
+    const [requestSuccessful, setRequestSuccessful] = useState<boolean>(false);
 
     const run = async (req?: TRequest) => {
         setIsLoading(true);
@@ -89,18 +91,18 @@ export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: st
                 url: url,
                 data: req,
             });
-            console.log(res);
             setRespone(res.data);
+            setRequestSuccessful(true);
             success = true;
         } catch (responseErr: any) {
-            setError(responseErr);
+            setError(responseErr.response.data);
         }
-
+        
         setIsLoading(false);
         return success;
     }
 
-    return { response, isLoading, error, run };
+    return { response, isLoading, error, run, requestSuccessful };
 }
 
 export const request = async <TResponse, TRequest>(

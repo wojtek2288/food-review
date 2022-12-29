@@ -1,6 +1,7 @@
 import { RequestType, useAxios } from '../hooks/useAxios';
 import PaginatedRequest from '../requestTypes.ts/PaginatedRequest';
 import PaginatedRequestWithSearch from '../requestTypes.ts/PaginatedRequestWithSearch';
+import RegisterRequest from '../requestTypes.ts/RegisterRequest';
 import Dish from '../responseTypes/Dish';
 import PaginatedResult from '../responseTypes/PaginatedResult';
 import Restaurant from '../responseTypes/Restaurant';
@@ -20,4 +21,8 @@ export const useSearchRestaurantsQuery = (req: PaginatedRequestWithSearch) => (
 
 export const useSearchUsersQuery = (req: PaginatedRequestWithSearch) => (
     useAxios<PaginatedResult<User>, PaginatedRequestWithSearch>(RequestType.Query, 'Users.SearchUsers', req)
+);
+
+export const useRegisterCommand = (req: RegisterRequest) => (
+    useAxios<any, RegisterRequest>(RequestType.Command, 'Users.Register', req)
 );

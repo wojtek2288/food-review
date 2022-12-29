@@ -7,19 +7,31 @@ import { NoResultsEmptyState } from '../EmptyStates/NoResultsEmptyState';
 import PaginatedResult from '../../responseTypes/PaginatedResult';
 
 interface RestaurantsSearchProps {
-    restaurants: PaginatedResult<Restaurant>;
-    searchPhrase: string;
-    isLoading: boolean;
+  restaurants: PaginatedResult<Restaurant>;
+  searchPhrase: string;
+  isLoading: boolean;
+  navigation: any;
 }
 
-export const RestaurantsSearch: React.FC<RestaurantsSearchProps> = ({ restaurants, searchPhrase, isLoading }) => {
-    return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            {searchPhrase === ''
-                ? <RestaurantsEmptyState />
-                : restaurants.items.length == 0
-                    ? <NoResultsEmptyState isLoading={isLoading} />
-                    : <RestaurantsList restaurants={restaurants.items} isLoading={isLoading} />}
-        </View>
-    );
-}
+export const RestaurantsSearch: React.FC<RestaurantsSearchProps> = ({
+  restaurants,
+  searchPhrase,
+  isLoading,
+  navigation,
+}) => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      {searchPhrase === '' ? (
+        <RestaurantsEmptyState />
+      ) : restaurants.items.length == 0 ? (
+        <NoResultsEmptyState isLoading={isLoading} />
+      ) : (
+        <RestaurantsList
+          restaurants={restaurants.items}
+          isLoading={isLoading}
+          navigation={navigation}
+        />
+      )}
+    </View>
+  );
+};
