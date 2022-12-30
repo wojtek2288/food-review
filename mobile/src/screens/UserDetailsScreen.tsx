@@ -1,21 +1,36 @@
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, FlatList, Dimensions } from 'react-native';
+import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { Text, View, Image, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
-import { ProfileTabScreenProps } from '../types';
 import { users } from '../data/users';
 import { Button } from '@ui-kitten/components';
 import { dishes } from '../data/dishes';
 import { DishCard } from '../components/Dishes/DishCard';
 
-export default function MyProfile({
+export default function UserDetailsScreen({
+  route,
   navigation,
-}: ProfileTabScreenProps<'MyProfile'>) {
+}: {
+  route: any;
+  navigation: any;
+}) {
   var user = users[0];
+  const { userId } = route.params;
 
   return (
     <>
+      <View style={styles.arrow}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name='leftcircleo' size={45} color={Colors.background} />
+        </TouchableOpacity>
+      </View>
       <FlatList
         ListHeaderComponent={() => (
           <>
@@ -32,35 +47,14 @@ export default function MyProfile({
                       }
                     />
                   </View>
-                  <View style={styles.settingsContainer}>
-                    <Pressable
-                      onPress={() => navigation.navigate('Modal')}
-                      style={({ pressed }) => ({
-                        opacity: pressed ? 0.5 : 1,
-                      })}
-                    >
-                      <AntDesign
-                        name='down'
-                        size={30}
-                        color={Colors.darkText}
-                      />
-                    </Pressable>
-                  </View>
                 </View>
                 <Text style={styles.username}>{user.username}</Text>
                 <View style={styles.desciptionContainer}>
                   <Text style={styles.description}>{user.description}</Text>
                 </View>
-                <Button
-                  onPress={() => navigation.navigate('Modal')}
-                  style={styles.button}
-                >
-                  Edit
-                </Button>
               </View>
-              <View style={styles.ratings}></View>
             </View>
-            <Text style={styles.headerText}>My Reviews:</Text>
+            <Text style={styles.headerText}>Reviews:</Text>
           </>
         )}
         data={dishes}
@@ -102,6 +96,14 @@ const styles = StyleSheet.create({
     paddingTop: '10 %',
     paddingBottom: '3 %',
   },
+  arrow: {
+    position: 'absolute',
+    left: '5 %',
+    top: '5 %',
+    zIndex: 999,
+    backgroundColor: 'white',
+    borderRadius: 100,
+  },
   upperContainer: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -112,15 +114,9 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     flex: 1,
-    marginLeft: 55,
     alignItems: 'center',
     justifyContent: 'center',
     height: Dimensions.get('window').height * 0.15,
-  },
-  settingsContainer: {
-    alignSelf: 'flex-start',
-    marginLeft: 'auto',
-    marginRight: 15,
   },
   profileAvatar: {
     flex: 1,

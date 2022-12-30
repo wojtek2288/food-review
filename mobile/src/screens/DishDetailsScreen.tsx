@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { Button } from '@ui-kitten/components';
 import {
@@ -12,8 +13,8 @@ import { Text, View } from 'react-native';
 import { Price } from '../components/Common/Price.';
 import { Rating } from '../components/Common/Rating';
 import { TagCard } from '../components/Common/TagCard';
-import { DishCard } from '../components/Dishes/DishCard';
 import { ReviewCard } from '../components/Reviews/ReviewCard';
+import { ReviewModal } from '../components/Reviews/ReviewModal';
 import Colors from '../constants/Colors';
 import { dishes } from '../data/dishes';
 import { reviews } from '../data/reviews';
@@ -27,6 +28,7 @@ export const DishDetailsScreen = ({
 }) => {
   const { dishId } = route.params;
   const dish = dishes[2];
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
 
   return (
     <View>
@@ -35,6 +37,9 @@ export const DishDetailsScreen = ({
           <AntDesign name='leftcircleo' size={45} color={Colors.background} />
         </TouchableOpacity>
       </View>
+      {reviewModalVisible ? (
+        <ReviewModal onClose={setReviewModalVisible} />
+      ) : null}
       <FlatList
         nestedScrollEnabled={true}
         ListHeaderComponent={() => (
@@ -69,7 +74,12 @@ export const DishDetailsScreen = ({
                 ))}
               </View>
               <View style={styles.rateContainer}>
-                <Button style={styles.button}>Rate</Button>
+                <Button
+                  style={styles.button}
+                  onPress={() => setReviewModalVisible(true)}
+                >
+                  Rate
+                </Button>
               </View>
             </View>
             <Text style={styles.headerText}>Reviews:</Text>

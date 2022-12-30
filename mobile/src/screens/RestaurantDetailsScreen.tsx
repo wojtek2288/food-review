@@ -21,6 +21,7 @@ import Dish from '../responseTypes/Dish';
 import Review from '../responseTypes/Review';
 import { DishCard } from '../components/Dishes/DishCard';
 import { dishes } from '../data/dishes';
+import { ReviewModal } from '../components/Reviews/ReviewModal';
 
 export const RestaurantDetailsScreen = ({
   route,
@@ -33,6 +34,7 @@ export const RestaurantDetailsScreen = ({
   const { restaurantId } = route.params;
   const [data, setData] = useState<any>(reviews);
   const restaurant = restaurants[2];
+  const [reviewModalVisible, setReviewModalVisible] = useState(false);
 
   return (
     <View>
@@ -41,6 +43,9 @@ export const RestaurantDetailsScreen = ({
           <AntDesign name='leftcircleo' size={45} color={Colors.background} />
         </TouchableOpacity>
       </View>
+      {reviewModalVisible ? (
+        <ReviewModal onClose={setReviewModalVisible} />
+      ) : null}
       <FlatList
         ListHeaderComponent={() => (
           <>
@@ -70,7 +75,12 @@ export const RestaurantDetailsScreen = ({
                 ))}
               </View>
               <View style={styles.rateContainer}>
-                <Button style={styles.button}>Rate</Button>
+                <Button
+                  style={styles.button}
+                  onPress={() => setReviewModalVisible(true)}
+                >
+                  Rate
+                </Button>
               </View>
             </View>
             <BottomNavigation

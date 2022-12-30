@@ -116,6 +116,7 @@ export default function Search({ navigation }: any) {
                 }
                 isLoading={users.isLoading}
                 searchPhrase={searchPhrase}
+                navigation={navigation}
               />
             )}
           />

@@ -42,6 +42,7 @@ export type SearchStackParamList = {
   Search: undefined;
   DishDetailsScreen: undefined;
   RestaurantDetailsScreen: undefined;
+  UserDetailsScreen: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

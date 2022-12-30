@@ -29,6 +29,7 @@ import Register from '../screens/Register';
 import Profile from '../screens/Profile';
 import { DishDetailsScreen } from '../screens/DishDetailsScreen';
 import { RestaurantDetailsScreen } from '../screens/RestaurantDetailsScreen';
+import UserDetailsScreen from '../screens/UserDetailsScreen';
 
 export default function Navigation() {
   return (
@@ -87,6 +88,18 @@ function ProfileTab() {
         component={Register}
         options={{ headerShown: false }}
       />
+      <SearchStack.Screen
+        name='DishDetailsScreen'
+        options={{ headerShown: false }}
+      >
+        {(props) => <DishDetailsScreen {...props} />}
+      </SearchStack.Screen>
+      <SearchStack.Screen
+        name='RestaurantDetailsScreen'
+        options={{ headerShown: false }}
+      >
+        {(props) => <RestaurantDetailsScreen {...props} />}
+      </SearchStack.Screen>
       <Stack.Group screenOptions={{ presentation: 'modal' }}>
         <Stack.Screen
           name='Modal'
@@ -135,6 +148,12 @@ function SearchTab() {
         options={{ headerShown: false }}
       >
         {(props) => <RestaurantDetailsScreen {...props} />}
+      </SearchStack.Screen>
+      <SearchStack.Screen
+        name='UserDetailsScreen'
+        options={{ headerShown: false }}
+      >
+        {(props) => <UserDetailsScreen {...props} />}
       </SearchStack.Screen>
     </SearchStack.Navigator>
   );
