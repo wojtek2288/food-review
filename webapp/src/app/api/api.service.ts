@@ -5,6 +5,7 @@ import { environment } from "src/environments/environment";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
 import { ApiUser } from "./model/api-user";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
+import { PaginatedQueryResult } from "./model/paginated-query-results";
 
 @Injectable({
     providedIn: "root",
@@ -33,8 +34,8 @@ export class ApiService {
         return this.http.post<ApiUser>(`${environment.apiURL}/auth/connect/token`, body, {headers: headers});
     }
 
-    getRestaurants(query: PaginatedQueryCriteria, token: string): Observable<Restaurant[]>
+    getRestaurants(query: PaginatedQueryCriteria, token: string): Observable<PaginatedQueryResult<Restaurant>>
     {
-        return this.http.post<Restaurant[]>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Mobile.Restaurants.SearchRestaurants`, query, {headers: this.getHeaders(token)});
+        return this.http.post<PaginatedQueryResult<Restaurant>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Restaurants.SearchRestaurants`, query, {headers: this.getHeaders(token)});
     }
 }

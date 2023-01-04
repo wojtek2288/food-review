@@ -22,6 +22,9 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.empTbSort;
+    this.paginator.page.subscribe(x => this.onSearch())
+    this.empTbSort.sortChange.subscribe(x => this.onSearch());
+    this.onSearch();
   }
 
   onSearch()
