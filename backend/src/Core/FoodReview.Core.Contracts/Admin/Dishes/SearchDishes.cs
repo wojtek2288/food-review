@@ -2,10 +2,10 @@ using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
 using Microsoft.AspNetCore.Authorization;
 
-namespace FoodReview.Core.Contracts.Admin.Restaurants;
+namespace FoodReview.Core.Contracts.Admin.Dishes;
 
 [AllowAnonymous]
-public class SearchRestaurants : QueryBase<SearchRestaurants, PaginatedResult<RestaurantDTO>>
+public class SearchDishes: QueryBase<SearchDishes, PaginatedResult<DishDTO>>
 {
     public string? SortingField { get; set; }
     public string? SortingDirection { get; set; }

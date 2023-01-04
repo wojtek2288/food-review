@@ -1,4 +1,4 @@
 export interface PaginatedQueryResult<T> {
-    totalItems: number
+    totalCount: number
     items: T[]
 }

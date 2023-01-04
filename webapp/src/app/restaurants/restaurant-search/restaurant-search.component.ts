@@ -23,11 +23,15 @@ export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> i
 
   override onSearch(): void {
     this.apiService.getRestaurants({
+      sortingField: this.sortingField,
+      sortingDirection: this.sortingDirection,
       pageCount: this.paginator.pageIndex,
       pageSize: this.paginator.pageSize,
-      searchPhrase: this.searchFormControl.value
-    }, this.authService.loggedInUser?.access_token!).subscribe(x => {
+      searchPhrase: this.searchFormControl.value,
+    }, this.authService.loggedInUser?.access_token!).subscribe(x => 
+    {
       this.dataSource.data = x.items;
+      this.paginator.length = x.totalCount;
     });
   }
 }

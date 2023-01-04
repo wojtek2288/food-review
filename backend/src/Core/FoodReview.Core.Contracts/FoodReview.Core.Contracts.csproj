@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FoodReview.Core.Domain\FoodReview.Core.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

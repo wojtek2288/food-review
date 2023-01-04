@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using FoodReview.Core.Contracts.Admin;
-using FoodReview.Core.Contracts.Admin.Restaurants;
+using FoodReview.Core.Contracts.Admin.Users;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
 using FoodReview.Core.Domain;
@@ -8,28 +8,28 @@ using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
+namespace FoodReview.Core.Services.CQRS.Admin.Users;
 
-public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResult<RestaurantDTO>>
+public class SearchUsersQH : QueryHandler<SearchUsers, PaginatedResult<UserDTO>>
 {
     private readonly CoreDbContext dbContext;
 
-    public SearchRestaurantsQH(CoreDbContext dbContext)
+    public SearchUsersQH(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
 
-    public override async Task<PaginatedResult<RestaurantDTO>> HandleAsync(SearchRestaurants query, CoreContext context)
+    public override async Task<PaginatedResult<UserDTO>> HandleAsync(SearchUsers query, CoreContext context)
     {
         var searchPhrase = query.SearchPhrase.ToLower();
-        var dbData = dbContext.Restaurants
-            .Where(r => r.Name.Trim().ToLower().Contains(searchPhrase) ||
-                        (r.Description != null && r.Description.Trim().ToLower().Contains(searchPhrase)));
+        var dbData = dbContext.Users
+            .Where(x => x.Username.Trim().ToLower().Contains(searchPhrase) ||
+                        (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)));
         
-        IEnumerable<Restaurant> items = dbData;
+        IEnumerable<User> items = dbData;
         if (query.SortingField != null)
         {
-            var descriptor = TypeDescriptor.GetProperties(typeof(Restaurant)).Find(query.SortingField, true);
+            var descriptor = TypeDescriptor.GetProperties(typeof(User)).Find(query.SortingField, true);
             var list = await dbData.ToListAsync();
             items = query.SortingDirection != null && query.SortingDirection == "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
                 : list.OrderByDescending(x => descriptor.GetValue((x)));
@@ -37,20 +37,20 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
         
         var totalCount = items.Count();
 
-        var restaurants = items
-            .Select(r => new RestaurantDTO
+        var dishes = items
+            .Select(x => new UserDTO
             {
-                Id = r.Id.ToString(),
-                Name = r.Name,
-                Description = r.Description,
+                Id = x.Id.ToString(),
+                Name = x.Username,
+                Description = x.Description
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)
             .ToList();
 
-        return new PaginatedResult<RestaurantDTO>
+        return new PaginatedResult<UserDTO>
         {
-            Items = restaurants,
+            Items = dishes,
             TotalCount = totalCount
         };
     }
