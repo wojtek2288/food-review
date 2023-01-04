@@ -10,18 +10,16 @@ import { Dish } from '../model/dish.interface';
   templateUrl: '../../main/base-search/base-search.component.html',
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class DishSearchComponent extends BaseSearchComponent<Dish> implements OnInit {
+export class DishSearchComponent extends BaseSearchComponent<Dish> {
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
     this.displayedColumns = ['id', 'name', 'restaurantName', 'description', 'showDetails'];
-  }
-
-  ngOnInit(): void {
     this.header = "Dishes";
   }
 
   override onSearch(): void {
+    this.isLoadingSubject.next(true);
     this.apiService.getDishes({
       sortingField: this.sortingField,
       sortingDirection: this.sortingDirection,
@@ -30,6 +28,7 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> implements On
       searchPhrase: this.searchFormControl.value,
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
+      this.isLoadingSubject.next(false);
       this.dataSource.data = x.items;
       this.paginator.length = x.totalCount;
     });

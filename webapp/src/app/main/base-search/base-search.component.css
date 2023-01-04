@@ -41,3 +41,7 @@ table{
 .mat-column-description {
     padding: 10px;
 }
+
+.spinner {
+    margin: 0 auto;
+}

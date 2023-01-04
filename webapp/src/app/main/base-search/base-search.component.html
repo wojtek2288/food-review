@@ -45,4 +45,8 @@
   </table>
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
   </mat-paginator>
+  
+  <div class="l">
+    <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+  </div>
 </mat-card>

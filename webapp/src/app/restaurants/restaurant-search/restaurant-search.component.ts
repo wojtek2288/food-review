@@ -10,18 +10,16 @@ import { Restaurant } from '../model/restaurant.interface';
   templateUrl: '../../main/base-search/base-search.component.html',
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> implements OnInit {
+export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> {
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Restaurant>();
     this.displayedColumns = ['id', 'name','description', 'showDetails'];
-  }
-
-  ngOnInit(): void {
     this.header = "Restaurants";
   }
 
   override onSearch(): void {
+    this.isLoadingSubject.next(true);
     this.apiService.getRestaurants({
       sortingField: this.sortingField,
       sortingDirection: this.sortingDirection,
@@ -30,6 +28,7 @@ export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> i
       searchPhrase: this.searchFormControl.value,
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
+      this.isLoadingSubject.next(false);
       this.dataSource.data = x.items;
       this.paginator.length = x.totalCount;
     });

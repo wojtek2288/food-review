@@ -10,18 +10,16 @@ import { User } from '../model/user.interface';
   templateUrl: '../../main/base-search/base-search.component.html',
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class UserSearchComponent extends BaseSearchComponent<User> implements OnInit {
+export class UserSearchComponent extends BaseSearchComponent<User> {
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<User>();
     this.displayedColumns = ['id', 'name', 'description', 'showDetails'];
-  }
-
-  ngOnInit(): void {
     this.header = "Users";
   }
 
   override onSearch(): void {
+    this.isLoadingSubject.next(true);
     this.apiService.getUsers({
       sortingField: this.sortingField,
       sortingDirection: this.sortingDirection,
@@ -30,6 +28,7 @@ export class UserSearchComponent extends BaseSearchComponent<User> implements On
       searchPhrase: this.searchFormControl.value,
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
+      this.isLoadingSubject.next(false);
       this.dataSource.data = x.items;
       this.paginator.length = x.totalCount;
     });

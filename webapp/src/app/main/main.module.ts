@@ -14,7 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoggedInGuard } from './auth/logged-in.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NotLoggedInGuard } from './auth/not-logged-in.guard';
@@ -40,7 +41,8 @@ import { NotLoggedInGuard } from './auth/not-logged-in.guard';
     MatSortModule,
     ReactiveFormsModule,
     RouterModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     NavbarComponent,
@@ -56,6 +58,7 @@ import { NotLoggedInGuard } from './auth/not-logged-in.guard';
     MatFormFieldModule,
     MatSortModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     ReactiveFormsModule
   ],
   providers: [
