@@ -1,4 +1,4 @@
-namespace FoodReview.Core.Contracts.Admin;
+namespace FoodReview.Core.Domain.DTO.Admin;
 
 public class UserDTO
 {

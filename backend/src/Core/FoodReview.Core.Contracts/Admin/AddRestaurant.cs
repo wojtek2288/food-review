@@ -6,7 +6,7 @@ namespace FoodReview.Core.Contracts.Admin;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class AddRestaurant : CommandBase<AddRestaurant>
 {
-    public Guid Id { get; set; }
+    public string Id { get; set; }
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
     public bool IsVisible { get; set; }

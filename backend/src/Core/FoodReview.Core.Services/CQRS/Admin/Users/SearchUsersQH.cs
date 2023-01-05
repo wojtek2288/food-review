@@ -4,6 +4,7 @@ using FoodReview.Core.Contracts.Admin.Users;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
 using FoodReview.Core.Domain;
+using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;

@@ -23,7 +23,7 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
             .MustAsync(async (x, cancellation) => 
             {
                 var restaurantExists = await dbContext.Restaurants
-                    .AnyAsync(r => r.Id == x.Command.Id, x.Context.CancellationToken);
+                    .AnyAsync(r => r.Id.ToString() == x.Command.Id, x.Context.CancellationToken);
 
                 return !restaurantExists;
             })
