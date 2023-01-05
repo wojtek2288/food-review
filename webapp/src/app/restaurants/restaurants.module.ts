@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RestaurantSearchComponent } from './restaurant-search/restaurant-search.component';
 import { MainModule } from '../main/main.module';
+import { RestaurantDetailsComponent } from './restaurant-details/restaurant-details.component';
 
 @NgModule({
   declarations: [
-    RestaurantSearchComponent
+    RestaurantSearchComponent,
+    RestaurantDetailsComponent
   ],
   imports: [
     CommonModule,
@@ -13,6 +15,7 @@ import { MainModule } from '../main/main.module';
   ],
   exports: [
     RestaurantSearchComponent,
+    RestaurantDetailsComponent
   ]
 })
 export class RestaurantsModule { }
