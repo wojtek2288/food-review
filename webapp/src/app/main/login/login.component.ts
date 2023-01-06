@@ -11,9 +11,7 @@ import { AuthService } from '../auth/auth.service';
 export class LoginComponent implements OnInit {
   loginControl = new FormControl('', [Validators.required]);
   passwordControl = new FormControl('', [Validators.required]);
-  constructor(private authService: AuthService) {
-    //this.authService.login("admin", "admin");
-   }
+  constructor(private authService: AuthService) { }
 
   ngOnInit(): void {
   }

@@ -36,4 +36,5 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   }
 
   onSearch() { }
+  onShowDetails(rowData: T) {}
 }

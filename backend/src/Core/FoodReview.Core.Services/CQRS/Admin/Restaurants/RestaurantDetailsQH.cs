@@ -49,7 +49,8 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
             Id = restaurant.Id.ToString(),
             Name = restaurant.Name,
             ImageUrl = restaurant.ImageUrl,
-            Description = restaurant.Description
+            Description = restaurant.Description,
+            IsVisible = restaurant.IsVisible
         };
     }
 }

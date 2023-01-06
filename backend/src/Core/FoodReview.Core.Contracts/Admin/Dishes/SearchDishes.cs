@@ -12,6 +12,6 @@ public class SearchDishes: QueryBase<SearchDishes, PaginatedResult<DishDTO>>
     public string? SortingDirection { get; set; }
     public int PageCount { get; set; }
     public int PageSize { get; set; }
-
     public string SearchPhrase { get; set; } = default!;
+    public string RestaurantName { get; set; } = default!;
 }

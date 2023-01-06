@@ -36,7 +36,7 @@
     <!-- Symbol Column -->
     <ng-container matColumnDef="showDetails">
       <th mat-header-cell *matHeaderCellDef> Show details </th>
-      <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary" class="show-details">Show
+      <td mat-cell *matCellDef="let element"> <button mat-raised-button color="primary" class="show-details" (click)="onShowDetails(element)">Show
           details</button></td>
     </ng-container>
 
@@ -46,7 +46,7 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons>
   </mat-paginator>
   
-  <div class="l">
+  <div>
     <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
   </div>
 </mat-card>

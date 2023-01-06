@@ -16,7 +16,7 @@ const routes: Routes = [
     canActivate: [LoggedInGuard]
   },
   {
-    path: 'restaurants/details',
+    path: 'restaurants/details/:id',
     component: RestaurantDetailsComponent,
     canActivate: [LoggedInGuard]
   },

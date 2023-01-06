@@ -6,8 +6,11 @@ import { Dish } from "../dishes/model/dish.interface";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
 import { User } from "../users/model/user.interface";
 import { ApiUser } from "./model/api-user";
+import { DetailsRequest } from "./model/details-request";
+import { DishQueryCriteria } from "./model/dish-query-criteria";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
 import { PaginatedQueryResult } from "./model/paginated-query-results";
+import { RestaurantDetails } from "./model/restaurant-details";
 
 @Injectable({
     providedIn: "root",
@@ -41,7 +44,12 @@ export class ApiService {
         return this.http.post<PaginatedQueryResult<Restaurant>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Restaurants.SearchRestaurants`, query, {headers: this.getHeaders(token)});
     }
 
-    getDishes(query: PaginatedQueryCriteria, token: string): Observable<PaginatedQueryResult<Dish>>
+    getRestaurantDetails(query: DetailsRequest, token: string): Observable<RestaurantDetails>
+    {
+        return this.http.post<RestaurantDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails`, query, {headers: this.getHeaders(token)});
+    }
+
+    getDishes(query: DishQueryCriteria, token: string): Observable<PaginatedQueryResult<Dish>>
     {
         return this.http.post<PaginatedQueryResult<Dish>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.SearchDishes`, query, {headers: this.getHeaders(token)});
     }

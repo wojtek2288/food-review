@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ApiService } from 'src/app/api/api.service';
 import { AuthService } from 'src/app/main/auth/auth.service';
@@ -11,6 +11,7 @@ import { Dish } from '../model/dish.interface';
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
 export class DishSearchComponent extends BaseSearchComponent<Dish> {
+  @Input() restaurant: string = "";
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
@@ -26,6 +27,7 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
       pageCount: this.paginator.pageIndex,
       pageSize: this.paginator.pageSize,
       searchPhrase: this.searchFormControl.value,
+      restaurantName: this.restaurant
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
       this.isLoadingSubject.next(false);

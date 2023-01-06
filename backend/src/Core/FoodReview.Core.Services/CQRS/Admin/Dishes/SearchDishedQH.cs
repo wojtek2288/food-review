@@ -25,6 +25,7 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
         var searchPhrase = query.SearchPhrase.ToLower();
         var dbData = dbContext.Dishes
             .Include(x => x.Restaurant)
+            .Where(x => string.IsNullOrEmpty(query.RestaurantName) || x.Restaurant.Name == query.RestaurantName)
             .Where(x => x.Name.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase));

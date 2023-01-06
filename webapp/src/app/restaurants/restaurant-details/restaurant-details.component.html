@@ -1,14 +1,27 @@
 <mat-card class="card">
-    <div class="name-description-grid">
+    <div class="name-description-grid" *ngIf="!(isLoading$ | async)">
         <h3 class="name-label">Name:</h3>
-        <mat-label class="name-content">Content name</mat-label>
+        <mat-label class="name-content">{{restaurant.name}}</mat-label>
         <div class="name-divider divider"></div>
         <h3 class="description-label">Description:</h3>
-        <mat-label class="description-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ullamcorper diam eu enim pellentesque, sit amet consectetur neque porttitor. Aliquam at ligula porta, condimentum tellus sed, auctor ipsum. Sed eleifend, enim id rhoncus varius, turpis metus placerat mauris, in ultricies erat sem in magna. Fusce ullamcorper consequat eros, eget hendrerit justo eleifend ut. Nam sapien nisi, tempor sed nulla nec, vestibulum facilisis felis. Fusce eget urna metus. Quisque orci ligula, tincidunt nec elit vitae, lobortis interdum neque. Praesent quis orci mattis, feugiat augue at, sodales neque. Sed ac augue et massa mattis luctus eget eget odio. Nunc nec lectus nec ex pellentesque sagittis. In id ipsum eget sem dictum sollicitudin.
-</mat-label>
-        <img src="https://images.ctfassets.net/81iqaqpfd8fy/3r4flvP8Z26WmkMwAEWEco/870554ed7577541c5f3bc04942a47b95/78745131.jpg?h=620&w=1440">
+        <mat-label class="description-content">{{restaurant.description}}</mat-label>
+        <div class="logo-image">
+            <img [src]="restaurant.imageUrl">
+        </div>
         <div class="tags-divider divider"></div>
         <h3 class="tags-label">Tags:</h3>
         <mat-label class="tags-content">Content name</mat-label>
+        <div class="ratings-divider divider"></div>
+        <mat-tab-group class="ratings-content">
+            <mat-tab label="Dishes">
+                <app-dish-search [restaurant]="restaurant.name">
+
+                </app-dish-search>
+            </mat-tab>
+            <mat-tab label="Ratings"> Content 2 </mat-tab>
+          </mat-tab-group>
+    </div>
+    <div class="spinner-div">
+        <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
     </div>
 </mat-card>

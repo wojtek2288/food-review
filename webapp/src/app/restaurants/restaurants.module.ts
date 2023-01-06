@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RestaurantSearchComponent } from './restaurant-search/restaurant-search.component';
 import { MainModule } from '../main/main.module';
 import { RestaurantDetailsComponent } from './restaurant-details/restaurant-details.component';
+import { DishesModule } from '../dishes/dishes.module';
 
 @NgModule({
   declarations: [
@@ -11,7 +12,8 @@ import { RestaurantDetailsComponent } from './restaurant-details/restaurant-deta
   ],
   imports: [
     CommonModule,
-    MainModule
+    MainModule,
+    DishesModule
   ],
   exports: [
     RestaurantSearchComponent,
