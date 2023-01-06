@@ -15,21 +15,11 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Feed: {
-            screens: {
-              Feed: 'feed',
-            },
-          },
           Search: {
             screens: {
               Search: 'search',
             },
           },
-          Profile: {
-            screens: {
-              Profile: 'profile',
-            },
-          }
         },
       },
       Modal: 'modal',

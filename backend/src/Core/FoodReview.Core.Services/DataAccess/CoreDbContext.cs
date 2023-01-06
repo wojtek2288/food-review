@@ -17,6 +17,7 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
     public DbSet<Dish> Dishes => Set<Dish>();
     public new DbSet<User> Users => Set<User>();
     public DbSet<Review> Reviews => Set<Review>();
+    public DbSet<Tag> Tags => Set<Tag>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -31,6 +32,10 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
             cfg.Property(e => e.ImageUrl).HasMaxLength(StringLengths.LinkString);
             cfg.HasMany(e => e.Dishes).WithOne(e => e.Restaurant);
+            cfg.OwnsMany(e => e.Tags, t =>
+            {
+                t.HasKey(t => new { t.RestaurantId, t.TagId });
+            });
         });
 
         builder.Entity<Dish>(cfg =>
@@ -40,6 +45,10 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
             cfg.Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
             cfg.Property(e => e.ImageUrl).HasMaxLength(StringLengths.LinkString);
+            cfg.OwnsMany(e => e.Tags, t =>
+            {
+                t.HasKey(t => new { t.DishId, t.TagId });
+            });
         });
 
         builder.Entity<User>(cfg =>
@@ -61,6 +70,13 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
             cfg.HasOne<Dish>().WithMany().HasForeignKey(e => e.DishId);
             cfg.Property(e => e.Description).IsRequired();
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
+        });
+
+        builder.Entity<Tag>(cfg =>
+        {
+            cfg.HasKey(e => e.Id);
+            cfg.Property(e => e.Name).HasMaxLength(StringLengths.VeryShortString);
+            cfg.Property(e => e.ColorHex).HasMaxLength(StringLengths.VeryShortString);
         });
     }
 

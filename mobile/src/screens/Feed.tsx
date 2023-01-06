@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 import { View } from 'react-native';
-import { RootTabScreenProps } from '../types';
+import { FeedTabScreenProps, RootTabScreenProps } from '../types';
 import Colors from '../constants/Colors';
 import { DishesList } from '../components/Dishes/DishesList';
 import { useEffect, useState } from 'react';
@@ -8,12 +8,15 @@ import Dish from '../responseTypes/Dish';
 import { useFeedQuery } from '../api/services';
 import { defaultPageSize } from '../constants/Pagination';
 
-export default function Feed({ navigation }: RootTabScreenProps<'Feed'>) {
+export default function Feed({ navigation }: any) {
   const [dishes, setDishes] = useState(new Array<Dish>());
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const paginatedRequest = { pageSize: defaultPageSize, pageCount: currentPage };
+  const paginatedRequest = {
+    pageSize: defaultPageSize,
+    pageCount: currentPage,
+  };
 
   const { response, run } = useFeedQuery(paginatedRequest);
 
@@ -31,18 +34,23 @@ export default function Feed({ navigation }: RootTabScreenProps<'Feed'>) {
       setCurrentPage(currentPage + 1);
       setTotalCount(response.totalCount);
     }
-  }, [response])
+  }, [response]);
 
   const onEndReached = () => {
     if (currentPage * defaultPageSize >= totalCount || currentPage == 0) {
       return;
     }
     run(paginatedRequest);
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <DishesList dishes={dishes} isLoading={isLoading} onEndReached={onEndReached} />
+      <DishesList
+        dishes={dishes}
+        isLoading={isLoading}
+        onEndReached={onEndReached}
+        navigation={navigation}
+      />
     </View>
   );
 }

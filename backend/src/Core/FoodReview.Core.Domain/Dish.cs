@@ -10,6 +10,9 @@ public class Dish : IEntity
     public string? Description { get; private set; }
     public string ImageUrl { get; private set; } = default!;
     public decimal Price { get; private set; }
+    public IReadOnlyList<TagToDish> Tags => tags;
+
+    private List<TagToDish> tags = new();
 
     private Dish() { }
 

@@ -117,6 +117,27 @@ namespace FoodReview.Core.Services.Migrations
                     b.ToTable("Reviews");
                 });
 
+            modelBuilder.Entity("FoodReview.Core.Domain.Tag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ColorHex")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("FoodReview.Core.Domain.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -351,7 +372,48 @@ namespace FoodReview.Core.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("FoodReview.Core.Domain.TagToDish", "Tags", b1 =>
+                        {
+                            b1.Property<Guid>("DishId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("TagId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("DishId", "TagId");
+
+                            b1.ToTable("TagToDish");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DishId");
+                        });
+
                     b.Navigation("Restaurant");
+
+                    b.Navigation("Tags");
+                });
+
+            modelBuilder.Entity("FoodReview.Core.Domain.Restaurant", b =>
+                {
+                    b.OwnsMany("FoodReview.Core.Domain.TagToRestaurant", "Tags", b1 =>
+                        {
+                            b1.Property<Guid>("RestaurantId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("TagId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("RestaurantId", "TagId");
+
+                            b1.ToTable("TagToRestaurant");
+
+                            b1.WithOwner()
+                                .HasForeignKey("RestaurantId");
+                        });
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("FoodReview.Core.Domain.Review", b =>

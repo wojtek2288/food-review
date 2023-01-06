@@ -1,9 +1,7 @@
 export default interface Review {
-    id: number;
+    id: string;
     username: string;
-    review: string;
-    dishUrl: string;
+    review: string | null;
     rating: number;
-    restaurantName: string;
-    dishName: string;
+    avatarUrl: string | null,
 }
