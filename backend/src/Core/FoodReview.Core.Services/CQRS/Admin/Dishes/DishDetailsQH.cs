@@ -50,7 +50,8 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO>
             Name = dish.Name,
             ImageUrl = dish.ImageUrl,
             Description = dish.Description,
-            RestaurantName = dish.Restaurant.Name
+            RestaurantName = dish.Restaurant.Name,
+            RestaurantId = dish.Restaurant.Id.ToString()
         };
     }
 }

@@ -3,6 +3,9 @@
         <h3 class="name-label">Name:</h3>
         <mat-label class="name-content">{{dish.name}}</mat-label>
         <div class="name-divider divider"></div>
+        <h3 class="restaurant-label">Restaurant:</h3>
+        <mat-label class="restaurant-content"><a [routerLink]="'/restaurants/details/' + dish.restaurantId">{{dish.restaurantName}}</a></mat-label>
+        <div class="restaurant-divider divider"></div>
         <h3 class="description-label">Description:</h3>
         <mat-label class="description-content">{{dish.description}}</mat-label>
         <div class="logo-image">

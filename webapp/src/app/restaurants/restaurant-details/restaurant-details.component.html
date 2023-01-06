@@ -8,6 +8,12 @@
         <div class="logo-image">
             <img [src]="restaurant.imageUrl">
         </div>
+        <div class="visibility-divider divider"></div>
+        <h3 class="visibility-label">Visibility:</h3>
+        <div class="visibility-content">
+            <mat-label >{{visibility}}</mat-label>
+            <button mat-raised-button color="primary" class="toggle-button" (click)="onVisibilityToggle()">Toggle</button>
+        </div>
         <div class="tags-divider divider"></div>
         <h3 class="tags-label">Tags:</h3>
         <mat-label class="tags-content">Content name</mat-label>

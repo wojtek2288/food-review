@@ -24,20 +24,42 @@ export class RestaurantDetailsComponent implements OnInit {
     isVisible: false
   };
   constructor(private route: ActivatedRoute, private apiService: ApiService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
+
   ngOnInit(): void {
     this.route.params.subscribe(x => 
       {
         this.restaurantId = x['id'];
-        this.apiService.getRestaurantDetails({
-          id: this.restaurantId
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-          {
-            this.restaurant = x;
-            this.isLoadingSubject.next(false);
-          }, x => {
-          this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
-          this.router.navigate(['']);
-        });
+        this.getDetails();
       });
+  }
+
+  getDetails(): void {
+    this.isLoadingSubject.next(true);
+    this.apiService.getRestaurantDetails({
+      id: this.restaurantId
+    }, this.authService.loggedInUser?.access_token!).subscribe(x => 
+      {
+        this.restaurant = x;
+        this.isLoadingSubject.next(false);
+      }, x => {
+      this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
+      this.router.navigate(['']);
+    });
+  }
+
+  get visibility(): string {
+    return this.restaurant.isVisible ? "Visible" : "Hidden";
+  }
+
+  onVisibilityToggle(): void {
+    this.apiService.toggleRestaurantVisibility({
+      id: this.restaurant.id
+    }, this.authService.loggedInUser?.access_token!).subscribe(
+      _ => {
+        this.snackBar.open("Successfuly changed visibility", "", {duration: 3000});
+        this.getDetails();
+      },
+      x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
+    );
   }
 }

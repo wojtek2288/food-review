@@ -52,6 +52,11 @@ export class ApiService {
         return this.http.post<RestaurantDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails`, query, {headers: this.getHeaders(token)});
     }
 
+    toggleRestaurantVisibility(query: DetailsRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Restaurants.ToggleRestaurantVisibility`, query, {headers: this.getHeaders(token)});
+    }
+
     getDishes(query: DishQueryCriteria, token: string): Observable<PaginatedQueryResult<Dish>>
     {
         return this.http.post<PaginatedQueryResult<Dish>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.SearchDishes`, query, {headers: this.getHeaders(token)});
