@@ -3,9 +3,10 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import Review from '../../responseTypes/Review';
 import { Rating } from '../Common/Rating';
 import { useState } from 'react';
+import ReviewResponse from '../../responseTypes/ReviewResponse';
 
 interface ReviewCardProps {
-  review: Review;
+  review: ReviewResponse;
 }
 
 export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
@@ -18,9 +19,9 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           <Image
             style={styles.avatar}
             source={
-              review.avatarUrl == null
+              review.imageUrl == null
                 ? require('../../assets/images/userEmpty.png')
-                : { uri: review.avatarUrl }
+                : { uri: review.imageUrl }
             }
           />
           <Text style={styles.username}>{review.username}</Text>
@@ -29,11 +30,11 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
           </View>
         </View>
         <View style={styles.cardDescription}>
-          {review.review == null ? null : (
+          {review.description == null ? null : (
             <Text style={styles.description}>
-              {review.review.length > 100 && !expand
-                ? review.review.substring(0, 100) + '...'
-                : review.review}
+              {review.description.length > 100 && !expand
+                ? review.description.substring(0, 100) + '...'
+                : review.description}
             </Text>
           )}
         </View>

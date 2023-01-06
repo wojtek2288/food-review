@@ -97,7 +97,7 @@ export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: st
         } catch (responseErr: any) {
             setError(responseErr.response.data);
         }
-        
+
         setIsLoading(false);
         return success;
     }
