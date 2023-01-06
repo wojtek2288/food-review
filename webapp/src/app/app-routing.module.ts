@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DishDetailsComponent } from './dishes/dish-details/dish-details.component';
 import { DishSearchComponent } from './dishes/dish-search/dish-search.component';
 import { LoggedInGuard } from './main/auth/logged-in.guard';
 import { NotLoggedInGuard } from './main/auth/not-logged-in.guard';
@@ -7,6 +8,7 @@ import { LoginComponent } from './main/login/login.component';
 import { NotFoundComponent } from './main/not-found/not-found.component';
 import { RestaurantDetailsComponent } from './restaurants/restaurant-details/restaurant-details.component';
 import { RestaurantSearchComponent } from './restaurants/restaurant-search/restaurant-search.component';
+import { ReviewSearchComponent } from './reviews/review-search/review-search.component';
 import { UserSearchComponent } from './users/user-search/user-search.component';
 
 const routes: Routes = [
@@ -26,8 +28,18 @@ const routes: Routes = [
     canActivate: [LoggedInGuard]
   },
   {
+    path: 'dishes/details/:id',
+    component: DishDetailsComponent,
+    canActivate: [LoggedInGuard]
+  },
+  {
     path: 'users',
     component: UserSearchComponent,
+    canActivate: [LoggedInGuard]
+  },
+  {
+    path: 'reviews',
+    component: ReviewSearchComponent,
     canActivate: [LoggedInGuard]
   },
   {

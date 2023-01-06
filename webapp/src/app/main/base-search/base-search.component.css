@@ -26,11 +26,19 @@ table{
     width: 20%;
 }
 
+.mat-column-username {
+    width: 10%;
+}
+
 .mat-column-name {
     width: 10%;
 }
 
 .mat-column-restaurantName {
+    width: 10%;
+}
+
+.mat-column-dishName {
     width: 10%;
 }
 
@@ -40,6 +48,10 @@ table{
 
 .mat-column-description {
     padding: 10px;
+}
+
+.mat-column-rating {
+    width: 10%;
 }
 
 .spinner {

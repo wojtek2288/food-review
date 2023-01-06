@@ -65,7 +65,8 @@ import { NotLoggedInGuard } from './auth/not-logged-in.guard';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatDividerModule,
-    MatTabsModule
+    MatTabsModule,
+    RouterModule
   ],
   providers: [
     LoggedInGuard,

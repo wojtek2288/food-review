@@ -9,6 +9,7 @@ import { MainModule } from './main/main.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { DishesModule } from './dishes/dishes.module';
 import { UsersModule } from './users/users.module';
+import { ReviewsModule } from './reviews/reviews.module';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { UsersModule } from './users/users.module';
     MainModule,
     RestaurantsModule,
     DishesModule,
-    UsersModule
+    UsersModule,
+    ReviewsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

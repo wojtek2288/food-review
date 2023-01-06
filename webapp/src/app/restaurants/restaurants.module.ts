@@ -4,6 +4,7 @@ import { RestaurantSearchComponent } from './restaurant-search/restaurant-search
 import { MainModule } from '../main/main.module';
 import { RestaurantDetailsComponent } from './restaurant-details/restaurant-details.component';
 import { DishesModule } from '../dishes/dishes.module';
+import { ReviewsModule } from '../reviews/reviews.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { DishesModule } from '../dishes/dishes.module';
   imports: [
     CommonModule,
     MainModule,
-    DishesModule
+    DishesModule,
+    ReviewsModule
   ],
   exports: [
     RestaurantSearchComponent,

@@ -1,5 +1,6 @@
 import { PaginatedQueryCriteria } from "./paginated-query-criteria";
 
-export interface DishQueryCriteria extends PaginatedQueryCriteria {
+export interface ReviewQueryCriteria extends PaginatedQueryCriteria {
     restaurantId: string | undefined;
+    dishId: string | undefined;
 }

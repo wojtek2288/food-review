@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api/api.service';
 import { AuthService } from 'src/app/main/auth/auth.service';
 import { BaseSearchComponent } from 'src/app/main/base-search/base-search.component';
@@ -12,7 +13,7 @@ import { Dish } from '../model/dish.interface';
 })
 export class DishSearchComponent extends BaseSearchComponent<Dish> {
   @Input() restaurantId: string = "";
-  constructor(private apiService: ApiService, private authService: AuthService) {
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
     this.displayedColumns = ['id', 'name', 'restaurantName', 'description', 'showDetails'];
@@ -34,5 +35,9 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
       this.dataSource.data = x.items;
       this.paginator.length = x.totalCount;
     });
+  }
+
+  override onShowDetails(rowData: Dish): void {
+    this.router.navigate(['dishes', 'details', rowData.id]);
   }
 }

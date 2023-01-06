@@ -1,38 +1,38 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/api/api.service';
-import { RestaurantDetails } from 'src/app/api/model/restaurant-details';
-import { DishSearchComponent } from 'src/app/dishes/dish-search/dish-search.component';
+import { DishDetails } from 'src/app/api/model/dish-details';
 import { AuthService } from 'src/app/main/auth/auth.service';
 
 @Component({
-  selector: 'app-restaurant-details',
-  templateUrl: './restaurant-details.component.html',
-  styleUrls: ['./restaurant-details.component.css']
+  selector: 'app-dish-details',
+  templateUrl: './dish-details.component.html',
+  styleUrls: ['./dish-details.component.css']
 })
-export class RestaurantDetailsComponent implements OnInit {
+export class DishDetailsComponent implements OnInit {
   isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   isLoading$ = this.isLoadingSubject.asObservable();
-  restaurantId: string = "";
-  restaurant: RestaurantDetails = {
-    id: this.restaurantId,
+  dishId: string = "";
+  dish: DishDetails = {
+    id: this.dishId,
     name: "",
     description: "",
     imageUrl: "",
-    isVisible: false
+    restaurantId: "",
+    restaurantName: ""
   };
   constructor(private route: ActivatedRoute, private apiService: ApiService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
   ngOnInit(): void {
     this.route.params.subscribe(x => 
       {
-        this.restaurantId = x['id'];
-        this.apiService.getRestaurantDetails({
-          id: this.restaurantId
+        this.dishId = x['id'];
+        this.apiService.getDishDetails({
+          id: this.dishId
         }, this.authService.loggedInUser?.access_token!).subscribe(x => 
           {
-            this.restaurant = x;
+            this.dish = x;
             this.isLoadingSubject.next(false);
           }, x => {
           this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});

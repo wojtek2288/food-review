@@ -26,6 +26,7 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             {
                 Id = x.Id.ToString(),
                 UserId = x.UserId.ToString(),
+                Username = dbContext.Users.Single(y => y.Id == x.UserId).Username,
                 Description = x.Description,
                 Rating = x.Rating,
                 RestaurantId = x.RestaurantId.ToString(),
@@ -33,8 +34,8 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
                 RestaurantName = dbContext.Restaurants.Single(y => y.Id == x.RestaurantId).Name,
                 DishName = x.DishId != null ? dbContext.Dishes.Single(y => y.Id == x.DishId).Name : null,
             })
-            .Where(x => query.RestaurantId == null|| x.RestaurantId == query.RestaurantId)
-            .Where(x => query.DishId == null|| x.DishId == query.DishId)
+            .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.RestaurantId == query.RestaurantId)
+            .Where(x => string.IsNullOrEmpty(query.DishId) || x.DishId == query.DishId)
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.RestaurantName.Trim().ToLower().Contains(searchPhrase) ||
                         (x.DishName != null && x.DishName.Trim().ToLower().Contains(searchPhrase)));
@@ -42,7 +43,7 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
         IEnumerable<ReviewDTO> items = dbData;
         if (query.SortingField != null)
         {
-            var descriptor = TypeDescriptor.GetProperties(typeof(Dish)).Find(query.SortingField, true);
+            var descriptor = TypeDescriptor.GetProperties(typeof(ReviewDTO)).Find(query.SortingField, true);
             var list = await dbData.ToListAsync();
             items = query.SortingDirection != null && query.SortingDirection == "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
                 : list.OrderByDescending(x => descriptor.GetValue((x)));

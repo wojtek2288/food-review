@@ -4,13 +4,16 @@ import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Dish } from "../dishes/model/dish.interface";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
+import { Review } from "../reviews/model/review.interface";
 import { User } from "../users/model/user.interface";
 import { ApiUser } from "./model/api-user";
 import { DetailsRequest } from "./model/details-request";
+import { DishDetails } from "./model/dish-details";
 import { DishQueryCriteria } from "./model/dish-query-criteria";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
 import { PaginatedQueryResult } from "./model/paginated-query-results";
 import { RestaurantDetails } from "./model/restaurant-details";
+import { ReviewQueryCriteria } from "./model/review-query-criteria";
 
 @Injectable({
     providedIn: "root",
@@ -54,8 +57,18 @@ export class ApiService {
         return this.http.post<PaginatedQueryResult<Dish>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.SearchDishes`, query, {headers: this.getHeaders(token)});
     }
 
+    getDishDetails(query: DetailsRequest, token: string): Observable<DishDetails>
+    {
+        return this.http.post<DishDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.DishDetails`, query, {headers: this.getHeaders(token)});
+    }
+
     getUsers(query: PaginatedQueryCriteria, token: string): Observable<PaginatedQueryResult<User>>
     {
         return this.http.post<PaginatedQueryResult<User>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Users.SearchUsers`, query, {headers: this.getHeaders(token)});
+    }
+
+    getReviews(query: ReviewQueryCriteria, token: string): Observable<PaginatedQueryResult<Review>>
+    {
+        return this.http.post<PaginatedQueryResult<Review>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Reviews.SearchReviews`, query, {headers: this.getHeaders(token)});
     }
 }
