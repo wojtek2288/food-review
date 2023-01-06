@@ -11,7 +11,7 @@ import { Dish } from '../model/dish.interface';
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
 export class DishSearchComponent extends BaseSearchComponent<Dish> {
-  @Input() restaurant: string = "";
+  @Input() restaurantId: string = "";
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
@@ -27,7 +27,7 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
       pageCount: this.paginator.pageIndex,
       pageSize: this.paginator.pageSize,
       searchPhrase: this.searchFormControl.value,
-      restaurantName: this.restaurant
+      restaurantId: this.restaurantId
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
       this.isLoadingSubject.next(false);

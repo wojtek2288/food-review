@@ -1,5 +1,5 @@
 import { PaginatedQueryCriteria } from "./paginated-query-criteria";
 
 export interface DishQueryCriteria extends PaginatedQueryCriteria {
-    restaurantName: string;
+    restaurantId: string;
 }
