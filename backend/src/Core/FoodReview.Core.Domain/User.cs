@@ -9,6 +9,7 @@ public class User : IAggregateRoot
     public string? Description { get; private set; }
     public string Email { get; private set; } = default!;
     public string? ImageUrl { get; private set; }
+    public bool IsBanned { get; private set; } = false;
 
     private User() { }
 
@@ -28,5 +29,10 @@ public class User : IAggregateRoot
     public void EditDescription(string description)
     {
         Description = description;
+    }
+
+    public void Ban()
+    {
+        IsBanned = true;
     }
 }

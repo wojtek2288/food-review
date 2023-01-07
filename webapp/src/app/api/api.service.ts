@@ -73,6 +73,11 @@ export class ApiService {
         return this.http.post<DishDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.DishDetails`, query, {headers: this.getHeaders(token)});
     }
 
+    deleteDish(query: DetailsRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Dishes.DeleteDish`, query, {headers: this.getHeaders(token)});
+    }
+
     getUsers(query: PaginatedQueryCriteria, token: string): Observable<PaginatedQueryResult<User>>
     {
         return this.http.post<PaginatedQueryResult<User>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Users.SearchUsers`, query, {headers: this.getHeaders(token)});
@@ -83,8 +88,18 @@ export class ApiService {
         return this.http.post<UserDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Users.UserDetails`, query, {headers: this.getHeaders(token)});
     }
 
+    banUser(query: DetailsRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Users.BanUser`, query, {headers: this.getHeaders(token)});
+    }
+
     getReviews(query: ReviewQueryCriteria, token: string): Observable<PaginatedQueryResult<Review>>
     {
         return this.http.post<PaginatedQueryResult<Review>>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Reviews.SearchReviews`, query, {headers: this.getHeaders(token)});
+    }
+
+    deleteReview(query: DetailsRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Reviews.DeleteReview`, query, {headers: this.getHeaders(token)});
     }
 }

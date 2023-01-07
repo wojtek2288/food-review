@@ -22,7 +22,8 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
     public override async Task<PaginatedResult<ReviewDTO>> HandleAsync(SearchReviews query, CoreContext context)
     {
         var searchPhrase = query.SearchPhrase.ToLower();
-        var dbData = dbContext.Reviews.Select(x => new ReviewDTO
+        var dbData = dbContext.Reviews
+            .Select(x => new ReviewDTO
             {
                 Id = x.Id.ToString(),
                 UserId = x.UserId.ToString(),

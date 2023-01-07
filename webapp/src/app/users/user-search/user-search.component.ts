@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api/api.service';
@@ -14,7 +15,7 @@ import { User } from '../model/user.interface';
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
 export class UserSearchComponent extends BaseSearchComponent<User> {
-  constructor(private apiService: ApiService, private authService: AuthService, private router: Router, private dialog: MatDialog) {
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router, private dialog: MatDialog, private snackBar: MatSnackBar) {
     super();
     this.dataSource = new MatTableDataSource<User>();
     this.displayedColumns = ['id', 'name', 'description', 'userButtons'];
@@ -46,7 +47,15 @@ export class UserSearchComponent extends BaseSearchComponent<User> {
     dialogRef.afterClosed().subscribe(x => {
       if (x)
       {
-
+        this.apiService.banUser({
+          id: rowData.id
+        }, this.authService.loggedInUser?.access_token!).subscribe(
+          _ => {
+            this.snackBar.open("Successfuly banned user", "", {duration: 3000});
+            this.onSearch();
+          },
+          x => this.snackBar.open("User with specified Id does not exist", "", {duration: 3000})
+        );
       }
     });
    }

@@ -24,6 +24,7 @@ public class SearchUsersQH : QueryHandler<SearchUsers, PaginatedResult<UserDTO>>
     {
         var searchPhrase = query.SearchPhrase.ToLower();
         var dbData = dbContext.Users
+            .Where(x => !x.IsBanned)
             .Where(x => x.Username.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)));
         

@@ -2,7 +2,7 @@ using FoodReview.Core.Domain.Common;
 
 namespace FoodReview.Core.Domain;
 
-public class Dish : IEntity
+public class Dish : IAggregateRoot
 {
     public Guid Id { get; private init; }
     public Restaurant Restaurant { get; private init; } = default!;

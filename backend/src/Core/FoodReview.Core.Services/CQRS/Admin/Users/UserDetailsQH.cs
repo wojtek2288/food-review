@@ -22,6 +22,7 @@ public class UserDetailsQV : AbstractValidator<QueryRequest<UserDetails, UserDet
             .MustAsync(async (x, cancellation) => 
             {
                 var userExists = await dbContext.Users
+                    .Where(x => !x.IsBanned)
                     .AnyAsync(r => r.Id.ToString() == x.Query.Id, x.Context.CancellationToken);
         
                 return userExists;
@@ -42,7 +43,9 @@ public class UserDetailsQH : QueryHandler<UserDetails, UserDetailsDTO>
 
     public override async Task<UserDetailsDTO> HandleAsync(UserDetails query, CoreContext context)
     {
-        var user = await dbContext.Users.SingleAsync(x => x.Id.ToString() == query.Id);
+        var user = await dbContext.Users
+            .Where(x => !x.IsBanned)
+            .SingleAsync(x => x.Id.ToString() == query.Id);
 
         return new UserDetailsDTO
         {

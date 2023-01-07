@@ -30,6 +30,7 @@ public class CoreModule : IAppModule
             .AddDefaultTokenProviders();
 
         services.AddScoped<Repository<Restaurant>, RestaurantsRepository>();
+        services.AddScoped<Repository<Dish>, DishesRepository>();
         services.AddScoped<Repository<User>, UsersRepository>();
         services.AddScoped<Repository<Review>, ReviewsRepository>();
 
