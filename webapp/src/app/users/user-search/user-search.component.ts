@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api/api.service';
 import { AuthService } from 'src/app/main/auth/auth.service';
 import { BaseSearchComponent } from 'src/app/main/base-search/base-search.component';
+import { ConfirmationDialogComponent } from 'src/app/main/confirmation-dialog/confirmation-dialog.component';
 import { User } from '../model/user.interface';
 
 @Component({
@@ -11,10 +14,10 @@ import { User } from '../model/user.interface';
   styleUrls: ['../../main/base-search/base-search.component.css']
 })
 export class UserSearchComponent extends BaseSearchComponent<User> {
-  constructor(private apiService: ApiService, private authService: AuthService) {
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router, private dialog: MatDialog) {
     super();
     this.dataSource = new MatTableDataSource<User>();
-    this.displayedColumns = ['id', 'name', 'description', 'showDetails'];
+    this.displayedColumns = ['id', 'name', 'description', 'userButtons'];
     this.header = "Users";
   }
 
@@ -33,4 +36,18 @@ export class UserSearchComponent extends BaseSearchComponent<User> {
       this.paginator.length = x.totalCount;
     });
   }
+
+  override onShowDetails(rowData: User): void {
+    this.router.navigate(['users', 'details', rowData.id]);
+   }
+
+   override onBan(rowData: User): void {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
+    dialogRef.afterClosed().subscribe(x => {
+      if (x)
+      {
+
+      }
+    });
+   }
 }

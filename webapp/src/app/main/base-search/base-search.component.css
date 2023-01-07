@@ -26,23 +26,15 @@ table{
     width: 20%;
 }
 
-.mat-column-username {
-    width: 10%;
-}
-
-.mat-column-name {
-    width: 10%;
-}
-
-.mat-column-restaurantName {
-    width: 10%;
-}
-
-.mat-column-dishName {
-    width: 10%;
-}
-
-.mat-column-showDetails {
+.mat-column-username,
+.mat-column-name,
+.mat-column-restaurantName,
+.mat-column-dishName,
+.mat-column-rating,
+.mat-column-restaurantButtons, 
+.mat-column-dishButtons, 
+.mat-column-userButtons, 
+.mat-column-reviewButtons {
     width: 10%;
 }
 
@@ -50,10 +42,11 @@ table{
     padding: 10px;
 }
 
-.mat-column-rating {
-    width: 10%;
-}
-
 .spinner {
     margin: 0 auto;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
 }

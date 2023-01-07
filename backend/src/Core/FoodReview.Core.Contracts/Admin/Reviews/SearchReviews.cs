@@ -16,4 +16,5 @@ public class SearchReviews: QueryBase<SearchReviews, PaginatedResult<ReviewDTO>>
     public string SearchPhrase { get; set; } = default!;
     public string? RestaurantId { get; set; }
     public string? DishId { get; set; }
+    public string? UserId { get; set; }
 }

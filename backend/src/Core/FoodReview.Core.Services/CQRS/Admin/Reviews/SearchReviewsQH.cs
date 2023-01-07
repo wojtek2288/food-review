@@ -36,6 +36,7 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             })
             .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.RestaurantId == query.RestaurantId)
             .Where(x => string.IsNullOrEmpty(query.DishId) || x.DishId == query.DishId)
+            .Where(x => string.IsNullOrEmpty(query.UserId) || x.UserId == query.UserId)
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.RestaurantName.Trim().ToLower().Contains(searchPhrase) ||
                         (x.DishName != null && x.DishName.Trim().ToLower().Contains(searchPhrase)));

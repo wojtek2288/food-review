@@ -13,10 +13,11 @@ import { Review } from '../model/review.interface';
 export class ReviewSearchComponent extends BaseSearchComponent<Review> {
   @Input() restaurantId: string = "";
   @Input() dishId: string = "";
+  @Input() userId: string = "";
   constructor(private apiService: ApiService, private authService: AuthService) {
     super();
     this.dataSource = new MatTableDataSource<Review>();
-    this.displayedColumns = ['id', 'username', 'restaurantName', 'dishName', 'description', 'rating', 'showDetails'];
+    this.displayedColumns = ['id', 'username', 'restaurantName', 'dishName', 'description', 'rating', 'reviewButtons'];
     this.header = "Reviews";
   }
   override onSearch(): void {
@@ -28,7 +29,8 @@ export class ReviewSearchComponent extends BaseSearchComponent<Review> {
       pageSize: this.paginator.pageSize,
       searchPhrase: this.searchFormControl.value,
       restaurantId: this.restaurantId,
-      dishId: this.dishId
+      dishId: this.dishId,
+      userId: this.userId
     }, this.authService.loggedInUser?.access_token!).subscribe(x => 
     {
       this.isLoadingSubject.next(false);

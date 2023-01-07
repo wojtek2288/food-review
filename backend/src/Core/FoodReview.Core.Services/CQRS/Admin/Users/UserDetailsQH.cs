@@ -49,7 +49,8 @@ public class UserDetailsQH : QueryHandler<UserDetails, UserDetailsDTO>
             Id = user.Id.ToString(),
             Name = user.Username,
             ImageUrl = user.ImageUrl,
-            Description = user.Description
+            Description = user.Description,
+            Email = user.Email
         };
     }
 }

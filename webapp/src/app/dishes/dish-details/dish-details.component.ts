@@ -35,7 +35,7 @@ export class DishDetailsComponent implements OnInit {
             this.dish = x;
             this.isLoadingSubject.next(false);
           }, x => {
-          this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
+          this.snackBar.open("Dish with specified Id does not exist", "", {duration: 3000});
           this.router.navigate(['']);
         });
       });

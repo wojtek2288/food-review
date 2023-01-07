@@ -9,6 +9,7 @@ import { NotFoundComponent } from './main/not-found/not-found.component';
 import { RestaurantDetailsComponent } from './restaurants/restaurant-details/restaurant-details.component';
 import { RestaurantSearchComponent } from './restaurants/restaurant-search/restaurant-search.component';
 import { ReviewSearchComponent } from './reviews/review-search/review-search.component';
+import { UserDetailsComponent } from './users/user-details/user-details.component';
 import { UserSearchComponent } from './users/user-search/user-search.component';
 
 const routes: Routes = [
@@ -35,6 +36,11 @@ const routes: Routes = [
   {
     path: 'users',
     component: UserSearchComponent,
+    canActivate: [LoggedInGuard]
+  },
+  {
+    path: 'users/details/:id',
+    component: UserDetailsComponent,
     canActivate: [LoggedInGuard]
   },
   {

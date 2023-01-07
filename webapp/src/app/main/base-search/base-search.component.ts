@@ -36,5 +36,9 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   }
 
   onSearch() { }
-  onShowDetails(rowData: T) {}
+  onShowDetails(rowData: T): void {}
+  onToggleVisibility(rowData: T): void {}
+  onEdit(rowData: T): void {}
+  onDelete(rowData: T): void {}
+  onBan(rowData: T): void {}
 }

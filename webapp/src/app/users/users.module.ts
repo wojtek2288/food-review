@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { MainModule } from '../main/main.module';
 import { UserDetailsComponent } from './user-details/user-details.component';
+import { ReviewsModule } from '../reviews/reviews.module';
 
 
 
@@ -13,10 +14,12 @@ import { UserDetailsComponent } from './user-details/user-details.component';
   ],
   imports: [
     CommonModule,
-    MainModule
+    MainModule,
+    ReviewsModule
   ],
   exports: [
-    UserSearchComponent
+    UserSearchComponent,
+    UserDetailsComponent
   ]
 })
 export class UsersModule { }

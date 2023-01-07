@@ -16,7 +16,7 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
   constructor(private apiService: ApiService, private authService: AuthService, private router: Router) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
-    this.displayedColumns = ['id', 'name', 'restaurantName', 'description', 'showDetails'];
+    this.displayedColumns = ['id', 'name', 'restaurantName', 'description', 'dishButtons'];
     this.header = "Dishes";
   }
 
