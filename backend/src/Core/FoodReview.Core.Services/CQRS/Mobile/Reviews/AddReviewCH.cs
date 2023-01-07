@@ -59,6 +59,9 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
 public class AddReviewCH : CommandHandler<AddReview>
 {
     private readonly Repository<Review> reviews;
+    private readonly Repository<User> users;
+    private readonly Repository<Dish> dishes;
+    private readonly Repository<Restaurant> restaurants;
 
     public AddReviewCH(Repository<Review> reviews)
     {
@@ -67,10 +70,13 @@ public class AddReviewCH : CommandHandler<AddReview>
 
     public override async Task HandleAsync(AddReview command, CoreContext context)
     {
+        var user = await users.FindAndEnsureExistsAsync(context.UserId);
+        var restaurant = await restaurants.FindAndEnsureExistsAsync(command.RestaurantId);
+        var dish = command.DishId != null ? await dishes.FindAsync(command.DishId.Value) : null;
         var review = Review.Create(
-            context.UserId,
-            command.RestaurantId,
-            command.DishId,
+            user,
+            restaurant,
+            dish,
             command.Description,
             command.Rating);
 

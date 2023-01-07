@@ -65,9 +65,9 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
         builder.Entity<Review>(cfg =>
         {
             cfg.HasKey(e => e.Id);
-            cfg.HasOne<User>().WithMany().HasForeignKey(e => e.UserId);
-            cfg.HasOne<Restaurant>().WithMany().HasForeignKey(e => e.RestaurantId);
-            cfg.HasOne<Dish>().WithMany().HasForeignKey(e => e.DishId);
+            // cfg.HasOne<User>().WithMany().HasForeignKey(e => e.UserId);
+            // cfg.HasOne<Restaurant>().WithMany().HasForeignKey(e => e.RestaurantId);
+            // cfg.HasOne<Dish>().WithMany().HasForeignKey(e => e.DishId);
             cfg.Property(e => e.Description).IsRequired();
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
         });

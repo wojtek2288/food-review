@@ -37,7 +37,7 @@ public class DeleteReviewCV : AbstractValidator<CommandRequest<DeleteReview, Uni
                     .Where(r => r.Id == cmd.Command.ReviewId)
                     .Select(r => new 
                     {
-                        r.UserId
+                        UserId = r.User.Id
                     })
                     .FirstOrDefaultAsync(ct);
 

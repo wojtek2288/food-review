@@ -4,6 +4,7 @@ using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodReview.Core.Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230107180500_ChangeReviewToHaveObjectsInsteadOfIDs")]
+    partial class ChangeReviewToHaveObjectsInsteadOfIDs
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +91,6 @@ namespace FoodReview.Core.Services.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("DateAdded")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
@@ -118,27 +117,6 @@ namespace FoodReview.Core.Services.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("FoodReview.Core.Domain.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ColorHex")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("FoodReview.Core.Domain.User", b =>
@@ -378,48 +356,7 @@ namespace FoodReview.Core.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("FoodReview.Core.Domain.TagToDish", "Tags", b1 =>
-                        {
-                            b1.Property<Guid>("DishId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<Guid>("TagId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("DishId", "TagId");
-
-                            b1.ToTable("TagToDish");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DishId");
-                        });
-
                     b.Navigation("Restaurant");
-
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("FoodReview.Core.Domain.Restaurant", b =>
-                {
-                    b.OwnsMany("FoodReview.Core.Domain.TagToRestaurant", "Tags", b1 =>
-                        {
-                            b1.Property<Guid>("RestaurantId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<Guid>("TagId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("RestaurantId", "TagId");
-
-                            b1.ToTable("TagToRestaurant");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RestaurantId");
-                        });
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("FoodReview.Core.Domain.Review", b =>
