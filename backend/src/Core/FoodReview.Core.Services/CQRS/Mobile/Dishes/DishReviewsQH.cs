@@ -24,6 +24,7 @@ public class DishReviewsQH : QueryHandler<DishReviews, PaginatedResult<ReviewDTO
 
         var reviews = await dbContext.Reviews
             .Where(r => r.DishId == query.DishId)
+            .OrderByDescending(r => r.DateAdded)
             .Join(dbContext.Users, r => r.UserId, u => u.Id, (r, u) => new ReviewDTO
             {
                 Id = r.Id,

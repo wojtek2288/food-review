@@ -8,23 +8,23 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.CQRS.Example;
 
-public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO>>
+public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserReviewDTO>>
 {
     private readonly CoreDbContext dbContext;
 
-    public MyReviewsQH(CoreDbContext dbContext)
+    public UserReviewsQH(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
 
-    public override async Task<PaginatedResult<UserReviewDTO>> HandleAsync(MyReviews query, CoreContext context)
+    public override async Task<PaginatedResult<UserReviewDTO>> HandleAsync(UserReviews query, CoreContext context)
     {
         var totalCount = await dbContext.Reviews
-            .Where(r => r.UserId == context.UserId)
+            .Where(r => r.UserId == query.UserId)
             .CountAsync(context.CancellationToken);
 
         var reviews = await dbContext.Reviews
-            .Where(r => r.UserId == context.UserId)
+            .Where(r => r.UserId == query.UserId)
             .Join(
                 dbContext.Restaurants,
                 r => r.RestaurantId,

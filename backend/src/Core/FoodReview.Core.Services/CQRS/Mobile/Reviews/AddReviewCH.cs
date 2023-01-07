@@ -46,7 +46,8 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
         RuleFor(x => x.Command.Description)
             .MaximumLength(StringLengths.MediumString)
                 .WithCode(AddReview.ErrorCodes.DescriptionTooLong)
-                .WithMessage("Description is too long.");
+                .WithMessage("Description is too long.")
+            .When(x => x.Command.Description is not null);
 
         RuleFor(x => x.Command.Rating)
             .Must(r => r >= 1 && r <= 10)

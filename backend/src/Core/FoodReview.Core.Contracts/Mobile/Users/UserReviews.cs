@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Mobile.Users;
 
-[Authorize(Roles = Auth.Roles.User)]
-public class MyReviews : QueryBase<MyReviews, PaginatedResult<UserReviewDTO>>
+[AllowAnonymous]
+public class UserReviews : QueryBase<UserReviews, PaginatedResult<UserReviewDTO>>
 {
+    public Guid UserId { get; set; }
     public int PageCount { get; set; }
     public int PageSize { get; set; }
 }

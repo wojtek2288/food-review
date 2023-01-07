@@ -19,7 +19,7 @@ import { ReviewModal } from '../components/Reviews/ReviewModal';
 import { defaultPageSize } from '../constants/Pagination';
 import { useRestaurantDetailsQuery, useRestaurantDishesQuery, useRestaurantReviewsQuery } from '../api/services';
 import RestaurantDetailsResponse from '../responseTypes/RestaurantDetailsResponse';
-import ReviewResponse from '../responseTypes/ReviewResponse';
+import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import Dish from '../responseTypes/Dish';
 
 export const RestaurantDetailsScreen = ({
@@ -31,7 +31,7 @@ export const RestaurantDetailsScreen = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [data, setData] = useState<any>();
-  const [reviews, setReviews] = useState<ReviewResponse[] | undefined>(undefined);
+  const [reviews, setReviews] = useState<UserReviewResponse[] | undefined>(undefined);
   const [dishes, setDishes] = useState<Dish[] | undefined>(undefined);
   const [reviewsCurrentPage, setReviewsCurrentPage] = useState(0);
   const [reviewsTotalCount, setReviewsTotalCount] = useState(0);
@@ -43,12 +43,12 @@ export const RestaurantDetailsScreen = ({
     restaurantId: route.params.restaurantId,
   };
   const reviewsReq = {
-    pageSize: 5,
+    pageSize: defaultPageSize,
     pageCount: reviewsCurrentPage,
     restaurantId: route.params.restaurantId,
   };
   const dishesReq = {
-    pageSize: 5,
+    pageSize: defaultPageSize,
     pageCount: dishesCurrentPage,
     restaurantId: route.params.restaurantId,
   }
@@ -107,7 +107,7 @@ export const RestaurantDetailsScreen = ({
 
   const onEndReached = () => {
     if (selectedIndex === 0) {
-      if (reviewsCurrentPage * 5 >= reviewsTotalCount || reviewsCurrentPage == 0 || areReviewsLoading) {
+      if (reviewsCurrentPage * defaultPageSize >= reviewsTotalCount || reviewsCurrentPage == 0 || areReviewsLoading) {
         console.log("reviews count: " + reviews?.length);
         return;
       }
@@ -115,7 +115,7 @@ export const RestaurantDetailsScreen = ({
       reviewsRun(reviewsReq);
     }
     else if (selectedIndex === 1) {
-      if (dishesCurrentPage * 5 >= dishesTotalCount || dishesCurrentPage == 0 || areDishesLoading) {
+      if (dishesCurrentPage * defaultPageSize >= dishesTotalCount || dishesCurrentPage == 0 || areDishesLoading) {
         console.log("dishes count: " + dishes?.length);
         return;
       }
