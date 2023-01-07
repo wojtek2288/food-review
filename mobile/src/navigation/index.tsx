@@ -203,6 +203,7 @@ function BottomTabNavigator() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color }) => <TabBarIcon name='user' color={color} />,
+          unmountOnBlur: true
         }}
       />
     </BottomTab.Navigator>

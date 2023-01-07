@@ -16,10 +16,13 @@ import { TagCard } from '../components/Common/TagCard';
 import { ReviewCard } from '../components/Reviews/ReviewCard';
 import { ReviewModal } from '../components/Reviews/ReviewModal';
 import Colors from '../constants/Colors';
-import { useDishDetailsQuery, useDishReviewsQuery } from '../api/services';
+import { useAddReviewCommand, useDishDetailsQuery, useDishReviewsQuery } from '../api/services';
 import DishDetailsResponse from '../responseTypes/DishDetailsResponse';
 import ReviewResponse from '../responseTypes/ReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
+import { useSignIn } from '../hooks/useSignIn';
+import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
+import * as SecureStore from 'expo-secure-store';
 
 export const DishDetailsScreen = ({
   route,
@@ -41,10 +44,17 @@ export const DishDetailsScreen = ({
     pageCount: currentPage,
     dishId: route.params.dishId,
   };
+  let addReviewReq: AddReviewRequest = {
+    restaurantId: '',
+    dishId: '',
+    description: null,
+    rating: 0,
+  }
 
   const { run: detailsRun, response: detailsResponse } = useDishDetailsQuery(detailsReq);
   const { run: reviewsRun, response: reviewsResponse } = useDishReviewsQuery(reviewsReq);
-
+  const { run: addReviewRun, requestSuccessful, isLoading: isAddReviewLoading } = useAddReviewCommand(addReviewReq);
+  const { isLoading: isSignInLoading, isAuthenticated, run: signInRun } = useSignIn();
 
   useEffect(() => {
     detailsRun(detailsReq);
@@ -75,6 +85,53 @@ export const DishDetailsScreen = ({
     reviewsRun(reviewsReq);
   };
 
+  const onReviewClicked = () => {
+    signInRun();
+  }
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      setReviewModalVisible(true);
+    }
+    else if (isAuthenticated === false) {
+      navigation.navigate('ProfileTab', { screen: 'Login' });
+    }
+  }, [isAuthenticated])
+
+  const onReviewAdd = async (description: string, rating: number) => {
+    if (dish !== undefined) {
+      const token = await SecureStore.getItemAsync('accessToken');
+      addReviewRun(
+        {
+          // restaurantId: dish.restaurantId,
+          restaurantId: 'b07601e7-c236-4a8a-a4eb-b25b9adf6687',
+          // dishId: dish.id,
+          dishId: '6d956f97-222e-471b-abcc-835c2421321f',
+          description: description,
+          rating: rating,
+        },
+        token!
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (requestSuccessful) {
+      setCurrentPage(0);
+      setTotalCount(0);
+      setReviews(undefined);
+      setReviewModalVisible(false);
+      reviewsRun({
+        pageSize: defaultPageSize,
+        pageCount: 0,
+        dishId: route.params.dishId,
+      });
+    }
+    else {
+      setReviewModalVisible(false);
+    }
+  }, [requestSuccessful])
+
   return (
     <>
       {reviews === undefined || dish === undefined
@@ -88,7 +145,7 @@ export const DishDetailsScreen = ({
             </TouchableOpacity>
           </View>
           {reviewModalVisible ? (
-            <ReviewModal onClose={setReviewModalVisible} />
+            <ReviewModal onClose={setReviewModalVisible} onReviewAdd={onReviewAdd} isLoading={isAddReviewLoading} />
           ) : null}
           <FlatList
             nestedScrollEnabled={true}
@@ -124,12 +181,15 @@ export const DishDetailsScreen = ({
                     ))}
                   </View>
                   <View style={styles.rateContainer}>
-                    <Button
-                      style={styles.button}
-                      onPress={() => setReviewModalVisible(true)}
-                    >
-                      Rate
-                    </Button>
+                    {isSignInLoading
+                      ? <Spinner status='warning' />
+                      : <Button
+                        style={styles.button}
+                        onPress={() => onReviewClicked()}
+                      >
+                        Rate
+                      </Button>}
+
                   </View>
                 </View>
                 <Text style={styles.headerText}>Reviews:</Text>
