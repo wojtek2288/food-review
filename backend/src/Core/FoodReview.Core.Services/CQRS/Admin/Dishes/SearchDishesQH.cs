@@ -6,6 +6,7 @@ using FoodReview.Core.Contracts.Shared;
 using FoodReview.Core.Domain;
 using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
+using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,16 +31,11 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
                         (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase));
         
-        IEnumerable<Dish> items = dbData;
-        if (query.SortingField != null)
-        {
-            var descriptor = TypeDescriptor.GetProperties(typeof(Dish)).Find(query.SortingField, true);
-            var list = await dbData.ToListAsync();
-            items = query.SortingDirection != null && query.SortingDirection == "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
-                : list.OrderByDescending(x => descriptor.GetValue((x)));
-        }
+        var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);
+
+        var items = sortedItems.ToList();
         
-        var totalCount = items.Count();
+        var totalCount = items.Count;
 
         var dishes = items
             .Select(x => new DishDTO

@@ -5,6 +5,7 @@ using FoodReview.Core.Contracts.Shared;
 using FoodReview.Core.Domain;
 using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
+using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,23 +24,22 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
     {
         var searchPhrase = query.SearchPhrase.ToLower();
         var dbData = dbContext.Reviews
+            .Include(x => x.User)
+            .Include(x => x.Restaurant)
+            .Include(x => x.Dish)
+            .Where(x => !x.User.IsBanned)
             .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.Restaurant.Id.ToString() == query.RestaurantId)
-            .Where(x => string.IsNullOrEmpty(query.DishId) || x.Dish.Id.ToString() == query.DishId)
+            .Where(x => string.IsNullOrEmpty(query.DishId) || x.Dish == null || x.Dish.Id.ToString() == query.DishId)
             .Where(x => string.IsNullOrEmpty(query.UserId) || x.User.Id.ToString() == query.UserId)
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Dish != null && x.Dish.Name.Trim().ToLower().Contains(searchPhrase)));
         
-        IEnumerable<Review> items = dbData;
-        if (query.SortingField != null)
-        {
-            var descriptor = TypeDescriptor.GetProperties(typeof(ReviewDTO)).Find(query.SortingField, true);
-            var list = await dbData.ToListAsync();
-            items = query.SortingDirection is "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
-                : list.OrderByDescending(x => descriptor.GetValue((x)));
-        }
+        var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);
+
+        var items = sortedItems.ToList();
         
-        var totalCount = items.Count();
+        var totalCount = items.Count;
         
         var reviews = items
             .Select(x => new ReviewDTO
