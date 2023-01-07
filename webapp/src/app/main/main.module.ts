@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
@@ -50,7 +51,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MatProgressSpinnerModule,
     MatDividerModule,
     MatTabsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   exports: [
     NavbarComponent,
@@ -71,7 +73,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MatDividerModule,
     MatTabsModule,
     RouterModule,
-    MatDialogModule
+    MatDialogModule,
+    MatMenuModule
   ],
   providers: [
     LoggedInGuard,

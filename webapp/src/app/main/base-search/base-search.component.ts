@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-base-search',
@@ -17,8 +17,7 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   sortingField: string = 'id';
   sortingDirection: SortDirection = "asc";
   totalItems: number = 0;
-  isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  isLoading$ = this.isLoadingSubject.asObservable();
+  isLoading$: Observable<boolean> = of(true);
   searchFormControl = new FormControl('');
   constructor() { }
 

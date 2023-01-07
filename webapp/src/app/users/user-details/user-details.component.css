@@ -12,7 +12,7 @@ h3 {
 }
 .name-description-grid {
     display: grid;
-    grid-template-columns: 50px 1fr 4fr 2fr;
+    grid-template-columns: 50px 1fr 4fr 2fr 10px;
     grid-template-rows: 20px auto 40px auto 40px auto 40px auto 20px;
 }
 .name-label {

@@ -3,6 +3,12 @@
         <h3 class="name-label">Name:</h3>
         <mat-label class="name-content">{{restaurant.name}}</mat-label>
         <div class="name-divider divider"></div>
+        <button mat-icon-button color="primary" class="menu-button" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onToggleVisibility()"><mat-icon color="primary">visibility</mat-icon> Toggle visibility</button>
+            <button mat-menu-item (click)="onEdit()"><mat-icon color="primary">edit</mat-icon> Edit</button>
+            <button mat-menu-item (click)="onDelete()"><mat-icon color="primary">delete</mat-icon> Delete</button>
+        </mat-menu>
         <h3 class="description-label">Description:</h3>
         <mat-label class="description-content">{{restaurant.description}}</mat-label>
         <div class="logo-image">
@@ -12,7 +18,7 @@
         <h3 class="visibility-label">Visibility:</h3>
         <div class="visibility-content">
             <mat-label >{{visibility}}</mat-label>
-            <button mat-raised-button color="primary" class="toggle-button" (click)="onVisibilityToggle()">Toggle</button>
+            <button mat-raised-button color="primary" class="toggle-button" (click)="onToggleVisibility()">Toggle</button>
         </div>
         <div class="tags-divider divider"></div>
         <h3 class="tags-label">Tags:</h3>

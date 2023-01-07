@@ -1,12 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { Component, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ApiService } from 'src/app/api/api.service';
-import { AuthService } from 'src/app/main/auth/auth.service';
+import { DishApiService } from 'src/app/api/dish-api.service';
 import { BaseSearchComponent } from 'src/app/main/base-search/base-search.component';
-import { ConfirmationDialogComponent } from 'src/app/main/confirmation-dialog/confirmation-dialog.component';
 import { Dish } from '../model/dish.interface';
 
 @Component({
@@ -16,27 +12,29 @@ import { Dish } from '../model/dish.interface';
 })
 export class DishSearchComponent extends BaseSearchComponent<Dish> {
   @Input() restaurantId: string = "";
-  constructor(private apiService: ApiService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar, private dialog: MatDialog) {
+  constructor(private dishService: DishApiService, private router: Router) {
     super();
     this.dataSource = new MatTableDataSource<Dish>();
     this.displayedColumns = ['id', 'name', 'restaurantName', 'description', 'dishButtons'];
     this.header = "Dishes";
+    this.isLoading$ = this.dishService.isLoading$;
+    this.dishService.afterCommandFinished$.subscribe(() => {
+      this.onSearch()
+    });
+    this.dishService.dishes$.subscribe(x => {
+      this.dataSource.data = x.items;
+      this.paginator.length = x.totalCount;
+    });
   }
 
   override onSearch(): void {
-    this.isLoadingSubject.next(true);
-    this.apiService.getDishes({
+    this.dishService.getDishes({
       sortingField: this.sortingField,
       sortingDirection: this.sortingDirection,
       pageCount: this.paginator.pageIndex,
       pageSize: this.paginator.pageSize,
       searchPhrase: this.searchFormControl.value,
       restaurantId: this.restaurantId
-    }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-    {
-      this.isLoadingSubject.next(false);
-      this.dataSource.data = x.items;
-      this.paginator.length = x.totalCount;
     });
   }
 
@@ -45,20 +43,6 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
   }
 
   override onDelete(rowData: Dish): void {
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent);
-    dialogRef.afterClosed().subscribe(x => {
-      if (x)
-      {
-        this.apiService.deleteDish({
-          id: rowData.id
-        }, this.authService.loggedInUser?.access_token!).subscribe(
-          _ => {
-            this.snackBar.open("Successfuly deleted review", "", {duration: 3000});
-            this.onSearch();
-          },
-          x => this.snackBar.open("Review with specified Id does not exist", "", {duration: 3000})
-        );
-      }
-    });
+    this.dishService.deleteDish(rowData.id);
   }
 }

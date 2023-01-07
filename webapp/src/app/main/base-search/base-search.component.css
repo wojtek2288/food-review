@@ -50,3 +50,7 @@ table{
     display: flex;
     justify-content: center;
 }
+
+.hide-div {
+    display: none;
+}

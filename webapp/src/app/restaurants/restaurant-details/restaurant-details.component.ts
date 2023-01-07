@@ -1,11 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
-import { ApiService } from 'src/app/api/api.service';
 import { RestaurantDetails } from 'src/app/api/model/restaurant-details';
-import { DishSearchComponent } from 'src/app/dishes/dish-search/dish-search.component';
-import { AuthService } from 'src/app/main/auth/auth.service';
+import { RestaurantApiService } from 'src/app/api/restaurant-api.service';
 
 @Component({
   selector: 'app-restaurant-details',
@@ -13,8 +11,7 @@ import { AuthService } from 'src/app/main/auth/auth.service';
   styleUrls: ['./restaurant-details.component.css']
 })
 export class RestaurantDetailsComponent implements OnInit {
-  isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  isLoading$ = this.isLoadingSubject.asObservable();
+  isLoading$ = this.restaurantService.isLoading$;
   restaurantId: string = "";
   restaurant: RestaurantDetails = {
     id: this.restaurantId,
@@ -23,7 +20,8 @@ export class RestaurantDetailsComponent implements OnInit {
     imageUrl: "",
     isVisible: false
   };
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
+
+  constructor(private route: ActivatedRoute, private restaurantService: RestaurantApiService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(x => 
@@ -31,35 +29,27 @@ export class RestaurantDetailsComponent implements OnInit {
         this.restaurantId = x['id'];
         this.getDetails();
       });
+    this.restaurantService.restaurantDetails$.subscribe(x => this.restaurant = x);
+    this.restaurantService.afterCommandFinished$.subscribe(x => this.getDetails());
   }
 
   getDetails(): void {
-    this.isLoadingSubject.next(true);
-    this.apiService.getRestaurantDetails({
-      id: this.restaurantId
-    }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-      {
-        this.restaurant = x;
-        this.isLoadingSubject.next(false);
-      }, x => {
-      this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
-      this.router.navigate(['']);
-    });
+    this.restaurantService.getRestaurantDetails(this.restaurantId);
   }
 
   get visibility(): string {
     return this.restaurant.isVisible ? "Visible" : "Hidden";
   }
 
-  onVisibilityToggle(): void {
-    this.apiService.toggleRestaurantVisibility({
-      id: this.restaurant.id
-    }, this.authService.loggedInUser?.access_token!).subscribe(
-      _ => {
-        this.snackBar.open("Successfuly changed visibility", "", {duration: 3000});
-        this.getDetails();
-      },
-      x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-    );
+  onToggleVisibility(): void {
+    this.restaurantService.toggleRestaurantVisibility(this.restaurantId);
+  }
+
+  onEdit(): void {
+    
+  }
+
+  onDelete(): void {
+    this.restaurantService.deleteRestaurant(this.restaurantId);
   }
 }
