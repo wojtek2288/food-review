@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  ScrollView,
   StyleSheet,
   FlatList,
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import { Text, View, Image, Pressable } from 'react-native';
+import { Text, View, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
-import { users } from '../data/users';
-import { Button } from '@ui-kitten/components';
-import { dishes } from '../data/dishes';
 import { DishCard } from '../components/Dishes/DishCard';
+import { defaultPageSize } from '../constants/Pagination';
+import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
+import UserReviewResponse from '../responseTypes/UserReviewResponse';
+import { useUserDetailsQuery, useUserReviewsQuery } from '../api/services';
+import { Spinner } from '@ui-kitten/components';
+import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 
 export default function UserDetailsScreen({
   route,
@@ -21,53 +23,113 @@ export default function UserDetailsScreen({
   route: any;
   navigation: any;
 }) {
-  var user = users[0];
-  const { userId } = route.params;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
+  const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
+  const [reviews, setReviews] = useState<UserReviewResponse[] | undefined>(undefined);
+  const detailsReq = {
+    userId: route.params.userId,
+  };
+  const reviewsReq = {
+    pageSize: defaultPageSize,
+    pageCount: currentPage,
+    userId: route.params.userId,
+  };
+
+  const { run: detailsRun, response: detailsResponse } = useUserDetailsQuery(detailsReq);
+  const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useUserReviewsQuery(reviewsReq);
+
+  useEffect(() => {
+    detailsRun(detailsReq);
+    reviewsRun(reviewsReq);
+  }, []);
+
+  useEffect(() => {
+    setUser(detailsResponse);
+  }, [detailsResponse]);
+
+  useEffect(() => {
+    if (reviewsResponse) {
+      if (reviews !== undefined) {
+        setReviews([...reviews, ...reviewsResponse.items]);
+      }
+      else {
+        setReviews(reviewsResponse.items);
+      }
+      setCurrentPage(currentPage + 1);
+      setTotalCount(reviewsResponse.totalCount);
+    }
+  }, [reviewsResponse]);
+
+  const onEndReached = () => {
+    if (currentPage * defaultPageSize >= totalCount || currentPage == 0 || areReviewsLoading) {
+      return;
+    }
+    reviewsRun(reviewsReq);
+  };
 
   return (
     <>
-      <View style={styles.arrow}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name='leftcircleo' size={45} color={Colors.background} />
-        </TouchableOpacity>
-      </View>
-      <FlatList
-        ListHeaderComponent={() => (
-          <>
-            <View style={styles.container}>
-              <View style={styles.profile}>
-                <View style={styles.upperContainer}>
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      style={styles.profileAvatar}
-                      source={
-                        user.imageUrl == null
-                          ? require('../assets/images/userEmpty.png')
-                          : { uri: user.imageUrl }
-                      }
-                    />
+      {user === undefined ?
+        <View style={styles.container}>
+          <Spinner status='warning' />
+        </View>
+        : <>
+          <View style={styles.arrow}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <AntDesign name='leftcircleo' size={45} color={Colors.background} />
+            </TouchableOpacity>
+          </View>
+          <FlatList
+            ListHeaderComponent={() => (
+              <>
+                <View style={styles.container}>
+                  <View style={styles.profile}>
+                    <View style={styles.upperContainer}>
+                      <View style={styles.avatarContainer}>
+                        <Image
+                          style={styles.profileAvatar}
+                          source={
+                            user.imageUrl == null
+                              ? require('../assets/images/userEmpty.png')
+                              : { uri: user.imageUrl }
+                          }
+                        />
+                      </View>
+                    </View>
+                    <Text style={styles.username}>{user.username}</Text>
+                    <View style={styles.desciptionContainer}>
+                      <Text style={styles.description}>{user.description}</Text>
+                    </View>
                   </View>
                 </View>
-                <Text style={styles.username}>{user.username}</Text>
-                <View style={styles.desciptionContainer}>
-                  <Text style={styles.description}>{user.description}</Text>
-                </View>
+                <Text style={styles.headerText}>Reviews:</Text>
+              </>
+            )}
+            data={reviews}
+            renderItem={(review) => (
+              <View style={styles.card}>
+                {review.item.dishReview !== null ? <DishCard dish={review.item.dishReview} navigation={navigation} />
+                  : <RestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} />}
               </View>
-            </View>
-            <Text style={styles.headerText}>Reviews:</Text>
-          </>
-        )}
-        data={dishes}
-        renderItem={(dish) => (
-          <View style={styles.dishCard}>
-            <DishCard dish={dish.item} navigation={navigation} />
-          </View>
-        )}
-        keyExtractor={(item, index) => {
-          return item.id.toString();
-        }}
-        showsVerticalScrollIndicator={false}
-      />
+            )}
+            keyExtractor={(item, index) => {
+              return index.toString();
+            }}
+            showsVerticalScrollIndicator={false}
+            onEndReached={onEndReached}
+            ListFooterComponent={() =>
+              <>
+                {areReviewsLoading ?
+                  <View style={styles.endOfListContainer}>
+                    <Spinner status='warning' />
+                  </View>
+                  : null
+                }
+              </>
+            }
+          />
+        </>}
     </>
   );
 }
@@ -128,6 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: '3 %',
+    marginTop: '3 %'
   },
   desciptionContainer: {
     marginBottom: '3 %',
@@ -154,8 +217,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '85 %',
   },
-  dishCard: {
+  card: {
     width: '85 %',
     alignSelf: 'center',
+  },
+  endOfListContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
   },
 });

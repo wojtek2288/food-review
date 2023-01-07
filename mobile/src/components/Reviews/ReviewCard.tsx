@@ -1,6 +1,5 @@
 import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image } from 'react-native';
-import Review from '../../responseTypes/Review';
 import { Rating } from '../Common/Rating';
 import { useState } from 'react';
 import ReviewResponse from '../../responseTypes/ReviewResponse';

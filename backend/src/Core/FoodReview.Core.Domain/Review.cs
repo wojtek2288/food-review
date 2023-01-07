@@ -8,8 +8,9 @@ public class Review : IAggregateRoot
     public Guid UserId { get; private set; }
     public Guid RestaurantId { get; private set; }
     public Guid? DishId { get; private set; }
-    public string Description { get; private set; } = default!;
+    public string? Description { get; private set; } = default!;
     public double Rating { get; private set; }
+    public DateTime DateAdded { get; private init; }
 
     private Review() { }
 
@@ -17,7 +18,7 @@ public class Review : IAggregateRoot
         Guid userId,
         Guid restaurantId,
         Guid? dishId,
-        string description,
+        string? description,
         double rating)
     {
         if (rating > 10 || rating < 1)
@@ -33,6 +34,7 @@ public class Review : IAggregateRoot
             DishId = dishId,
             Description = description,
             Rating = rating,
+            DateAdded = DateTime.Now,
         };
     }
 

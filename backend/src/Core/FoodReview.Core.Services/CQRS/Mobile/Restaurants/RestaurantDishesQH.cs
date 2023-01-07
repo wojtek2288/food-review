@@ -35,6 +35,7 @@ public class RestaurantDishesQH : QueryHandler<RestaurantDishes, PaginatedResult
                     .Where(r => r.DishId == d.Id)
                     .Average(r => r.Rating),
             })
+            .OrderBy(d => d.Name)
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)
             .ToListAsync(context.CancellationToken);

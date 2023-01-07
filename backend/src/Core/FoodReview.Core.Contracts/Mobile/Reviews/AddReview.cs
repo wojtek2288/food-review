@@ -8,7 +8,7 @@ public class AddReview : CommandBase<AddReview>
 {
     public Guid RestaurantId { get; set; }
     public Guid? DishId { get; set; }
-    public string Description { get; set; } = default!;
+    public string? Description { get; set; } = default!;
     public double Rating { get; set; }
 
     public static class ErrorCodes

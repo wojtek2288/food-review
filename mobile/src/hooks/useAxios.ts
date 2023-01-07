@@ -78,23 +78,35 @@ export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: st
     const [response, setRespone] = useState<TResponse>();
     const [requestSuccessful, setRequestSuccessful] = useState<boolean>(false);
 
-    const run = async (req?: TRequest) => {
+    const run = async (req?: TRequest, token?: string) => {
         setIsLoading(true);
         setError(null);
         let success = false;
 
         const url = requestType === RequestType.Command ? commandUrl(path) : queryUrl(path);
+        console.log(path);
 
         try {
+            console.log(token);
+
             const res = await axios<TResponse>({
                 method: 'post',
                 url: url,
                 data: req,
+                headers: token !== undefined
+                    ?
+                    {
+                        Authorization: `Bearer ${token}`
+                    }
+                    : undefined,
             });
+            console.log(path);
+            console.log("dupaa");
             setRespone(res.data);
             setRequestSuccessful(true);
             success = true;
         } catch (responseErr: any) {
+            console.log(responseErr);
             setError(responseErr.response.data);
         }
 
