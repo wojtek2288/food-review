@@ -206,7 +206,13 @@ export const RestaurantDetailsScreen = ({
             </TouchableOpacity>
           </View>
           {reviewModalVisible ? (
-            <ReviewModal onClose={setReviewModalVisible} onReviewAdd={onReviewAdd} isLoading={isAddReviewLoading} />
+            <ReviewModal
+              onClose={setReviewModalVisible}
+              onReviewAdd={onReviewAdd}
+              isLoading={isAddReviewLoading}
+              description={null}
+              rating={null}
+            />
           ) : null}
           <FlatList
             ListHeaderComponent={() => (

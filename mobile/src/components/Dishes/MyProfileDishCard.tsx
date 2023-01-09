@@ -5,8 +5,9 @@ import { Rating } from '../Common/Rating';
 import { AntDesign } from '@expo/vector-icons';
 import { DeleteReviewConfirmation } from '../Reviews/DeleteReviewConfirmation';
 import { DishReview } from '../../responseTypes/MyReviewResponse';
-import { useDeleteReviewCommand } from '../../api/services';
+import { useDeleteReviewCommand, useEditReviewCommand } from '../../api/services';
 import * as SecureStore from 'expo-secure-store';
+import { ReviewModal } from '../Reviews/ReviewModal';
 
 export interface MyProfileDishCardProps {
     dish: DishReview;
@@ -20,18 +21,42 @@ export const MyProfileDishCard: React.FC<MyProfileDishCardProps> = ({ dish, navi
     };
     const deleteReviewReq = {
         reviewId: dish.reviewId
+    };
+    const editReviewReq = {
+        reviewId: dish.reviewId,
+        description: '',
+        rating: 0,
     }
     const [deleteReviewModalVisible, setDeleteReviewModalVisible] = useState(false);
+    const [editReviewModalVisible, setEditReviewModalVisible] = useState(false);
     const {
         run: deleteReviewRun,
         isLoading: deleteReviewLoading,
         requestSuccessful: deleteReviewRequestSuccessful
     } = useDeleteReviewCommand(deleteReviewReq);
+    const {
+        run: editReviewRun,
+        isLoading: editReviewLoading,
+        requestSuccessful: editReviewRequestSuccessful
+    } = useEditReviewCommand(editReviewReq);
 
     const onReviewDelete = async () => {
         const token = await SecureStore.getItemAsync('accessToken');
         if (token !== null) {
             deleteReviewRun(deleteReviewReq, token);
+        }
+    }
+
+    const onReviewEdit = async (description: string, rating: number) => {
+        const token = await SecureStore.getItemAsync('accessToken');
+        if (token !== null) {
+            editReviewRun(
+                {
+                    reviewId: dish.reviewId,
+                    description: description,
+                    rating: rating
+                },
+                token);
         }
     }
 
@@ -42,6 +67,13 @@ export const MyProfileDishCard: React.FC<MyProfileDishCardProps> = ({ dish, navi
         }
     }, [deleteReviewRequestSuccessful])
 
+    useEffect(() => {
+        if (editReviewRequestSuccessful) {
+            setRefreshReviews(true);
+            setDeleteReviewModalVisible(false);
+        }
+    }, [editReviewRequestSuccessful])
+
     return (
         <View style={styles.dishContainer}>
             {deleteReviewModalVisible
@@ -50,9 +82,19 @@ export const MyProfileDishCard: React.FC<MyProfileDishCardProps> = ({ dish, navi
                     onReviewDelete={onReviewDelete}
                     isLoading={deleteReviewLoading} />
                 : null}
+            {editReviewModalVisible
+                ? <ReviewModal
+                    onClose={setEditReviewModalVisible}
+                    onReviewAdd={onReviewEdit}
+                    isLoading={editReviewLoading}
+                    description={dish.description}
+                    rating={dish.rating} />
+                : null}
             <Card style={styles.card} onPress={onDishCardClicked}>
                 <View style={styles.iconsContainer}>
-                    <AntDesign name="edit" size={35} color="black" style={{ marginRight: '10 %' }} />
+                    <TouchableOpacity onPress={() => setEditReviewModalVisible(true)}>
+                        <AntDesign name="edit" size={35} color="black" style={{ marginRight: '10 %' }} />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => setDeleteReviewModalVisible(true)}>
                         <AntDesign name="delete" size={35} color="red" />
                     </TouchableOpacity>

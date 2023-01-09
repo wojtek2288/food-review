@@ -22,6 +22,7 @@ import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
 import EditMyDescriptionRequest from '../requestTypes.ts/EditMyDescriptionRequest';
 import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import DeleteReviewRequest from '../requestTypes.ts/DeleteReviewRequest';
+import EditReviewRequest from '../requestTypes.ts/EditReviewRequest';
 
 export const useFeedQuery = (req: PaginatedRequest) => (
     useAxios<PaginatedResult<Dish>, PaginatedRequest>(RequestType.Query, 'Dishes.Feed', req)
@@ -89,4 +90,8 @@ export const useEditMyDescriptionCommand = (req: EditMyDescriptionRequest) => (
 
 export const useDeleteReviewCommand = (req: DeleteReviewRequest) => (
     useAxios<any, DeleteReviewRequest>(RequestType.Command, 'Reviews.DeleteReview', req)
-)
+);
+
+export const useEditReviewCommand = (req: EditReviewRequest) => (
+    useAxios<any, EditReviewRequest>(RequestType.Command, 'Reviews.EditReview', req)
+);

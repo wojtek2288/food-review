@@ -5,8 +5,9 @@ import { Rating } from '../Common/Rating';
 import { AntDesign } from '@expo/vector-icons';
 import { DeleteReviewConfirmation } from '../Reviews/DeleteReviewConfirmation';
 import { RestaurantReview } from '../../responseTypes/MyReviewResponse';
-import { useDeleteReviewCommand } from '../../api/services';
+import { useDeleteReviewCommand, useEditReviewCommand } from '../../api/services';
 import * as SecureStore from 'expo-secure-store';
+import { ReviewModal } from '../Reviews/ReviewModal';
 
 export interface MyProfileRestaurantCardProps {
     restaurant: RestaurantReview;
@@ -21,17 +22,41 @@ export const MyProfileRestaurantCard: React.FC<MyProfileRestaurantCardProps> = (
     const deleteReviewReq = {
         reviewId: restaurant.reviewId
     }
+    const editReviewReq = {
+        reviewId: restaurant.reviewId,
+        description: '',
+        rating: 0,
+    }
     const [deleteReviewModalVisible, setDeleteReviewModalVisible] = useState(false);
+    const [editReviewModalVisible, setEditReviewModalVisible] = useState(false);
     const {
         run: deleteReviewRun,
         isLoading: deleteReviewLoading,
         requestSuccessful: deleteReviewRequestSuccessful
     } = useDeleteReviewCommand(deleteReviewReq);
+    const {
+        run: editReviewRun,
+        isLoading: editReviewLoading,
+        requestSuccessful: editReviewRequestSuccessful
+    } = useEditReviewCommand(editReviewReq);
 
     const onReviewDelete = async () => {
         const token = await SecureStore.getItemAsync('accessToken');
         if (token !== null) {
             deleteReviewRun(deleteReviewReq, token);
+        }
+    }
+
+    const onReviewEdit = async (description: string, rating: number) => {
+        const token = await SecureStore.getItemAsync('accessToken');
+        if (token !== null) {
+            editReviewRun(
+                {
+                    reviewId: restaurant.reviewId,
+                    description: description,
+                    rating: rating
+                },
+                token);
         }
     }
 
@@ -42,6 +67,13 @@ export const MyProfileRestaurantCard: React.FC<MyProfileRestaurantCardProps> = (
         }
     }, [deleteReviewRequestSuccessful])
 
+    useEffect(() => {
+        if (editReviewRequestSuccessful) {
+            setRefreshReviews(true);
+            setDeleteReviewModalVisible(false);
+        }
+    }, [editReviewRequestSuccessful])
+
     return (
         <View style={styles.dishContainer}>
             {deleteReviewModalVisible
@@ -50,9 +82,19 @@ export const MyProfileRestaurantCard: React.FC<MyProfileRestaurantCardProps> = (
                     onReviewDelete={onReviewDelete}
                     isLoading={deleteReviewLoading} />
                 : null}
+            {editReviewModalVisible
+                ? <ReviewModal
+                    onClose={setEditReviewModalVisible}
+                    onReviewAdd={onReviewEdit}
+                    isLoading={editReviewLoading}
+                    description={restaurant.description}
+                    rating={restaurant.rating} />
+                : null}
             <Card style={styles.card} onPress={onRestaurantCardClicked}>
                 <View style={styles.iconsContainer}>
-                    <AntDesign name="edit" size={35} color="black" style={{ marginRight: '10 %' }} />
+                    <TouchableOpacity onPress={() => setEditReviewModalVisible(true)}>
+                        <AntDesign name="edit" size={35} color="black" style={{ marginRight: '10 %' }} />
+                    </TouchableOpacity>
                     <TouchableOpacity onPress={() => setDeleteReviewModalVisible(true)}>
                         <AntDesign name="delete" size={35} color="red" />
                     </TouchableOpacity>

@@ -68,6 +68,7 @@ export default function Login({ navigation }: ProfileTabScreenProps<'Login'>) {
                 <KeyboardAwareScrollView
                   contentContainerStyle={styles.inputsContainer}
                   showsVerticalScrollIndicator={false}
+                  scrollEnabled={true}
                 >
                   <Text style={styles.signInText}>Sign In</Text>
                   {showError ? (

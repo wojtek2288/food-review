@@ -167,6 +167,8 @@ export const DishDetailsScreen = ({
               onClose={setReviewModalVisible}
               onReviewAdd={onReviewAdd}
               isLoading={isAddReviewLoading}
+              description={null}
+              rating={null}
             />
           ) : null}
           <FlatList
