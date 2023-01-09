@@ -8,6 +8,7 @@ using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using ReviewDTO = FoodReview.Core.Domain.DTO.Admin.ReviewDTO;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Reviews;
 

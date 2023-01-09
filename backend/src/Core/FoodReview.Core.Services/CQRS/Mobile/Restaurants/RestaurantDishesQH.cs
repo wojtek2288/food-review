@@ -32,7 +32,7 @@ public class RestaurantDishesQH : QueryHandler<RestaurantDishes, PaginatedResult
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(r => r.DishId == d.Id)
+                    .Where(r => r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
             })
             .OrderBy(d => d.Name)

@@ -29,7 +29,7 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO?>
                 DishName = d.Name,
                 Price = d.Price,
                 Rating = dbContext.Reviews
-                    .Where(r => r.DishId == d.Id)
+                    .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
                 Description = d.Description,
                 Tags = d.Tags
