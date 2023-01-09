@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.CQRS.Example;
 
-public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO>>
+public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
 {
     private readonly CoreDbContext dbContext;
 
@@ -17,7 +17,7 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO
         this.dbContext = dbContext;
     }
 
-    public override async Task<PaginatedResult<UserReviewDTO>> HandleAsync(MyReviews query, CoreContext context)
+    public override async Task<PaginatedResult<MyReviewDTO>> HandleAsync(MyReviews query, CoreContext context)
     {
         var totalCount = await dbContext.Reviews
             .Where(r => r.UserId == context.UserId)
@@ -31,21 +31,25 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO
                 r => r.RestaurantId,
                 res => res.Id,
                 (r, res) => new { Review = r, Restaurant = res })
-            .LeftJoin(dbContext.Dishes, r => r.Review.DishId, d => d.Id, (r, d) => new UserReviewDTO
+            .LeftJoin(dbContext.Dishes, r => r.Review.DishId, d => d.Id, (r, d) => new MyReviewDTO
             {
                 restaurantReview = d == null
-                ? new RestaurantSummaryDTO
+                ? new RestaurantReviewDTO
                 {
-                    Id = r.Restaurant.Id,
+                    RestaurantId = r.Restaurant.Id,
+                    ReviewId = r.Review.Id,
+                    Description = r.Review.Description,
                     Name = r.Restaurant.Name,
                     ImageUrl = r.Restaurant.ImageUrl,
                     Rating = r.Review.Rating,
                 }
                 : null,
                 dishReview = d != null
-                ? new DishSummaryDTO
+                ? new DishReviewDTO
                 {
-                    Id = d.Id,
+                    DishId = d.Id,
+                    ReviewId = r.Review.Id,
+                    Description = r.Review.Description,
                     Name = d.Name,
                     RestaurantName = r.Restaurant.Name,
                     ImageUrl = d.ImageUrl,
@@ -57,7 +61,7 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO
             .Take(query.PageSize)
             .ToListAsync(context.CancellationToken);
 
-        return new PaginatedResult<UserReviewDTO>
+        return new PaginatedResult<MyReviewDTO>
         {
             TotalCount = totalCount,
             Items = reviews,
