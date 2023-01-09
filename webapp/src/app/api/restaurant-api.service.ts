@@ -109,6 +109,7 @@ export class RestaurantApiService {
               _ => {
                 this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
                 this.afterCommandFinishedSubject.next();
+                this.router.navigate(['']);
               },
               x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
             );

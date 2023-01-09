@@ -112,6 +112,7 @@ export class DishApiService {
               _ => {
                 this.snackBar.open("Successfuly deleted dish", "", {duration: 3000});
                 this.afterCommandFinishedSubject.next();
+                this.router.navigate(['dishes']);
               },
               x => this.snackBar.open("Dish with specified Id does not exist", "", {duration: 3000})
             );
