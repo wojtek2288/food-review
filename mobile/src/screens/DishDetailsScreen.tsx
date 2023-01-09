@@ -115,6 +115,7 @@ export const DishDetailsScreen = ({
   const onReviewAdd = async (description: string, rating: number) => {
     if (dish !== undefined) {
       const token = await SecureStore.getItemAsync('accessToken');
+      console.log(dish);
       addReviewRun(
         {
           restaurantId: dish.restaurantId,
@@ -133,6 +134,7 @@ export const DishDetailsScreen = ({
       setTotalCount(0);
       setReviews(undefined);
       setReviewModalVisible(false);
+      detailsRun(detailsReq);
       reviewsRun({
         pageSize: defaultPageSize,
         pageCount: 0,

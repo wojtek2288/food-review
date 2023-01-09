@@ -19,7 +19,7 @@ import { ReviewModal } from '../components/Reviews/ReviewModal';
 import { defaultPageSize } from '../constants/Pagination';
 import { useAddReviewCommand, useRestaurantDetailsQuery, useRestaurantDishesQuery, useRestaurantReviewsQuery } from '../api/services';
 import RestaurantDetailsResponse from '../responseTypes/RestaurantDetailsResponse';
-import UserReviewResponse from '../responseTypes/UserReviewResponse';
+import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import Dish from '../responseTypes/Dish';
 import { useSignIn } from '../hooks/useSignIn';
 import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
@@ -34,7 +34,7 @@ export const RestaurantDetailsScreen = ({
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [data, setData] = useState<any>();
-  const [reviews, setReviews] = useState<UserReviewResponse[] | undefined>(undefined);
+  const [reviews, setReviews] = useState<MyReviewResponse[] | undefined>(undefined);
   const [dishes, setDishes] = useState<Dish[] | undefined>(undefined);
   const [reviewsCurrentPage, setReviewsCurrentPage] = useState(0);
   const [reviewsTotalCount, setReviewsTotalCount] = useState(0);
@@ -347,6 +347,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     paddingHorizontal: '7.5 %',
+    paddingTop: '3 %'
   },
   reviewContainer: {
     flex: 1,

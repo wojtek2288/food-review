@@ -187,6 +187,7 @@ function BottomTabNavigator() {
         options={{
           title: 'Feed',
           tabBarIcon: ({ color }) => <TabBarIcon name='home' color={color} />,
+          unmountOnBlur: true,
         }}
       />
       <BottomTab.Screen

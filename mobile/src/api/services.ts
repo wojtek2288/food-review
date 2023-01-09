@@ -6,7 +6,7 @@ import PaginatedRequestWithSearch from '../requestTypes.ts/PaginatedRequestWithS
 import RegisterRequest from '../requestTypes.ts/RegisterRequest';
 import Dish from '../responseTypes/Dish';
 import DishDetailsResponse from '../responseTypes/DishDetailsResponse';
-import UserReviewResponse from '../responseTypes/UserReviewResponse';
+import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import PaginatedResult from '../responseTypes/PaginatedResult';
 import Restaurant from '../responseTypes/Restaurant';
 import User from '../responseTypes/User';
@@ -19,6 +19,9 @@ import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import UserReviewsRequest from '../requestTypes.ts/UserReviewsRequest';
 import ReviewResponse from '../responseTypes/ReviewResponse';
 import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
+import EditMyDescriptionRequest from '../requestTypes.ts/EditMyDescriptionRequest';
+import UserReviewResponse from '../responseTypes/UserReviewResponse';
+import DeleteReviewRequest from '../requestTypes.ts/DeleteReviewRequest';
 
 export const useFeedQuery = (req: PaginatedRequest) => (
     useAxios<PaginatedResult<Dish>, PaginatedRequest>(RequestType.Query, 'Dishes.Feed', req)
@@ -57,7 +60,7 @@ export const useMyProfileQuery = (req: {}) => (
 );
 
 export const useMyReviewsQuery = (req: PaginatedRequest) => (
-    useAxios<PaginatedResult<UserReviewResponse>, PaginatedRequest>(RequestType.Query, 'Users.MyReviews', req)
+    useAxios<PaginatedResult<MyReviewResponse>, PaginatedRequest>(RequestType.Query, 'Users.MyReviews', req)
 )
 
 export const useAddReviewCommand = (req: AddReviewRequest) => (
@@ -69,7 +72,7 @@ export const useRestaurantDetailsQuery = (req: RestaurantDetailsRequest) => (
 );
 
 export const useRestaurantReviewsQuery = (req: RestaurantReviewsRequest) => (
-    useAxios<PaginatedResult<UserReviewResponse>, RestaurantReviewsRequest>(RequestType.Query, 'Restaurants.RestaurantReviews', req)
+    useAxios<PaginatedResult<MyReviewResponse>, RestaurantReviewsRequest>(RequestType.Query, 'Restaurants.RestaurantReviews', req)
 );
 
 export const useRestaurantDishesQuery = (req: RestaurantDishesRequest) => (
@@ -79,3 +82,11 @@ export const useRestaurantDishesQuery = (req: RestaurantDishesRequest) => (
 export const useRegisterCommand = (req: RegisterRequest) => (
     useAxios<any, RegisterRequest>(RequestType.Command, 'Users.Register', req)
 );
+
+export const useEditMyDescriptionCommand = (req: EditMyDescriptionRequest) => (
+    useAxios<any, EditMyDescriptionRequest>(RequestType.Command, 'Users.EditMyDescription', req)
+);
+
+export const useDeleteReviewCommand = (req: DeleteReviewRequest) => (
+    useAxios<any, DeleteReviewRequest>(RequestType.Command, 'Reviews.DeleteReview', req)
+)

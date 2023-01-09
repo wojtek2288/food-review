@@ -8,11 +8,13 @@ import { Button, Popover, Spinner } from '@ui-kitten/components';
 import { DishCard } from '../components/Dishes/DishCard';
 import * as SecureStore from 'expo-secure-store';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
-import UserReviewResponse from '../responseTypes/UserReviewResponse';
+import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
-import { useMyProfileQuery, useMyReviewsQuery } from '../api/services';
+import { useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery } from '../api/services';
 import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
+import { MyProfileDishCard } from '../components/Dishes/MyProfileDishCard';
+import { MyProfileRestaurantCard } from '../components/Restaurants/MyProfileRestaurantCard';
 
 export default function MyProfile({
   navigation,
@@ -23,15 +25,20 @@ export default function MyProfile({
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
-  const [reviews, setReviews] = useState<UserReviewResponse[] | undefined>(undefined);
+  const [reviews, setReviews] = useState<MyReviewResponse[] | undefined>(undefined);
+  const [refreshReviews, setRefreshReviews] = useState(false);
   const detailsReq = {};
   const reviewsReq = {
     pageSize: defaultPageSize,
     pageCount: currentPage
   };
+  const editMyDescriptionReq = {
+    description: '',
+  };
 
   const { run: detailsRun, response: detailsResponse } = useMyProfileQuery(detailsReq);
   const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useMyReviewsQuery(reviewsReq);
+  const { run: editMyDescriptionRun, isLoading: editMyDescriptionLoading, requestSuccessful } = useEditMyDescriptionCommand(editMyDescriptionReq);
 
   const fetchData = async () => {
     const token = await SecureStore.getItemAsync('accessToken');
@@ -67,12 +74,39 @@ export default function MyProfile({
     }
   }, [reviewsResponse]);
 
+  useEffect(() => {
+    if (requestSuccessful === true) {
+      setDescriptionModalVisible(false);
+      detailsRun(detailsReq, token)
+    }
+    else if (requestSuccessful === false) {
+      setDescriptionModalVisible(false);
+    }
+  }, [requestSuccessful]);
+
+  useEffect(() => {
+    if (refreshReviews) {
+      setRefreshReviews(false);
+      setCurrentPage(0);
+      setTotalCount(0);
+      setReviews(undefined);
+      reviewsRun({
+        pageSize: defaultPageSize,
+        pageCount: 0,
+      }, token);
+    }
+  }, [refreshReviews]);
+
   const onEndReached = () => {
     if (currentPage * defaultPageSize >= totalCount || currentPage == 0 || areReviewsLoading) {
       return;
     }
     reviewsRun(reviewsReq, token);
   };
+
+  const onDescriptionEdited = (description: string) => {
+    editMyDescriptionRun({ description }, token);
+  }
 
   return (
     <>
@@ -85,7 +119,11 @@ export default function MyProfile({
           ListHeaderComponent={() => (
             <>
               {descriptionModalVisible ? (
-                <EditDescriptionModal onClose={setDescriptionModalVisible} />
+                <EditDescriptionModal
+                  onClose={setDescriptionModalVisible}
+                  isLoading={editMyDescriptionLoading}
+                  onDescriptionEdited={onDescriptionEdited}
+                  description={user.description} />
               ) : null}
               <View style={styles.container}>
                 <View style={styles.profile}>
@@ -153,8 +191,9 @@ export default function MyProfile({
           data={reviews}
           renderItem={(review) => (
             <View style={styles.card}>
-              {review.item.dishReview !== null ? <DishCard dish={review.item.dishReview} navigation={navigation} />
-                : <RestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} />}
+              {review.item.dishReview !== null
+                ? <MyProfileDishCard dish={review.item.dishReview} navigation={navigation} setRefreshReviews={setRefreshReviews} />
+                : <MyProfileRestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} setRefreshReviews={setRefreshReviews} />}
             </View>
           )}
           keyExtractor={(item, index) => {

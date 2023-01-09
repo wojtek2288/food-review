@@ -28,15 +28,15 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review }) => {
             <Rating rating={review.rating} />
           </View>
         </View>
-        <View style={styles.cardDescription}>
-          {review.description == null ? null : (
+        {review.description === null || review.description === ''
+          ? null
+          : <View style={styles.cardDescription}>
             <Text style={styles.description}>
               {review.description.length > 100 && !expand
                 ? review.description.substring(0, 100) + '...'
                 : review.description}
             </Text>
-          )}
-        </View>
+          </View>}
       </Card>
     </View>
   );
