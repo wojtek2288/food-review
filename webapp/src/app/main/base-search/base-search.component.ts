@@ -1,14 +1,18 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+
+export const rowAnimation = trigger('rowAnimation', [ transition('* => void', [ animate('0ms', style({ display: 'none'})) ]) ]);
 
 @Component({
   selector: 'app-base-search',
   templateUrl: './base-search.component.html',
-  styleUrls: ['./base-search.component.css']
+  styleUrls: ['./base-search.component.css'],
+  animations: [rowAnimation]
 })
 export class BaseSearchComponent<T> implements AfterViewInit {
   @Input() enableAdding: boolean = false;

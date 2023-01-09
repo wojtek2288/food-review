@@ -16,7 +16,8 @@ const routes: Routes = [
   {
     path: 'restaurants',
     component: RestaurantSearchComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'restaurants' }
   },
   {
     path: 'restaurants/details/:id',
@@ -26,17 +27,20 @@ const routes: Routes = [
   {
     path: 'dishes',
     component: DishSearchComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'dishes' }
   },
   {
     path: 'dishes/details/:id',
     component: DishDetailsComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'dishDetails' }
   },
   {
     path: 'users',
     component: UserSearchComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'users' }
   },
   {
     path: 'users/details/:id',
@@ -46,7 +50,8 @@ const routes: Routes = [
   {
     path: 'reviews',
     component: ReviewSearchComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'reviews' }
   },
   {
     path: 'login',
