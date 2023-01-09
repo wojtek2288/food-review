@@ -25,6 +25,7 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<UserReviewDTO
 
         var reviews = await dbContext.Reviews
             .Where(r => r.UserId == context.UserId)
+            .OrderByDescending(r => r.DateAdded)
             .Join(
                 dbContext.Restaurants,
                 r => r.RestaurantId,

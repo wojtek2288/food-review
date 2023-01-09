@@ -5,19 +5,18 @@ import IdentityServerRequest from "../requestTypes.ts/IdentityServerRequest";
 import * as SecureStore from 'expo-secure-store';
 import qs from "qs";
 
-export const useSignIn = () =>
-{
+export const useSignIn = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
     const [error, setError] = useState<any>(null);
 
     const run = async (req?: IdentityServerRequest) => {
         setIsLoading(true);
+        setIsAuthenticated(null);
         let success = false;
-        let params : any;
+        let params: any;
 
-        if (req !== undefined)
-        {
+        if (req !== undefined) {
             params =
             {
                 client_id: 'client_app',
@@ -26,17 +25,14 @@ export const useSignIn = () =>
                 password: req.password
             }
         }
-        else
-        {
+        else {
             const refreshToken = await SecureStore.getItemAsync('refreshToken');
-            if (refreshToken === null)
-            {
+            if (refreshToken === null) {
                 setIsLoading(false);
                 setIsAuthenticated(false);
                 return success;
             }
-            else
-            {
+            else {
                 params =
                 {
                     client_id: 'client_app',
@@ -51,7 +47,7 @@ export const useSignIn = () =>
                 authUrl,
                 qs.stringify(params),
                 {
-                    headers:{
+                    headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     }
                 });

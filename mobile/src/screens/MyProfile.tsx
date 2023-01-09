@@ -5,19 +5,21 @@ import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import { ProfileTabScreenProps } from '../types';
 import { Button, Popover, Spinner } from '@ui-kitten/components';
-import { dishes } from '../data/dishes';
 import { DishCard } from '../components/Dishes/DishCard';
 import * as SecureStore from 'expo-secure-store';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
 import { useMyProfileQuery, useMyReviewsQuery } from '../api/services';
+import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
+import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
 
 export default function MyProfile({
   navigation,
 }: ProfileTabScreenProps<'MyProfile'>) {
   const [token, setToken] = useState('');
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
@@ -82,6 +84,9 @@ export default function MyProfile({
         <FlatList
           ListHeaderComponent={() => (
             <>
+              {descriptionModalVisible ? (
+                <EditDescriptionModal onClose={setDescriptionModalVisible} />
+              ) : null}
               <View style={styles.container}>
                 <View style={styles.profile}>
                   <View style={styles.upperContainer}>
@@ -134,7 +139,7 @@ export default function MyProfile({
                     <Text style={styles.description}>{user.description}</Text>
                   </View>
                   <Button
-                    onPress={() => navigation.navigate('Modal')}
+                    onPress={() => setDescriptionModalVisible(true)}
                     style={styles.button}
                   >
                     Edit
@@ -145,14 +150,15 @@ export default function MyProfile({
               <Text style={styles.headerText}>My Reviews:</Text>
             </>
           )}
-          data={dishes}
-          renderItem={(dish) => (
-            <View style={styles.dishCard}>
-              <DishCard dish={dish.item} navigation={navigation} />
+          data={reviews}
+          renderItem={(review) => (
+            <View style={styles.card}>
+              {review.item.dishReview !== null ? <DishCard dish={review.item.dishReview} navigation={navigation} />
+                : <RestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} />}
             </View>
           )}
           keyExtractor={(item, index) => {
-            return item.id.toString();
+            return index.toString();
           }}
           showsVerticalScrollIndicator={false}
           onEndReached={onEndReached}
@@ -258,5 +264,9 @@ const styles = StyleSheet.create({
   signOutText: {
     fontWeight: 'bold',
     color: 'white'
-  }
+  },
+  card: {
+    width: '85 %',
+    alignSelf: 'center',
+  },
 });

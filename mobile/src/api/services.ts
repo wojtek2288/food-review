@@ -18,6 +18,7 @@ import UserDetailsRequest from '../requestTypes.ts/UserDetailsRequest';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import UserReviewsRequest from '../requestTypes.ts/UserReviewsRequest';
 import ReviewResponse from '../responseTypes/ReviewResponse';
+import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
 
 export const useFeedQuery = (req: PaginatedRequest) => (
     useAxios<PaginatedResult<Dish>, PaginatedRequest>(RequestType.Query, 'Dishes.Feed', req)
@@ -57,6 +58,10 @@ export const useMyProfileQuery = (req: {}) => (
 
 export const useMyReviewsQuery = (req: PaginatedRequest) => (
     useAxios<PaginatedResult<UserReviewResponse>, PaginatedRequest>(RequestType.Query, 'Users.MyReviews', req)
+)
+
+export const useAddReviewCommand = (req: AddReviewRequest) => (
+    useAxios<any, AddReviewRequest>(RequestType.Command, 'Reviews.AddReview', req)
 )
 
 export const useRestaurantDetailsQuery = (req: RestaurantDetailsRequest) => (

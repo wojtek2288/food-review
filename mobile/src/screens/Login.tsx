@@ -17,14 +17,17 @@ export default function Login({ navigation }: ProfileTabScreenProps<'Login'>) {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showError, setShowError] = useState<boolean>(false);
+  const [buttonClicked, setButtonClicked] = useState<boolean>(false);
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
   const { isLoading, isAuthenticated, run, error } = useSignIn();
 
   useEffect(() => {
-    if (!isLoading) {
-      if (isAuthenticated === true) {
-        navigation.replace('MyProfile');
-      }
+    run();
+  }, []);
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      navigation.replace('MyProfile');
     }
   }, [isAuthenticated]);
 
@@ -47,72 +50,80 @@ export default function Login({ navigation }: ProfileTabScreenProps<'Login'>) {
   );
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.logo}
-            source={require('../assets/images/logo.png')}
-          />
+    <>
+      {isLoading && !buttonClicked
+        ? <View style={styles.container}>
+          <Spinner status='warning' />
         </View>
-        <View style={styles.loginContainer}>
-          <View style={styles.loginTopConatiner}>
-            <KeyboardAwareScrollView
-              contentContainerStyle={styles.inputsContainer}
-              showsVerticalScrollIndicator={false}
-            >
-              <Text style={styles.signInText}>Sign In</Text>
-              {showError ? (
-                <Text style={styles.errorText}>
-                  Invalid username or password
-                </Text>
-              ) : null}
-              <Input
-                placeholder='Username'
-                label='Username'
-                value={username}
-                onChangeText={(nextValue) => setUsername(nextValue)}
-                size='large'
-                style={styles.input}
+        : <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+          <View style={styles.container}>
+            <View style={styles.logoContainer}>
+              <Image
+                style={styles.logo}
+                source={require('../assets/images/logo.png')}
               />
-              <Input
-                placeholder='Password'
-                value={password}
-                label='Password'
-                secureTextEntry={secureTextEntry}
-                accessoryRight={renderIcon}
-                onChangeText={(nextValue) => setPassword(nextValue)}
-                size='large'
-                style={styles.input}
-              />
-              {isLoading ? (
-                <Spinner style={styles.spinner} status='warning' />
-              ) : (
-                <Button
-                  style={styles.button}
-                  onPress={() =>
-                    run({ username: username, password: password })
-                  }
+            </View>
+            <View style={styles.loginContainer}>
+              <View style={styles.loginTopConatiner}>
+                <KeyboardAwareScrollView
+                  contentContainerStyle={styles.inputsContainer}
+                  showsVerticalScrollIndicator={false}
                 >
-                  Sign In
-                </Button>
-              )}
-              <View style={{ flexDirection: 'row' }}>
-                <Text style={{ color: '#414a4c' }}>
-                  Don't have an account ?{' '}
-                </Text>
-                {/* you can use also .replace */}
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Register')}
-                >
-                  <Text style={{ color: Colors.background }}>Sign Up</Text>
-                </TouchableOpacity>
+                  <Text style={styles.signInText}>Sign In</Text>
+                  {showError ? (
+                    <Text style={styles.errorText}>
+                      Invalid username or password
+                    </Text>
+                  ) : null}
+                  <Input
+                    placeholder='Username'
+                    label='Username'
+                    value={username}
+                    onChangeText={(nextValue) => setUsername(nextValue)}
+                    size='large'
+                    style={styles.input}
+                  />
+                  <Input
+                    placeholder='Password'
+                    value={password}
+                    label='Password'
+                    secureTextEntry={secureTextEntry}
+                    accessoryRight={renderIcon}
+                    onChangeText={(nextValue) => setPassword(nextValue)}
+                    size='large'
+                    style={styles.input}
+                  />
+                  {isLoading ? (
+                    <Spinner style={styles.spinner} status='warning' />
+                  ) : (
+                    <Button
+                      style={styles.button}
+                      onPress={() => {
+                        setButtonClicked(true);
+                        run({ username: username, password: password });
+                      }
+                      }
+                    >
+                      Sign In
+                    </Button>
+                  )}
+                  <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ color: '#414a4c' }}>
+                      Don't have an account ?{' '}
+                    </Text>
+                    {/* you can use also .replace */}
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate('Register')}
+                    >
+                      <Text style={{ color: Colors.background }}>Sign Up</Text>
+                    </TouchableOpacity>
+                  </View>
+                </KeyboardAwareScrollView>
               </View>
-            </KeyboardAwareScrollView>
+            </View>
           </View>
-        </View>
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>}
+    </>
   );
 }
 

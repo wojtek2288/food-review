@@ -22,7 +22,9 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO?>
             .Where(d => d.Id == query.DishId)
             .Select(d => new DishDetailsDTO
             {
+                Id = d.Id,
                 ImageUrl = d.ImageUrl,
+                RestaurantId = d.Restaurant.Id,
                 RestaurantName= d.Restaurant.Name,
                 DishName = d.Name,
                 Price = d.Price,

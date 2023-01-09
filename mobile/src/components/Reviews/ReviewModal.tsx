@@ -6,19 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Button, Input, Modal } from '@ui-kitten/components';
+import { Button, Input, Modal, Spinner } from '@ui-kitten/components';
 import Colors from '../../constants/Colors';
 import { AntDesign } from '@expo/vector-icons';
 import { TouchableWithoutFeedback } from '@ui-kitten/components/devsupport';
 import Slider from '@react-native-community/slider';
 import { Rating } from '../Common/Rating';
-import { ScrollView } from 'react-native-virtualized-view';
 
 interface ReviewModalProps {
   onClose: (value: React.SetStateAction<boolean>) => void;
+  onReviewAdd: (description: string, rating: number) => void;
+  isLoading: boolean;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose }) => {
+export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading }) => {
   const textLimit = 500;
   const [label, setLabel] = useState(`Review 0/${textLimit}`);
   const [text, setText] = useState('');
@@ -39,7 +40,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose }) => {
         </View>
         <Input
           multiline={true}
-          textStyle={{ minHeight: Dimensions.get('window').height * 0.15 }}
+          textStyle={{ height: Dimensions.get('window').height * 0.15 }}
           placeholder='Review'
           label={label}
           onChangeText={(text) => {
@@ -65,9 +66,11 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose }) => {
           value={sliderValue}
           onValueChange={(value) => setSliderValie(value)}
         />
-        <Button onPress={() => onClose(false)} style={styles.button}>
-          Rate
-        </Button>
+        {isLoading
+          ? <View style={styles.spinnerContainer}><Spinner status='warning' /></View>
+          : <Button onPress={() => onReviewAdd(text, sliderValue)} style={styles.button}>
+            Rate
+          </Button>}
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -88,6 +91,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     flex: 1,
+  },
+  spinnerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   button: {
     backgroundColor: Colors.background,

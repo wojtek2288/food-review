@@ -16,10 +16,17 @@ import { TagCard } from '../components/Common/TagCard';
 import { ReviewCard } from '../components/Reviews/ReviewCard';
 import { ReviewModal } from '../components/Reviews/ReviewModal';
 import Colors from '../constants/Colors';
-import { useDishDetailsQuery, useDishReviewsQuery } from '../api/services';
+import {
+  useAddReviewCommand,
+  useDishDetailsQuery,
+  useDishReviewsQuery,
+} from '../api/services';
 import DishDetailsResponse from '../responseTypes/DishDetailsResponse';
 import ReviewResponse from '../responseTypes/ReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
+import { useSignIn } from '../hooks/useSignIn';
+import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
+import * as SecureStore from 'expo-secure-store';
 
 export const DishDetailsScreen = ({
   route,
@@ -32,7 +39,9 @@ export const DishDetailsScreen = ({
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [dish, setDish] = useState<DishDetailsResponse | undefined>(undefined);
-  const [reviews, setReviews] = useState<ReviewResponse[] | undefined>(undefined);
+  const [reviews, setReviews] = useState<ReviewResponse[] | undefined>(
+    undefined
+  );
   const detailsReq = {
     dishId: route.params.dishId,
   };
@@ -41,10 +50,27 @@ export const DishDetailsScreen = ({
     pageCount: currentPage,
     dishId: route.params.dishId,
   };
+  let addReviewReq: AddReviewRequest = {
+    restaurantId: '',
+    dishId: '',
+    description: null,
+    rating: 0,
+  };
 
-  const { run: detailsRun, response: detailsResponse } = useDishDetailsQuery(detailsReq);
-  const { run: reviewsRun, response: reviewsResponse } = useDishReviewsQuery(reviewsReq);
-
+  const { run: detailsRun, response: detailsResponse } =
+    useDishDetailsQuery(detailsReq);
+  const { run: reviewsRun, response: reviewsResponse } =
+    useDishReviewsQuery(reviewsReq);
+  const {
+    run: addReviewRun,
+    requestSuccessful,
+    isLoading: isAddReviewLoading,
+  } = useAddReviewCommand(addReviewReq);
+  const {
+    isLoading: isSignInLoading,
+    isAuthenticated,
+    run: signInRun,
+  } = useSignIn();
 
   useEffect(() => {
     detailsRun(detailsReq);
@@ -59,8 +85,7 @@ export const DishDetailsScreen = ({
     if (reviewsResponse) {
       if (reviews !== undefined) {
         setReviews([...reviews, ...reviewsResponse.items]);
-      }
-      else {
+      } else {
         setReviews(reviewsResponse.items);
       }
       setCurrentPage(currentPage + 1);
@@ -75,31 +100,88 @@ export const DishDetailsScreen = ({
     reviewsRun(reviewsReq);
   };
 
+  const onReviewClicked = () => {
+    signInRun();
+  };
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      setReviewModalVisible(true);
+    } else if (isAuthenticated === false) {
+      navigation.navigate('ProfileTab', { screen: 'Login' });
+    }
+  }, [isAuthenticated]);
+
+  const onReviewAdd = async (description: string, rating: number) => {
+    if (dish !== undefined) {
+      const token = await SecureStore.getItemAsync('accessToken');
+      addReviewRun(
+        {
+          restaurantId: dish.restaurantId,
+          dishId: dish.id,
+          description: description,
+          rating: rating,
+        },
+        token!
+      );
+    }
+  };
+
+  useEffect(() => {
+    if (requestSuccessful) {
+      setCurrentPage(0);
+      setTotalCount(0);
+      setReviews(undefined);
+      setReviewModalVisible(false);
+      reviewsRun({
+        pageSize: defaultPageSize,
+        pageCount: 0,
+        dishId: route.params.dishId,
+      });
+    } else {
+      setReviewModalVisible(false);
+    }
+  }, [requestSuccessful]);
+
   return (
     <>
-      {reviews === undefined || dish === undefined
-        ? <View style={styles.container}>
+      {reviews === undefined || dish === undefined ? (
+        <View style={styles.container}>
           <Spinner status='warning' />
         </View>
-        : <View>
+      ) : (
+        <View>
           <View style={styles.arrow}>
             <TouchableOpacity onPress={() => navigation.goBack()}>
-              <AntDesign name='leftcircleo' size={45} color={Colors.background} />
+              <AntDesign
+                name='leftcircleo'
+                size={45}
+                color={Colors.background}
+              />
             </TouchableOpacity>
           </View>
           {reviewModalVisible ? (
-            <ReviewModal onClose={setReviewModalVisible} />
+            <ReviewModal
+              onClose={setReviewModalVisible}
+              onReviewAdd={onReviewAdd}
+              isLoading={isAddReviewLoading}
+            />
           ) : null}
           <FlatList
             nestedScrollEnabled={true}
             ListHeaderComponent={() => (
               <>
                 <View style={styles.imageContainer}>
-                  <Image style={styles.dishImage} source={{ uri: dish.imageUrl }} />
+                  <Image
+                    style={styles.dishImage}
+                    source={{ uri: dish.imageUrl }}
+                  />
                 </View>
                 <View style={styles.descriptionContainer}>
                   <View style={styles.restaurantNameContainer}>
-                    <Text style={styles.restaurantName}>{dish.restaurantName}</Text>
+                    <Text style={styles.restaurantName}>
+                      {dish.restaurantName}
+                    </Text>
                   </View>
                   <View style={styles.ratingContainer}>
                     <Text style={styles.dishName}>{dish.dishName}</Text>
@@ -115,7 +197,9 @@ export const DishDetailsScreen = ({
                       nestedScrollEnabled={true}
                       contentContainerStyle={styles.dishDescriptionContainer}
                     >
-                      <Text style={styles.dishDescription}>{dish.description}</Text>
+                      <Text style={styles.dishDescription}>
+                        {dish.description}
+                      </Text>
                     </ScrollView>
                   )}
                   <View style={styles.tagsContainer}>
@@ -124,12 +208,16 @@ export const DishDetailsScreen = ({
                     ))}
                   </View>
                   <View style={styles.rateContainer}>
-                    <Button
-                      style={styles.button}
-                      onPress={() => setReviewModalVisible(true)}
-                    >
-                      Rate
-                    </Button>
+                    {isSignInLoading ? (
+                      <Spinner status='warning' />
+                    ) : (
+                      <Button
+                        style={styles.button}
+                        onPress={() => onReviewClicked()}
+                      >
+                        Rate
+                      </Button>
+                    )}
                   </View>
                 </View>
                 <Text style={styles.headerText}>Reviews:</Text>
@@ -149,10 +237,9 @@ export const DishDetailsScreen = ({
             showsVerticalScrollIndicator={false}
             onEndReached={onEndReached}
           />
-        </View>}
-
+        </View>
+      )}
     </>
-
   );
 };
 

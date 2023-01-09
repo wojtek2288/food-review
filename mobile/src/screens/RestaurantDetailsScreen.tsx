@@ -17,10 +17,13 @@ import { useEffect, useState } from 'react';
 import { DishCard } from '../components/Dishes/DishCard';
 import { ReviewModal } from '../components/Reviews/ReviewModal';
 import { defaultPageSize } from '../constants/Pagination';
-import { useRestaurantDetailsQuery, useRestaurantDishesQuery, useRestaurantReviewsQuery } from '../api/services';
+import { useAddReviewCommand, useRestaurantDetailsQuery, useRestaurantDishesQuery, useRestaurantReviewsQuery } from '../api/services';
 import RestaurantDetailsResponse from '../responseTypes/RestaurantDetailsResponse';
 import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import Dish from '../responseTypes/Dish';
+import { useSignIn } from '../hooks/useSignIn';
+import AddReviewRequest from '../requestTypes.ts/AddReviewRequest';
+import * as SecureStore from 'expo-secure-store';
 
 export const RestaurantDetailsScreen = ({
   route,
@@ -52,10 +55,18 @@ export const RestaurantDetailsScreen = ({
     pageCount: dishesCurrentPage,
     restaurantId: route.params.restaurantId,
   }
+  const addReviewReq: AddReviewRequest = {
+    restaurantId: route.params.restaurantId,
+    dishId: null,
+    description: null,
+    rating: 0,
+  }
 
   const { run: detailsRun, response: detailsResponse } = useRestaurantDetailsQuery(detailsReq);
   const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useRestaurantReviewsQuery(reviewsReq);
   const { run: dishesRun, response: dishesResponse, isLoading: areDishesLoading } = useRestaurantDishesQuery(dishesReq);
+  const { run: addReviewRun, requestSuccessful, isLoading: isAddReviewLoading } = useAddReviewCommand(addReviewReq);
+  const { isLoading, isAuthenticated, run: signInRun } = useSignIn();
 
   useEffect(() => {
     detailsRun(detailsReq);
@@ -65,6 +76,7 @@ export const RestaurantDetailsScreen = ({
 
   useEffect(() => {
     setRestaurant(detailsResponse);
+    console.log(detailsResponse);
   }, [detailsResponse]);
 
   useEffect(() => {
@@ -124,6 +136,63 @@ export const RestaurantDetailsScreen = ({
     }
   };
 
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      setReviewModalVisible(true);
+    }
+    else if (isAuthenticated === false) {
+      navigation.navigate('ProfileTab', { screen: 'Login' });
+    }
+  }, [isAuthenticated])
+
+  const onReviewClicked = () => {
+    signInRun();
+  }
+
+  useEffect(() => {
+    if (isAuthenticated === true) {
+      setReviewModalVisible(true);
+    }
+    else if (isAuthenticated === false) {
+      navigation.navigate('ProfileTab', { screen: 'Login' });
+    }
+  }, [isAuthenticated])
+
+  const onReviewAdd = async (description: string, rating: number) => {
+    console.log("Adding review");
+    if (restaurant !== undefined) {
+      const token = await SecureStore.getItemAsync('accessToken');
+      addReviewRun(
+        {
+          restaurantId: route.params.restaurantId,
+          dishId: null,
+          description: description,
+          rating: rating,
+        },
+        token!
+      )
+    }
+  }
+
+  useEffect(() => {
+    console.log(requestSuccessful);
+    if (requestSuccessful) {
+      setReviewsCurrentPage(0);
+      setReviewsTotalCount(0);
+      setReviews(undefined);
+      setReviewModalVisible(false);
+      reviewsRun({
+        pageSize: defaultPageSize,
+        pageCount: 0,
+        restaurantId: route.params.restaurantId,
+      });
+    }
+    else {
+      setReviewModalVisible(false);
+    }
+  }, [requestSuccessful])
+
+
   return (
     <>
       {restaurant === undefined
@@ -137,7 +206,7 @@ export const RestaurantDetailsScreen = ({
             </TouchableOpacity>
           </View>
           {reviewModalVisible ? (
-            <ReviewModal onClose={setReviewModalVisible} />
+            <ReviewModal onClose={setReviewModalVisible} onReviewAdd={onReviewAdd} isLoading={isAddReviewLoading} />
           ) : null}
           <FlatList
             ListHeaderComponent={() => (
@@ -168,12 +237,14 @@ export const RestaurantDetailsScreen = ({
                     ))}
                   </View>
                   <View style={styles.rateContainer}>
-                    <Button
-                      style={styles.button}
-                      onPress={() => setReviewModalVisible(true)}
-                    >
-                      Rate
-                    </Button>
+                    {isLoading
+                      ? <Spinner status='warning' />
+                      : <Button
+                        style={styles.button}
+                        onPress={() => onReviewClicked()}
+                      >
+                        Rate
+                      </Button>}
                   </View>
                 </View>
                 <BottomNavigation

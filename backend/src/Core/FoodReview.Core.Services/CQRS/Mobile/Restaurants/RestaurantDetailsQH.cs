@@ -25,7 +25,7 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
                 ImageUrl = r.ImageUrl,
                 RestaurantName= r.Name,
                 Rating = dbContext.Reviews
-                    .Where(r => r.RestaurantId == r.Id)
+                    .Where(rev => rev.RestaurantId == r.Id && rev.DishId == null)
                     .Average(r => r.Rating),
                 Description = r.Description,
                 Tags = r.Tags
