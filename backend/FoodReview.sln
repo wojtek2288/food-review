@@ -15,8 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{1294D806-F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodReview.Api", "src\Apps\FoodReview.Api\FoodReview.Api.csproj", "{F7092C36-1FF0-4185-8BF3-03B4BDC93AFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FoodReview.Tests", "tests\FoodReview.Tests.csproj", "{26588996-4D81-4ADD-97FC-28D29EC30D5A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{F7092C36-1FF0-4185-8BF3-03B4BDC93AFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7092C36-1FF0-4185-8BF3-03B4BDC93AFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7092C36-1FF0-4185-8BF3-03B4BDC93AFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26588996-4D81-4ADD-97FC-28D29EC30D5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26588996-4D81-4ADD-97FC-28D29EC30D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26588996-4D81-4ADD-97FC-28D29EC30D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26588996-4D81-4ADD-97FC-28D29EC30D5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{41FD8725-1E86-4E0F-84D7-82404A40C255} = {10B95F42-C434-47CA-B9AD-8BF43EB47936}
