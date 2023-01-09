@@ -46,7 +46,7 @@ export class RestaurantDetailsComponent implements OnInit {
   }
 
   onEdit(): void {
-    
+    this.restaurantService.editRestaurant(this.restaurant);
   }
 
   onDelete(): void {

@@ -5,6 +5,7 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { AuthService } from "../main/auth/auth.service";
 import { ConfirmationDialogComponent } from "../main/confirmation-dialog/confirmation-dialog.component";
+import { EditDetailsDialogComponent } from "../main/edit-details-dialog/edit-details-dialog.component";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
 import { ApiService } from "./api.service";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
@@ -48,6 +49,58 @@ export class RestaurantApiService {
           this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
           this.router.navigate(['']);
         });
+    }
+
+    public addRestaurant(): void {
+      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+        data: {
+          name: "",
+          description: "",
+          imageUrl: ""
+        },
+        width: "500px"
+      });
+      dialogRef.afterClosed().subscribe(x => {
+        if (x)
+        {
+          this.isLoadingSubject.next(true);
+          console.log(x);
+          return;
+          // this.apiService.deleteRestaurant({
+          //   id: id
+          // }, this.authService.loggedInUser?.access_token!).subscribe(
+          //   _ => {
+          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
+          //     this.afterCommandFinishedSubject.next();
+          //   },
+          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
+          // );
+        }
+      });
+    }
+
+    public editRestaurant(data: Restaurant): void {
+      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+        data: {...data},
+        width: "500px"
+      });
+      dialogRef.afterClosed().subscribe(x => {
+        if (x)
+        {
+          this.isLoadingSubject.next(true);
+          console.log(x);
+          return;
+          // this.apiService.deleteRestaurant({
+          //   id: id
+          // }, this.authService.loggedInUser?.access_token!).subscribe(
+          //   _ => {
+          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
+          //     this.afterCommandFinishedSubject.next();
+          //   },
+          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
+          // );
+        }
+      });
     }
     
     public deleteRestaurant(id: string): void {

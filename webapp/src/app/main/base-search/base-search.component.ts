@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
@@ -11,6 +11,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
   styleUrls: ['./base-search.component.css']
 })
 export class BaseSearchComponent<T> implements AfterViewInit {
+  @Input() enableAdding: boolean = false;
   header: string = "";
   dataSource!: MatTableDataSource<T>;
   displayedColumns: string[] = ['id', 'name', 'description', 'showDetails'];
@@ -34,9 +35,10 @@ export class BaseSearchComponent<T> implements AfterViewInit {
     setTimeout(() => this.onSearch());
   }
 
-  onSearch() { }
+  onSearch(): void { }
   onShowDetails(rowData: T): void {}
   onToggleVisibility(rowData: T): void {}
+  onAdd(): void {}
   onEdit(rowData: T): void {}
   onDelete(rowData: T): void {}
   onBan(rowData: T): void {}

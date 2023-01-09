@@ -54,3 +54,8 @@ table{
 .hide-div {
     display: none;
 }
+
+.add-button {
+    color:white;
+    margin: 13px;
+}

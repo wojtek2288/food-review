@@ -42,6 +42,14 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> {
     this.router.navigate(['dishes', 'details', rowData.id]);
   }
 
+  override onAdd(): void {
+    this.dishService.addDish(this.restaurantId);
+  }
+
+  override onEdit(rowData: Dish): void {
+    this.dishService.editDish(rowData);
+  }
+
   override onDelete(rowData: Dish): void {
     this.dishService.deleteDish(rowData.id);
   }

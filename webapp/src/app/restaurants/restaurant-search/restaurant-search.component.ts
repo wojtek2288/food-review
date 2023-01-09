@@ -13,6 +13,7 @@ import { Restaurant } from '../model/restaurant.interface';
 export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> {
   constructor(private restaurantService: RestaurantApiService, private router: Router) {
     super();
+    this.enableAdding = true;
     this.dataSource = new MatTableDataSource<Restaurant>();
     this.displayedColumns = ['id', 'name','description', 'restaurantButtons'];
     this.header = "Restaurants";
@@ -42,6 +43,14 @@ export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> {
 
   override onToggleVisibility(rowData: Restaurant): void {
     this.restaurantService.toggleRestaurantVisibility(rowData.id);
+  }
+
+  override onAdd(): void {
+    this.restaurantService.addRestaurant();
+  }
+
+  override onEdit(rowData: Restaurant): void {
+    this.restaurantService.editRestaurant(rowData);
   }
 
   override onDelete(rowData: Restaurant): void {

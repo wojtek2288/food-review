@@ -1,5 +1,4 @@
-export interface Restaurant{
-    id: string,
+export interface EditDialogData {
     name: string,
     description: string,
     imageUrl: string

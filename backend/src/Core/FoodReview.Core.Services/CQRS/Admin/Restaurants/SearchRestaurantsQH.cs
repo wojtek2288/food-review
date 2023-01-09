@@ -40,7 +40,8 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
                 Id = r.Id.ToString(),
                 Name = r.Name,
                 Description = r.Description,
-                IsVisible = r.IsVisible
+                IsVisible = r.IsVisible,
+                ImageUrl = r.ImageUrl
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

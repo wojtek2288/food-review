@@ -1,5 +1,6 @@
 using FluentValidation;
 using FoodReview.Core.Contracts.Admin;
+using FoodReview.Core.Contracts.Admin.Restaurants;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
@@ -7,9 +8,8 @@ using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using FoodReview.Core.Services.DataAccess.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
-namespace FoodReview.Core.Services.CQRS.Example;
+namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
 
 public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, Unit>>
 {
@@ -18,17 +18,6 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
     public AddRestaurantCV(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
-        
-        RuleFor(x => x)
-            .MustAsync(async (x, cancellation) => 
-            {
-                var restaurantExists = await dbContext.Restaurants
-                    .AnyAsync(r => r.Id.ToString() == x.Command.Id, x.Context.CancellationToken);
-
-                return !restaurantExists;
-            })
-            .WithCode(AddRestaurant.ErrorCodes.RestaurantWithSpecifiedIdAlreadyExists)
-            .WithMessage("Restaurant with specified Id already exists.");
 
         RuleFor(x => x.Command.Name)
             .NotEmpty()
@@ -69,7 +58,7 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
             command.Name,
             command.Description,
             command.ImageLink,
-            command.IsVisible);
+            false);
 
         await restaurants.AddAsync(restaurant, context.CancellationToken);
     }

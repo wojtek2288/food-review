@@ -15,7 +15,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -24,6 +24,7 @@ import { LoggedInGuard } from './auth/logged-in.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NotLoggedInGuard } from './auth/not-logged-in.guard';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { EditDetailsDialogComponent } from './edit-details-dialog/edit-details-dialog.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     BaseSearchComponent,
     LoginComponent,
     NotFoundComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    EditDetailsDialogComponent
   ],
   imports: [
     CommonModule,
@@ -52,7 +54,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MatDividerModule,
     MatTabsModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    FormsModule
   ],
   exports: [
     NavbarComponent,
@@ -74,7 +77,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     MatTabsModule,
     RouterModule,
     MatDialogModule,
-    MatMenuModule
+    MatMenuModule,
+    FormsModule
   ],
   providers: [
     LoggedInGuard,
