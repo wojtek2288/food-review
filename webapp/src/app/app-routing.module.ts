@@ -22,7 +22,8 @@ const routes: Routes = [
   {
     path: 'restaurants/details/:id',
     component: RestaurantDetailsComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'restaurantDetails' }
   },
   {
     path: 'dishes',
@@ -45,7 +46,8 @@ const routes: Routes = [
   {
     path: 'users/details/:id',
     component: UserDetailsComponent,
-    canActivate: [LoggedInGuard]
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'userDetails' }
   },
   {
     path: 'reviews',
