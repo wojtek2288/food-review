@@ -3,6 +3,10 @@
         <h3 class="name-label">Username:</h3>
         <mat-label class="name-content"> {{user.name}} </mat-label>
         <div class="name-divider divider"></div>
+        <button mat-icon-button color="primary" class="menu-button" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onBan()"><mat-icon color="primary">block</mat-icon> Ban</button>
+        </mat-menu>
         <h3 class="email-label">Email:</h3>
         <mat-label class="email-content"> {{user.email}} </mat-label>
         <div class="email-divider divider"></div>

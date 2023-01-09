@@ -3,6 +3,11 @@
         <h3 class="name-label">Name:</h3>
         <mat-label class="name-content">{{dish.name}}</mat-label>
         <div class="name-divider divider"></div>
+        <button mat-icon-button color="primary" class="menu-button" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onEdit()"><mat-icon color="primary">edit</mat-icon> Edit</button>
+            <button mat-menu-item (click)="onDelete()"><mat-icon color="primary">delete</mat-icon> Delete</button>
+        </mat-menu>
         <h3 class="restaurant-label">Restaurant:</h3>
         <mat-label class="restaurant-content"><a [routerLink]="'/restaurants/details/' + dish.restaurantId">{{dish.restaurantName}}</a></mat-label>
         <div class="restaurant-divider divider"></div>

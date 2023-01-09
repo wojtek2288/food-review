@@ -34,4 +34,12 @@ export class DishDetailsComponent implements OnInit {
   getDetails(): void {
     this.dishService.getDishDetails(this.dishId);
   }
+
+  onEdit(): void {
+
+  }
+
+  onDelete(): void {
+    this.dishService.deleteDish(this.dishId);
+  }
 }

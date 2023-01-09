@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { ApiService } from 'src/app/api/api.service';
 import { UserDetails } from 'src/app/api/model/user-details';
+import { UserApiService } from 'src/app/api/user-api.service';
 import { AuthService } from 'src/app/main/auth/auth.service';
 
 @Component({
@@ -12,8 +13,7 @@ import { AuthService } from 'src/app/main/auth/auth.service';
   styleUrls: ['./user-details.component.css']
 })
 export class UserDetailsComponent implements OnInit {
-  isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  isLoading$ = this.isLoadingSubject.asObservable();
+  isLoading$ = this.userService.isLoading$;
   userId: string = "";
   user: UserDetails = {
     id: this.userId,
@@ -22,22 +22,23 @@ export class UserDetailsComponent implements OnInit {
     email: "",
     imageUrl: ""
   };
-  constructor(private route: ActivatedRoute, private apiService: ApiService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private route: ActivatedRoute, private userService: UserApiService) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(x => 
       {
         this.userId = x['id'];
-        this.apiService.getUserDetails({
-          id: this.userId
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-          {
-            this.user = x;
-            this.isLoadingSubject.next(false);
-          }, x => {
-          this.snackBar.open("User with specified Id does not exist", "", {duration: 3000});
-          this.router.navigate(['']);
-        });
+        this.getDetails();
       });
+      this.userService.userDetails$.subscribe(x => this.user = x);
+      this.userService.afterCommandFinished$.subscribe(x => this.getDetails());
+  }
+
+  getDetails(): void {
+    this.userService.getUserDetails(this.userId);
+  }
+
+  onBan(): void {
+    this.userService.banUser(this.userId);
   }
 }
