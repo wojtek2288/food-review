@@ -21,7 +21,7 @@ public class CoreModule : IAppModule
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<CoreDbContext>(
-            opts => opts.UseSqlServer("Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false"),
+            opts => opts.UseSqlServer(connectionString),
             ServiceLifetime.Transient);
 
         services

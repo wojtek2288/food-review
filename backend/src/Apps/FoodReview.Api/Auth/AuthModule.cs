@@ -22,7 +22,7 @@ public class AuthModule : IAppModule
 
     public void ConfigureServices(IServiceCollection services)
     {
-        var connectionString = "Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false";
+        var connectionString = Config.SqlServer.ConnectionString(config);
 
         var isConfig = services.AddIdentityServer()
             .AddInMemoryApiResources(ClientsConfiguration.GetApiResources())
