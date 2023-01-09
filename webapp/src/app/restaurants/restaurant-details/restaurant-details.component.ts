@@ -3,6 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
 import { RestaurantDetails } from 'src/app/api/model/restaurant-details';
+import { Tag } from 'src/app/api/model/tag';
 import { RestaurantApiService } from 'src/app/api/restaurant-api.service';
 
 @Component({
@@ -18,7 +19,8 @@ export class RestaurantDetailsComponent implements OnInit {
     name: "",
     description: "",
     imageUrl: "",
-    isVisible: false
+    isVisible: false,
+    tags: []
   };
 
   constructor(private route: ActivatedRoute, private restaurantService: RestaurantApiService) { }

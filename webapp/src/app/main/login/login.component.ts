@@ -9,6 +9,7 @@ import { AuthService } from '../auth/auth.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  isLoading$ = this.authService.isLoading$;
   loginControl = new FormControl('', [Validators.required]);
   passwordControl = new FormControl('', [Validators.required]);
   constructor(private authService: AuthService) { }

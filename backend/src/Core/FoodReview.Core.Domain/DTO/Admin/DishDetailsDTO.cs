@@ -9,4 +9,5 @@ public class DishDetailsDTO
     public string RestaurantId { get; set; }
     public string ImageUrl { get; set; }
     public decimal Price { get; set; }
+    public List<TagDTO> Tags { get; set; }
 }

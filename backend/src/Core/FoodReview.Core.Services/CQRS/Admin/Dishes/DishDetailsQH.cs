@@ -52,7 +52,19 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO>
             Description = dish.Description,
             RestaurantName = dish.Restaurant.Name,
             RestaurantId = dish.Restaurant.Id.ToString(),
-            Price = dish.Price
+            Price = dish.Price,
+            Tags = dish.Tags
+                .Join(
+                    dbContext.Tags,
+                    ttd => ttd.TagId,
+                    t => t.Id,
+                    (_, t) => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                .ToList(),
         };
     }
 }

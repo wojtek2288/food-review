@@ -7,4 +7,5 @@ public class RestaurantDetailsDTO
     public string? Description { get; set; }
     public string ImageUrl { get; set; }
     public bool IsVisible { get; set; }
+    public List<TagDTO> Tags { get; set; }
 }

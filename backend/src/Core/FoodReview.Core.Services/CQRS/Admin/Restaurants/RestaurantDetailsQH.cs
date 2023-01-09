@@ -1,12 +1,15 @@
 using FluentValidation;
 using FoodReview.Core.Contracts.Admin.Restaurants;
 using FoodReview.Core.Contracts.Common;
+using FoodReview.Core.Contracts.Shared;
+using FoodReview.Core.Domain;
 using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TagDTO = FoodReview.Core.Domain.DTO.Admin.TagDTO;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
 
@@ -50,7 +53,19 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
             Name = restaurant.Name,
             ImageUrl = restaurant.ImageUrl,
             Description = restaurant.Description,
-            IsVisible = restaurant.IsVisible
+            IsVisible = restaurant.IsVisible,
+            Tags = restaurant.Tags
+                .Join(
+                    dbContext.Tags,
+                    ttd => ttd.TagId,
+                    t => t.Id,
+                    (_, t) => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                .ToList(),
         };
     }
 }

@@ -9,6 +9,8 @@ import { Router } from "@angular/router";
     providedIn: 'root'
  })
  export class AuthService {
+     private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+     public isLoading$ = this.isLoadingSubject.asObservable();
      public loggedInUser: ApiUser | null = null;
      public isUserLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -24,12 +26,17 @@ import { Router } from "@angular/router";
 
      login(username: string, password: string): void
      {
+        this.isLoadingSubject.next(true);
         this.api.loginAdmin(username, password).subscribe(response => {
             this.loggedInUser = response;
             localStorage.setItem('apiUser', JSON.stringify(this.loggedInUser));
             this.isUserLoggedIn$.next(true);
+            this.isLoadingSubject.next(false);
         },
-        () => this.snackBar.open("Login failed", "", {duration: 3000}),
+        () => {
+            this.snackBar.open("Login failed", "", {duration: 3000});
+            this.isLoadingSubject.next(false);
+        },
         () => this.router.navigate(['/restaurants']));
      }
 

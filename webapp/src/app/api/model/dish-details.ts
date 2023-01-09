@@ -1,3 +1,5 @@
+import { Tag } from "./tag";
+
 export interface DishDetails {
     id: string,
     name: string,
@@ -5,5 +7,6 @@ export interface DishDetails {
     imageUrl: string,
     restaurantId: string,
     restaurantName: string,
-    price: number
+    price: number,
+    tags: Tag[]
 }

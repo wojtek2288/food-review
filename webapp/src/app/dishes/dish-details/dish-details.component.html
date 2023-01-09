@@ -18,7 +18,7 @@
         </div>
         <div class="tags-divider divider"></div>
         <h3 class="tags-label">Tags:</h3>
-        <mat-label class="tags-content">Content name</mat-label>
+        <mat-label class="tags-content"><div class="tag" *ngFor="let tag of dish.tags" [ngStyle]="{'color': tag.colorHex, 'border-color': tag.colorHex}"><p>{{tag.name}}</p></div></mat-label>
         <div class="ratings-divider divider"></div>
         <mat-tab-group class="ratings-content">
             <mat-tab label="Reviews">

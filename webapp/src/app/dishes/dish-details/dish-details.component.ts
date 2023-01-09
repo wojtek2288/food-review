@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DishApiService } from 'src/app/api/dish-api.service';
 import { DishDetails } from 'src/app/api/model/dish-details';
+import { Tag } from 'src/app/api/model/tag';
 
 @Component({
   selector: 'app-dish-details',
@@ -18,7 +19,8 @@ export class DishDetailsComponent implements OnInit {
     imageUrl: "",
     restaurantId: "",
     restaurantName: "",
-    price: 0
+    price: 0,
+    tags: []
   };
 
   constructor(private dishService: DishApiService, private route: ActivatedRoute) { }

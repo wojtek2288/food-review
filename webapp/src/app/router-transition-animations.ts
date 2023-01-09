@@ -18,7 +18,7 @@ export const routeTransitionAnimations = trigger('triggerName', [
            ]),
         query(':enter', animateChild())
       ]),
-      transition('* => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetials => *, dishDetails => *, userDetails => *', [
+      transition('* => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetails => *, dishDetails => *, userDetails => *', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
