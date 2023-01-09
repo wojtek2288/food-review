@@ -8,4 +8,5 @@ public class DishDTO
     public string RestaurantName { get; set; }
     public string RestaurantId { get; set; }
     public string ImageUrl { get; set; }
+    public decimal Price { get; set; }
 }

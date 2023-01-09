@@ -6,10 +6,14 @@ import { Dish } from "../dishes/model/dish.interface";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
 import { Review } from "../reviews/model/review.interface";
 import { User } from "../users/model/user.interface";
+import { AddDishRequest } from "./model/add-dish-request";
+import { AddRestaurantRequest } from "./model/add-restaurat-request";
 import { ApiUser } from "./model/api-user";
 import { DetailsRequest } from "./model/details-request";
 import { DishDetails } from "./model/dish-details";
 import { DishQueryCriteria } from "./model/dish-query-criteria";
+import { EditDishRequest } from "./model/edit-dish-request";
+import { EditRestaurantRequest } from "./model/edit-restaurant-request";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
 import { PaginatedQueryResult } from "./model/paginated-query-results";
 import { RestaurantDetails } from "./model/restaurant-details";
@@ -58,6 +62,16 @@ export class ApiService {
         return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Restaurants.ToggleRestaurantVisibility`, query, {headers: this.getHeaders(token)});
     }
 
+    addRestaurant(query: AddRestaurantRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Restaurants.AddRestaurant`, query, {headers: this.getHeaders(token)});
+    }
+
+    editRestaurant(query: EditRestaurantRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Restaurants.EditRestaurant`, query, {headers: this.getHeaders(token)});
+    }
+
     deleteRestaurant(query: DetailsRequest, token: string): Observable<void>
     {
         return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Restaurants.DeleteRestaurant`, query, {headers: this.getHeaders(token)});
@@ -71,6 +85,16 @@ export class ApiService {
     getDishDetails(query: DetailsRequest, token: string): Observable<DishDetails>
     {
         return this.http.post<DishDetails>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Dishes.DishDetails`, query, {headers: this.getHeaders(token)});
+    }
+
+    addDish(query: AddDishRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Dishes.AddDish`, query, {headers: this.getHeaders(token)});
+    }
+
+    editDish(query: EditDishRequest, token: string): Observable<void>
+    {
+        return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Dishes.EditDish`, query, {headers: this.getHeaders(token)});
     }
 
     deleteDish(query: DetailsRequest, token: string): Observable<void>

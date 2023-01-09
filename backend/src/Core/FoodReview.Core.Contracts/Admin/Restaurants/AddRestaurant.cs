@@ -8,7 +8,7 @@ public class AddRestaurant : CommandBase<AddRestaurant>
 {
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
-    public string ImageLink { get; set; } = default!;
+    public string ImageUrl { get; set; } = default!;
 
     public static class ErrorCodes
     {

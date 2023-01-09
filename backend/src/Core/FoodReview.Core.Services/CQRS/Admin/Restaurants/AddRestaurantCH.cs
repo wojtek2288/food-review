@@ -1,5 +1,4 @@
 using FluentValidation;
-using FoodReview.Core.Contracts.Admin;
 using FoodReview.Core.Contracts.Admin.Restaurants;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Domain;
@@ -33,7 +32,7 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
                 .WithMessage("Description is too long.")
             .When(e => e.Command.Description is not null);
 
-        RuleFor(x => x.Command.ImageLink)
+        RuleFor(x => x.Command.ImageUrl)
             .NotEmpty()
                 .WithCode(AddRestaurant.ErrorCodes.ImageLinkEmpty)
                 .WithMessage("ImageLink must not be empty.")
@@ -57,7 +56,7 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
         var restaurant = Restaurant.Create(
             command.Name,
             command.Description,
-            command.ImageLink,
+            command.ImageUrl,
             false);
 
         await restaurants.AddAsync(restaurant, context.CancellationToken);

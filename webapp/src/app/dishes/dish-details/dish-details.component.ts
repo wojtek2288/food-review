@@ -17,7 +17,8 @@ export class DishDetailsComponent implements OnInit {
     description: "",
     imageUrl: "",
     restaurantId: "",
-    restaurantName: ""
+    restaurantName: "",
+    price: 0
   };
 
   constructor(private dishService: DishApiService, private route: ActivatedRoute) { }
@@ -36,7 +37,7 @@ export class DishDetailsComponent implements OnInit {
   }
 
   onEdit(): void {
-
+    this.dishService.editDish(this.dish);
   }
 
   onDelete(): void {

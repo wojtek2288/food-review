@@ -5,7 +5,7 @@ import { Router } from "@angular/router";
 import { Subject } from "rxjs";
 import { AuthService } from "../main/auth/auth.service";
 import { ConfirmationDialogComponent } from "../main/confirmation-dialog/confirmation-dialog.component";
-import { EditDetailsDialogComponent } from "../main/edit-details-dialog/edit-details-dialog.component";
+import { EditRestaurantDetailsDialogComponent } from "../main/edit-restaurant-details-dialog/edit-restaurant-details-dialog.component";
 import { Restaurant } from "../restaurants/model/restaurant.interface";
 import { ApiService } from "./api.service";
 import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
@@ -52,7 +52,7 @@ export class RestaurantApiService {
     }
 
     public addRestaurant(): void {
-      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+      const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
         data: {
           name: "",
           description: "",
@@ -64,23 +64,19 @@ export class RestaurantApiService {
         if (x)
         {
           this.isLoadingSubject.next(true);
-          console.log(x);
-          return;
-          // this.apiService.deleteRestaurant({
-          //   id: id
-          // }, this.authService.loggedInUser?.access_token!).subscribe(
-          //   _ => {
-          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
-          //     this.afterCommandFinishedSubject.next();
-          //   },
-          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-          // );
+          this.apiService.addRestaurant(x, this.authService.loggedInUser?.access_token!).subscribe(
+            _ => {
+              this.snackBar.open("Successfuly added restaurant", "", {duration: 3000});
+              this.afterCommandFinishedSubject.next();
+            },
+            x => this.snackBar.open("Adding restaurant did not succeed", "", {duration: 3000})
+          );
         }
       });
     }
 
     public editRestaurant(data: Restaurant): void {
-      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+      const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
         data: {...data},
         width: "500px"
       });
@@ -88,17 +84,15 @@ export class RestaurantApiService {
         if (x)
         {
           this.isLoadingSubject.next(true);
-          console.log(x);
-          return;
-          // this.apiService.deleteRestaurant({
-          //   id: id
-          // }, this.authService.loggedInUser?.access_token!).subscribe(
-          //   _ => {
-          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
-          //     this.afterCommandFinishedSubject.next();
-          //   },
-          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-          // );
+          this.apiService.editRestaurant(Object.assign({
+            id: data.id
+          }, x), this.authService.loggedInUser?.access_token!).subscribe(
+            _ => {
+              this.snackBar.open("Successfuly edited restaurant", "", {duration: 3000});
+              this.afterCommandFinishedSubject.next();
+            },
+            x => this.snackBar.open("Editing restaurant was not successful", "", {duration: 3000})
+          );
         }
       });
     }

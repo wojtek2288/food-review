@@ -24,7 +24,8 @@ import { LoggedInGuard } from './auth/logged-in.guard';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { NotLoggedInGuard } from './auth/not-logged-in.guard';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
-import { EditDetailsDialogComponent } from './edit-details-dialog/edit-details-dialog.component';
+import { EditRestaurantDetailsDialogComponent } from './edit-restaurant-details-dialog/edit-restaurant-details-dialog.component';
+import { EditDishDetailsDialogComponent } from './edit-dish-details-dialog/edit-dish-details-dialog.component';
 
 
 @NgModule({
@@ -34,7 +35,8 @@ import { EditDetailsDialogComponent } from './edit-details-dialog/edit-details-d
     LoginComponent,
     NotFoundComponent,
     ConfirmationDialogComponent,
-    EditDetailsDialogComponent
+    EditRestaurantDetailsDialogComponent,
+    EditDishDetailsDialogComponent
   ],
   imports: [
     CommonModule,

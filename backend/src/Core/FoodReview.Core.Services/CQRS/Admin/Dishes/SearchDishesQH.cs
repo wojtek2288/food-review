@@ -45,7 +45,8 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
                 Description = x.Description,
                 RestaurantName = x.Restaurant.Name,
                 RestaurantId = x.Restaurant.Id.ToString(),
-                ImageUrl = x.ImageUrl
+                ImageUrl = x.ImageUrl,
+                Price = x.Price
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

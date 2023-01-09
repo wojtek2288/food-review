@@ -6,10 +6,11 @@ import { Subject } from "rxjs";
 import { Dish } from "../dishes/model/dish.interface";
 import { AuthService } from "../main/auth/auth.service";
 import { ConfirmationDialogComponent } from "../main/confirmation-dialog/confirmation-dialog.component";
-import { EditDetailsDialogComponent } from "../main/edit-details-dialog/edit-details-dialog.component";
+import { EditDishDetailsDialogComponent } from "../main/edit-dish-details-dialog/edit-dish-details-dialog.component";
 import { ApiService } from "./api.service";
 import { DishDetails } from "./model/dish-details";
 import { DishQueryCriteria } from "./model/dish-query-criteria";
+import { EditDishRequest } from "./model/edit-dish-request";
 import { PaginatedQueryResult } from "./model/paginated-query-results";
 
 @Injectable({
@@ -52,7 +53,7 @@ export class DishApiService {
     }
 
     public addDish(restaurantId: string): void {
-      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+      const dialogRef = this.dialog.open(EditDishDetailsDialogComponent, {
         data: {
           name: "",
           description: "",
@@ -64,23 +65,21 @@ export class DishApiService {
         if (x)
         {
           this.isLoadingSubject.next(true);
-          console.log(x);
-          return;
-          // this.apiService.deleteRestaurant({
-          //   id: id
-          // }, this.authService.loggedInUser?.access_token!).subscribe(
-          //   _ => {
-          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
-          //     this.afterCommandFinishedSubject.next();
-          //   },
-          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-          // );
+          this.apiService.addDish(Object.assign({
+            restaurantId: restaurantId
+          }, x), this.authService.loggedInUser?.access_token!).subscribe(
+            _ => {
+              this.snackBar.open("Successfuly added dish", "", {duration: 3000});
+              this.afterCommandFinishedSubject.next();
+            },
+            x => this.snackBar.open("Adding dish did not succeed", "", {duration: 3000})
+          );
         }
       });
     }
 
-    public editDish(data: Dish): void {
-      const dialogRef = this.dialog.open(EditDetailsDialogComponent, {
+    public editDish(data: EditDishRequest): void {
+      const dialogRef = this.dialog.open(EditDishDetailsDialogComponent, {
         data: {...data},
         width: "500px"
       });
@@ -88,17 +87,15 @@ export class DishApiService {
         if (x)
         {
           this.isLoadingSubject.next(true);
-          console.log(x);
-          return;
-          // this.apiService.deleteRestaurant({
-          //   id: id
-          // }, this.authService.loggedInUser?.access_token!).subscribe(
-          //   _ => {
-          //     this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
-          //     this.afterCommandFinishedSubject.next();
-          //   },
-          //   x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-          // );
+          this.apiService.editDish(Object.assign({
+            id: data.id
+          }, x), this.authService.loggedInUser?.access_token!).subscribe(
+            _ => {
+              this.snackBar.open("Successfuly edited dish", "", {duration: 3000});
+              this.afterCommandFinishedSubject.next();
+            },
+            x => this.snackBar.open("Editing dish did not succeed", "", {duration: 3000})
+          );
         }
       });
     }

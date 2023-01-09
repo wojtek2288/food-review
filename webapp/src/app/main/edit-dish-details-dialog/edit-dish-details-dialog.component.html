@@ -1,0 +1,28 @@
+<div mat-dialog-content>
+    <form [formGroup]="formGroup">
+        <p>Name</p>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          <p>Description</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+          </mat-form-field>
+          <p>Image URL</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Image URL</mat-label>
+            <input matInput formControlName="imageUrl">
+          </mat-form-field>
+          <p>Price</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Price</mat-label>
+            <input matInput formControlName="price" type="number">
+          </mat-form-field>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <button mat-button type="submit" (click)="onClick()" [disabled]="!formGroup.valid">Save</button>
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+</div>

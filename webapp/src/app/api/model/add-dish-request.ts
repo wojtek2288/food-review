@@ -1,9 +1,7 @@
-export interface DishDetails {
-    id: string,
+export interface AddDishRequest {
     name: string,
     description: string,
     imageUrl: string,
     restaurantId: string,
-    restaurantName: string,
     price: number
 }

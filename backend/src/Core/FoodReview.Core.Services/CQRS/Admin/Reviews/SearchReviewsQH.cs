@@ -29,7 +29,7 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             .Include(x => x.Dish)
             .Where(x => !x.User.IsBanned)
             .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.Restaurant.Id.ToString() == query.RestaurantId)
-            .Where(x => string.IsNullOrEmpty(query.DishId) || x.Dish == null || x.Dish.Id.ToString() == query.DishId)
+            .Where(x => string.IsNullOrEmpty(query.DishId) || x.Dish != null && x.Dish.Id.ToString() == query.DishId)
             .Where(x => string.IsNullOrEmpty(query.UserId) || x.User.Id.ToString() == query.UserId)
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase) ||
