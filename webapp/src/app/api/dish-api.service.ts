@@ -47,8 +47,8 @@ export class DishApiService {
             this.dishDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
           }, x => {
-          this.snackBar.open("Dish with specified Id does not exist", "", {duration: 3000});
-          this.router.navigate(['']);
+          //this.snackBar.open("Dish with specified Id does not exist", "", {duration: 3000});
+          //this.router.navigate(['']);
         });
     }
 
