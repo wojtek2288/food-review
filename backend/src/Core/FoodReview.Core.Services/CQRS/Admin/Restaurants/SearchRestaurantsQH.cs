@@ -9,6 +9,7 @@ using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using TagDTO = FoodReview.Core.Domain.DTO.Admin.TagDTO;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
 
@@ -42,6 +43,18 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
                 Description = r.Description,
                 IsVisible = r.IsVisible,
                 ImageUrl = r.ImageUrl,
+                Tags = r.Tags
+                    .Join(
+                        dbContext.Tags,
+                        ttd => ttd.TagId,
+                        t => t.Id,
+                        (_, t) => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                    .ToList(),
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

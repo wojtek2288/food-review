@@ -18,6 +18,11 @@ public class AddDishCV : AbstractValidator<CommandRequest<AddDish, Unit>>
     {
         this.dbContext = dbContext;
 
+        RuleFor(x => x.Command.RestaurantId)
+            .NotEmpty()
+                .WithCode(AddDish.ErrorCodes.RestaurantIdNotProvided)
+                .WithMessage("Restaurant ID must be provided.");
+        
         RuleFor(x => x.Command.Name)
             .NotEmpty()
                 .WithCode(AddDish.ErrorCodes.NameIsEmpty)
@@ -65,6 +70,7 @@ public class AddDishCH : CommandHandler<AddDish>
             command.Description,
             command.ImageUrl,
             command.Price);
+        dish.SetTags(command.Tags);
 
         await dbContext.Dishes.AddAsync(dish);
         await dbContext.SaveChangesAsync();

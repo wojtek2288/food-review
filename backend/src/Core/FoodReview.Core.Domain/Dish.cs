@@ -41,4 +41,14 @@ public class Dish : IAggregateRoot
         Price = price;
         ImageUrl = imageUrl;
     }
+    
+    
+    public void SetTags(List<string> tagIds)
+    {
+        tags = tagIds.Select(x => new TagToDish
+        {
+            DishId = Id,
+            TagId = Guid.Parse(x)
+        }).ToList();
+    }
 }

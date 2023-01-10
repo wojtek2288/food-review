@@ -18,6 +18,7 @@ import { PaginatedQueryCriteria } from "./model/paginated-query-criteria";
 import { PaginatedQueryResult } from "./model/paginated-query-results";
 import { RestaurantDetails } from "./model/restaurant-details";
 import { ReviewQueryCriteria } from "./model/review-query-criteria";
+import { Tag } from "./model/tag";
 import { UserDetails } from "./model/user-details";
 
 @Injectable({
@@ -125,5 +126,10 @@ export class ApiService {
     deleteReview(query: DetailsRequest, token: string): Observable<void>
     {
         return this.http.post<void>(`${environment.apiURL}/api/command/FoodReview.Core.Contracts.Admin.Reviews.DeleteReview`, query, {headers: this.getHeaders(token)});
+    }
+
+    getTags(token: string): Observable<Tag[]>
+    {
+        return this.http.post<Tag[]>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Tags.GetTags`, {headers: this.getHeaders(token)});
     }
 }

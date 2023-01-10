@@ -15,6 +15,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
+import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -57,7 +58,8 @@ import { EditDishDetailsDialogComponent } from './edit-dish-details-dialog/edit-
     MatTabsModule,
     MatDialogModule,
     MatMenuModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ],
   exports: [
     NavbarComponent,
@@ -80,7 +82,8 @@ import { EditDishDetailsDialogComponent } from './edit-dish-details-dialog/edit-
     RouterModule,
     MatDialogModule,
     MatMenuModule,
-    FormsModule
+    FormsModule,
+    MatSelectModule
   ],
   providers: [
     LoggedInGuard,

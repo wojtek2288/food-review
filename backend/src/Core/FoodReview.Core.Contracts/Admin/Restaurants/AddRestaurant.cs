@@ -9,6 +9,7 @@ public class AddRestaurant : CommandBase<AddRestaurant>
     public string Name { get; set; } = default!;
     public string? Description { get; set; }
     public string ImageUrl { get; set; } = default!;
+    public List<string> Tags { get; set; } = default!;
 
     public static class ErrorCodes
     {
@@ -17,5 +18,6 @@ public class AddRestaurant : CommandBase<AddRestaurant>
         public const int DescriptionTooLong = 3;
         public const int ImageLinkEmpty = 4;
         public const int ImageLinkTooLong = 5;
+        public const int InvalidTagIdList = 6;
     }
 }

@@ -39,6 +39,17 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
             .MaximumLength(StringLengths.LinkString)
                 .WithCode(AddRestaurant.ErrorCodes.ImageLinkTooLong)
                 .WithMessage("ImageLink too long.");
+                
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) =>
+            {
+                var tagsFound = x.Command.Tags.Distinct()
+                    .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);
+        
+                return tagsFound == x.Command.Tags.Count;
+            })
+            .WithCode(AddRestaurant.ErrorCodes.InvalidTagIdList)
+            .WithMessage("Invalid list of tag IDs.");
     }
 }
 
@@ -58,6 +69,7 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
             command.Description,
             command.ImageUrl,
             false);
+        restaurant.SetTags(command.Tags);
 
         await restaurants.AddAsync(restaurant, context.CancellationToken);
     }

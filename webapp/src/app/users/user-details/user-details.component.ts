@@ -1,11 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-import { ApiService } from 'src/app/api/api.service';
+import { Subscription } from 'rxjs';
 import { UserDetails } from 'src/app/api/model/user-details';
 import { UserApiService } from 'src/app/api/user-api.service';
-import { AuthService } from 'src/app/main/auth/auth.service';
 
 @Component({
   selector: 'app-user-details',
@@ -13,6 +10,8 @@ import { AuthService } from 'src/app/main/auth/auth.service';
   styleUrls: ['./user-details.component.css']
 })
 export class UserDetailsComponent implements OnInit {
+  sub1: Subscription | undefined;
+  sub2: Subscription | undefined;
   isLoading$ = this.userService.isLoading$;
   userId: string = "";
   user: UserDetails = {
@@ -22,7 +21,9 @@ export class UserDetailsComponent implements OnInit {
     email: "",
     imageUrl: ""
   };
-  constructor(private route: ActivatedRoute, private userService: UserApiService) { }
+  constructor(private route: ActivatedRoute, private userService: UserApiService, private router: Router) { 
+
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(x => 
@@ -30,8 +31,8 @@ export class UserDetailsComponent implements OnInit {
         this.userId = x['id'];
         this.getDetails();
       });
-      this.userService.userDetails$.subscribe(x => this.user = x);
-      this.userService.afterCommandFinished$.subscribe(x => this.getDetails());
+      this.sub1 = this.userService.userDetails$.subscribe(x => this.user = x);
+      this.sub2 = this.userService.afterCommandFinished$.subscribe(x => this.getDetails());
   }
 
   getDetails(): void {

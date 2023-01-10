@@ -11,6 +11,7 @@ public class AddDish : CommandBase<AddDish>
     public string? Description { get; set; }
     public string ImageUrl { get; set; } = default!;
     public decimal Price { get; set; }
+    public List<string> Tags { get; set; } = default!;
 
     public static class ErrorCodes
     {
@@ -21,5 +22,6 @@ public class AddDish : CommandBase<AddDish>
         public const int ImageLinkEmpty = 5;
         public const int ImageLinkTooLong = 6;
         public const int NegativePrice = 7;
+        public const int InvalidTagIdList = 8;
     }
 }

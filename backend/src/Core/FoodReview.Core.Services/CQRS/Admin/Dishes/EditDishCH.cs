@@ -76,6 +76,8 @@ public class EditDishCH : CommandHandler<EditDish>
             command.Description,
             command.ImageUrl,
             command.Price);
+        dish.SetTags(command.Tags);
+
         await dishes.SaveChangesAsync();
     }
 }

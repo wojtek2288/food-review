@@ -27,7 +27,7 @@ public class EditRestaurantCV : AbstractValidator<CommandRequest<EditRestaurant,
         
                 return restaurantExists;
             })
-            .WithCode(DeleteRestaurant.ErrorCodes.RestaurantDoesNotExist)
+            .WithCode(EditRestaurant.ErrorCodes.RestaurantDoesNotExist)
             .WithMessage("Restaurant with specified Id does not exist.");
 
         RuleFor(x => x.Command.Name)
@@ -51,6 +51,17 @@ public class EditRestaurantCV : AbstractValidator<CommandRequest<EditRestaurant,
             .MaximumLength(StringLengths.LinkString)
                 .WithCode(EditRestaurant.ErrorCodes.ImageLinkTooLong)
                 .WithMessage("ImageLink too long.");
+        
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) =>
+            {
+                var tagsFound = x.Command.Tags.Distinct()
+                    .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);
+        
+                return tagsFound == x.Command.Tags.Count;
+            })
+            .WithCode(EditRestaurant.ErrorCodes.InvalidTagIdList)
+            .WithMessage("Invalid list of tag IDs.");
     }
 }
 
@@ -71,7 +82,8 @@ public class EditRestaurantCH : CommandHandler<EditRestaurant>
             command.Name,
             command.Description,
             command.ImageUrl);
-
+        restaurant.SetTags(command.Tags);
+        
         await restaurants.UpdateAsync(restaurant);
     }
 }
