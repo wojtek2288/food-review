@@ -1,11 +1,9 @@
 using FluentValidation;
 using FoodReview.Core.Contracts.Admin.Dishes;
 using FoodReview.Core.Contracts.Common;
-using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
-using FoodReview.Core.Services.DataAccess.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -61,12 +59,10 @@ public class EditDishCV : AbstractValidator<CommandRequest<EditDish, Unit>>
 
 public class EditDishCH : CommandHandler<EditDish>
 {
-    private readonly Repository<Dish> dishes;
     private readonly CoreDbContext dbContext;
 
-    public EditDishCH(Repository<Dish> dishes, CoreDbContext dbContext)
+    public EditDishCH(CoreDbContext dbContext)
     {
-        this.dishes = dishes;
         this.dbContext = dbContext;
     }
 
