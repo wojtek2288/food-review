@@ -1,7 +1,9 @@
 using FoodReview.Core.Contracts.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Restaurants;
 
+[Authorize(Roles = Auth.Roles.Admin)]
 public class ToggleRestaurantVisibility: CommandBase<ToggleRestaurantVisibility>
 {
     public string Id { get; set; }

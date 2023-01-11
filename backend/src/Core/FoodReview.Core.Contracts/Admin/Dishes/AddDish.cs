@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Dishes;
 
-[AllowAnonymous]
+[Authorize(Roles = Auth.Roles.Admin)]
 public class AddDish : CommandBase<AddDish>
 {
     public string RestaurantId { get; set; } = default!;

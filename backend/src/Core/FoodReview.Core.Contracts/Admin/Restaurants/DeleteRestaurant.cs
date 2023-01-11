@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Restaurants;
 
-[AllowAnonymous]
+[Authorize(Roles = Auth.Roles.Admin)]
 public class DeleteRestaurant : CommandBase<DeleteRestaurant>
 {
     public string Id { get; set; }

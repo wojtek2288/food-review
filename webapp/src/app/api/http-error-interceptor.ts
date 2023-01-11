@@ -34,7 +34,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         };
         if (this.authService.loggedInUser) {
             headers = Object.assign({
-                Authorization: `Basic ${this.authService.loggedInUser.access_token}`
+                Authorization: `Bearer ${this.authService.loggedInUser.access_token}`
             }, headers);
         }
         return request.clone({
