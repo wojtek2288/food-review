@@ -57,16 +57,6 @@ public class Restaurant : IAggregateRoot
         dishes.Remove(dish);
     }
 
-    public void SetTags(List<string> tagIds)
-    {
-        // tags.Clear();
-        // tags.AddRange(tagIds.Select(x => new TagToRestaurant
-        // {
-        //     RestaurantId = Id,
-        //     TagId = Guid.Parse(x)
-        // }));
-    }
-
     public void EditDish(Guid dishId, string name, string? description, string imageUrl, decimal price)
     {
         if (!Dishes.Any(d => d.Id == dishId))

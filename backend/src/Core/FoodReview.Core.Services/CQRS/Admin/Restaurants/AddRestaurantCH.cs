@@ -7,6 +7,7 @@ using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using FoodReview.Core.Services.DataAccess.Repositories;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
 
@@ -56,10 +57,12 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
 public class AddRestaurantCH : CommandHandler<AddRestaurant>
 {
     private readonly Repository<Restaurant> restaurants;
+    private readonly CoreDbContext dbContext;
 
-    public AddRestaurantCH(Repository<Restaurant> restaurants)
+    public AddRestaurantCH(Repository<Restaurant> restaurants, CoreDbContext dbContext)
     {
         this.restaurants = restaurants;
+        this.dbContext = dbContext;
     }
 
     public override async Task HandleAsync(AddRestaurant command, CoreContext context)
@@ -69,7 +72,8 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
             command.Description,
             command.ImageUrl,
             false);
-        restaurant.SetTags(command.Tags);
+        var tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
+        restaurant.Tags = tags;
 
         await restaurants.AddAsync(restaurant, context.CancellationToken);
     }
