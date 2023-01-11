@@ -32,10 +32,10 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
             cfg.Property(e => e.ImageUrl).HasMaxLength(StringLengths.LinkString);
             cfg.HasMany(e => e.Dishes).WithOne(e => e.Restaurant);
-            cfg.OwnsMany(e => e.Tags, t =>
-            {
-                t.HasKey(t => new { t.RestaurantId, t.TagId });
-            });
+            // cfg.OwnsMany(e => e.Tags, t =>
+            // {
+            //     t.HasKey(t => new { t.RestaurantId, t.TagId });
+            // });
         });
 
         builder.Entity<Dish>(cfg =>
@@ -45,10 +45,10 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
             cfg.Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
             cfg.Property(e => e.ImageUrl).HasMaxLength(StringLengths.LinkString);
-            cfg.OwnsMany(e => e.Tags, t =>
-            {
-                t.HasKey(t => new { t.DishId, t.TagId });
-            });
+            // cfg.OwnsMany(e => e.Tags, t =>
+            // {
+            //     t.HasKey(t => new { t.DishId, t.TagId });
+            // });
         });
 
         builder.Entity<User>(cfg =>
@@ -65,9 +65,9 @@ public class CoreDbContext : IdentityDbContext<AuthUser, AuthRole, Guid>
         builder.Entity<Review>(cfg =>
         {
             cfg.HasKey(e => e.Id);
-            cfg.HasOne<User>().WithMany().HasForeignKey(e => e.UserId);
-            cfg.HasOne<Restaurant>().WithMany().HasForeignKey(e => e.RestaurantId);
-            cfg.HasOne<Dish>().WithMany().HasForeignKey(e => e.DishId);
+            // cfg.HasOne<User>().WithMany().HasForeignKey(e => e.UserId);
+            // cfg.HasOne<Restaurant>().WithMany().HasForeignKey(e => e.RestaurantId);
+            // cfg.HasOne<Dish>().WithMany().HasForeignKey(e => e.DishId);
             cfg.Property(e => e.Description).IsRequired();
             cfg.Property(e => e.Description).HasMaxLength(StringLengths.MediumString);
         });

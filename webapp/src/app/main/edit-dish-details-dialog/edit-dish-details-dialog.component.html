@@ -1,0 +1,38 @@
+<div mat-dialog-content *ngIf="!(isLoading$ | async)">
+    <form [formGroup]="formGroup">
+        <p>Name</p>
+        <mat-form-field appearance="fill">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name">
+          </mat-form-field>
+          <p>Description</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="description">
+          </mat-form-field>
+          <p>Image URL</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Image URL</mat-label>
+            <input matInput formControlName="imageUrl">
+          </mat-form-field>
+          <p>Price</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Price</mat-label>
+            <input matInput formControlName="price" type="number">
+          </mat-form-field>
+          <p>Tags</p>
+          <mat-form-field appearance="fill">
+            <mat-label>Tags</mat-label>
+            <mat-select formControlName="tags" multiple>
+              <mat-option *ngFor="let tag of tags" [value]="tag.id">{{tag.name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+    </form>
+</div>
+<div class="spinner-div">
+  <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+</div>
+<div mat-dialog-actions *ngIf="!(isLoading$ | async)">
+    <button mat-button type="submit" (click)="onClick()" [disabled]="!formGroup.valid">Save</button>
+    <button mat-button [mat-dialog-close]="false">Cancel</button>
+</div>

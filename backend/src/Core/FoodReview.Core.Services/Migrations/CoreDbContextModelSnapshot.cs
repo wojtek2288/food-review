@@ -22,6 +22,21 @@ namespace FoodReview.Core.Services.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("DishTag", b =>
+                {
+                    b.Property<Guid>("DishesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("DishesId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("DishTag");
+                });
+
             modelBuilder.Entity("FoodReview.Core.Domain.Dish", b =>
                 {
                     b.Property<Guid>("Id")
@@ -159,6 +174,9 @@ namespace FoodReview.Core.Services.Migrations
                     b.Property<string>("ImageUrl")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Username")
                         .IsRequired()
@@ -367,6 +385,36 @@ namespace FoodReview.Core.Services.Migrations
                     b.ToTable("AspNetUserTokens", "auth");
                 });
 
+            modelBuilder.Entity("RestaurantTag", b =>
+                {
+                    b.Property<Guid>("RestaurantsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TagsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RestaurantsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("RestaurantTag");
+                });
+
+            modelBuilder.Entity("DishTag", b =>
+                {
+                    b.HasOne("FoodReview.Core.Domain.Dish", null)
+                        .WithMany()
+                        .HasForeignKey("DishesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodReview.Core.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("FoodReview.Core.Domain.Dish", b =>
                 {
                     b.HasOne("FoodReview.Core.Domain.Restaurant", "Restaurant")
@@ -375,67 +423,32 @@ namespace FoodReview.Core.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsMany("FoodReview.Core.Domain.TagToDish", "Tags", b1 =>
-                        {
-                            b1.Property<Guid>("DishId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<Guid>("TagId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("DishId", "TagId");
-
-                            b1.ToTable("TagToDish");
-
-                            b1.WithOwner()
-                                .HasForeignKey("DishId");
-                        });
-
                     b.Navigation("Restaurant");
-
-                    b.Navigation("Tags");
-                });
-
-            modelBuilder.Entity("FoodReview.Core.Domain.Restaurant", b =>
-                {
-                    b.OwnsMany("FoodReview.Core.Domain.TagToRestaurant", "Tags", b1 =>
-                        {
-                            b1.Property<Guid>("RestaurantId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<Guid>("TagId")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.HasKey("RestaurantId", "TagId");
-
-                            b1.ToTable("TagToRestaurant");
-
-                            b1.WithOwner()
-                                .HasForeignKey("RestaurantId");
-                        });
-
-                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("FoodReview.Core.Domain.Review", b =>
                 {
-                    b.HasOne("FoodReview.Core.Domain.Dish", null)
+                    b.HasOne("FoodReview.Core.Domain.Dish", "Dish")
                         .WithMany()
                         .HasForeignKey("DishId");
 
-                    b.HasOne("FoodReview.Core.Domain.Restaurant", null)
+                    b.HasOne("FoodReview.Core.Domain.Restaurant", "Restaurant")
                         .WithMany()
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FoodReview.Core.Domain.User", null)
+                    b.HasOne("FoodReview.Core.Domain.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Dish");
+
+                    b.Navigation("Restaurant");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -485,6 +498,21 @@ namespace FoodReview.Core.Services.Migrations
                     b.HasOne("FoodReview.Core.Services.DataAccess.Entities.AuthUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("RestaurantTag", b =>
+                {
+                    b.HasOne("FoodReview.Core.Domain.Restaurant", null)
+                        .WithMany()
+                        .HasForeignKey("RestaurantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FoodReview.Core.Domain.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

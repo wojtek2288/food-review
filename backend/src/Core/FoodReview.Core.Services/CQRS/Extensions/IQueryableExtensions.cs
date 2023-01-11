@@ -1,4 +1,7 @@
 using System.Linq.Expressions;
+using System.ComponentModel;
+using FoodReview.Core.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.CQRS.Extensions;
 
@@ -54,5 +57,23 @@ public static class IQueryableExtensions
         public static System.Reflection.PropertyInfo KeyPropertyInfo = typeof(Grouping<TKey, TValue>).GetProperty(
             nameof(Key)
         )!;
+    }
+    
+    public static async Task<IEnumerable<T>> Sort<T>(this IQueryable<T> data, string? propertyName, string? sortDirection)
+    {
+        if (propertyName == null)
+        {
+            return data;
+        }
+        
+        var descriptor = TypeDescriptor.GetProperties(typeof(T)).Find(propertyName, true);
+        if (descriptor == null)
+        {
+            return data;
+        }
+        
+        var list = await data.ToListAsync();
+        return sortDirection is "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
+            : list.OrderByDescending(x => descriptor.GetValue((x)));
     }
 }

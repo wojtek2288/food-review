@@ -2,5 +2,8 @@ export interface Dish {
     id: string,
     name: string,
     restaurantName: string,
-    description: string
+    restaurantId: string,
+    description: string,
+    imageUrl: string,
+    price: number
 }

@@ -1,0 +1,41 @@
+<mat-card class="card">
+    <div class="name-description-grid" *ngIf="!(isLoading$ | async)">
+        <h3 class="name-label">Name:</h3>
+        <mat-label class="name-content">{{restaurant.name}}</mat-label>
+        <div class="name-divider divider"></div>
+        <button mat-icon-button color="primary" class="menu-button" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onToggleVisibility()"><mat-icon color="primary">visibility</mat-icon> Toggle visibility</button>
+            <button mat-menu-item (click)="onEdit()"><mat-icon color="primary">edit</mat-icon> Edit</button>
+            <button mat-menu-item (click)="onDelete()"><mat-icon color="primary">delete</mat-icon> Delete</button>
+        </mat-menu>
+        <h3 class="description-label">Description:</h3>
+        <mat-label class="description-content">{{restaurant.description}}</mat-label>
+        <div class="logo-image">
+            <img [src]="restaurant.imageUrl">
+        </div>
+        <div class="visibility-divider divider"></div>
+        <h3 class="visibility-label">Visibility:</h3>
+        <div class="visibility-content">
+            <mat-label >{{visibility}}</mat-label>
+        </div>
+        <div class="tags-divider divider"></div>
+        <h3 class="tags-label">Tags:</h3>
+        <mat-label class="tags-content"><div class="tag" *ngFor="let tag of restaurant.tags" [ngStyle]="{'color': tag.colorHex, 'border-color': tag.colorHex}"><p>{{tag.name}}</p></div></mat-label>
+        <div class="ratings-divider divider"></div>
+        <mat-tab-group class="ratings-content">
+            <mat-tab label="Dishes">
+                <app-dish-search [restaurantId]="restaurantId" [enableAdding]="true">
+
+                </app-dish-search>
+            </mat-tab>
+            <mat-tab label="Reviews">
+                <app-review-search [restaurantId]="restaurantId">
+                </app-review-search>
+            </mat-tab>
+          </mat-tab-group>
+    </div>
+    <div class="spinner-div">
+        <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+    </div>
+</mat-card>

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,8 @@ import { MainModule } from './main/main.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { DishesModule } from './dishes/dishes.module';
 import { UsersModule } from './users/users.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { HttpErrorInterceptor } from './api/http-error-interceptor';
 
 @NgModule({
   declarations: [
@@ -22,9 +24,10 @@ import { UsersModule } from './users/users.module';
     MainModule,
     RestaurantsModule,
     DishesModule,
-    UsersModule
+    UsersModule,
+    ReviewsModule
   ],
-  providers: [],
+  providers: [ { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

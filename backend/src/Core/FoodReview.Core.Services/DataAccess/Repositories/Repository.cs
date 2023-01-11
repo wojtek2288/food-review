@@ -41,4 +41,9 @@ public abstract class Repository<T> where T : class, IAggregateRoot
     {
         return DbSet.FirstAsync(x => x.Id == id, ct);
     }
+
+    public Task SaveChangesAsync(CancellationToken ct = default)
+    {
+        return DbContext.SaveChangesAsync(ct);
+    }
 }

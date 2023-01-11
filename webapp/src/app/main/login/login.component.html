@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-card>
+  <mat-card *ngIf="!(isLoading$ | async)">
     <h3>Please log in</h3>
     <form>
       <mat-form-field appearance="fill">
@@ -16,4 +16,7 @@
       <button color="primary" type="submit" mat-raised-button (click)="login()">Log in</button>
     </div>
   </mat-card>
+  <div class="spinner-div">
+    <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+</div>
 </div>

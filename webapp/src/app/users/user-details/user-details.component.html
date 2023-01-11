@@ -1,0 +1,29 @@
+<mat-card class="card">
+    <div class="name-description-grid" *ngIf="!(isLoading$ | async)">
+        <h3 class="name-label">Username:</h3>
+        <mat-label class="name-content"> {{user.name}} </mat-label>
+        <div class="name-divider divider"></div>
+        <button mat-icon-button color="primary" class="menu-button" [matMenuTriggerFor]="menu"><mat-icon>settings</mat-icon></button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="onBan()"><mat-icon color="primary">block</mat-icon> Ban</button>
+        </mat-menu>
+        <h3 class="email-label">Email:</h3>
+        <mat-label class="email-content"> {{user.email}} </mat-label>
+        <div class="email-divider divider"></div>
+        <h3 class="description-label">Description:</h3>
+        <mat-label class="description-content"> {{user.description}} </mat-label>
+        <div class="logo-image">
+            <img [src]="user.imageUrl">
+        </div>
+        <div class="ratings-divider divider"></div>
+        <mat-tab-group class="ratings-content">
+            <mat-tab label="Reviews">
+                <app-review-search [userId]="userId">
+                </app-review-search>
+            </mat-tab>
+          </mat-tab-group>
+    </div>
+    <div class="spinner-div">
+        <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+    </div>
+</mat-card>

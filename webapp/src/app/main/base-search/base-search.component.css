@@ -26,18 +26,34 @@ table{
     width: 20%;
 }
 
-.mat-column-name {
-    width: 10%;
-}
-
-.mat-column-restaurantName {
-    width: 10%;
-}
-
-.mat-column-showDetails {
+.mat-column-username,
+.mat-column-name,
+.mat-column-restaurantName,
+.mat-column-dishName,
+.mat-column-rating,
+.mat-column-restaurantButtons, 
+.mat-column-dishButtons, 
+.mat-column-userButtons, 
+.mat-column-reviewButtons {
     width: 10%;
 }
 
 .mat-column-description {
     padding: 10px;
+}
+
+.spinner {
+    margin: 0 auto;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.add-button {
+    color:white;
+    margin: 13px;
 }

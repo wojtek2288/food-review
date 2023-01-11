@@ -10,7 +10,9 @@ public class Restaurant : IAggregateRoot
     public string ImageUrl { get; private set; } = default!;
     public bool IsVisible { get; private set; }
     public IReadOnlyList<Dish> Dishes => dishes;
-    public IReadOnlyList<TagToRestaurant> Tags => tags;
+
+    public ICollection<Tag> Tags { get; set; }
+    //public List<TagToRestaurant> Tags => tags;
 
     private List<Dish> dishes = new();
     private List<TagToRestaurant> tags = new();

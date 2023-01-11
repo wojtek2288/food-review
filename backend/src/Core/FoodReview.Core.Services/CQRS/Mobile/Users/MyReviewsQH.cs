@@ -20,18 +20,18 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
     public override async Task<PaginatedResult<MyReviewDTO>> HandleAsync(MyReviews query, CoreContext context)
     {
         var totalCount = await dbContext.Reviews
-            .Where(r => r.UserId == context.UserId)
+            .Where(r => r.User.Id == context.UserId)
             .CountAsync(context.CancellationToken);
 
         var reviews = await dbContext.Reviews
-            .Where(r => r.UserId == context.UserId)
+            .Where(r => r.User.Id == context.UserId)
             .OrderByDescending(r => r.DateAdded)
             .Join(
                 dbContext.Restaurants,
-                r => r.RestaurantId,
+                r => r.Restaurant.Id,
                 res => res.Id,
                 (r, res) => new { Review = r, Restaurant = res })
-            .LeftJoin(dbContext.Dishes, r => r.Review.DishId, d => d.Id, (r, d) => new MyReviewDTO
+            .LeftJoin(dbContext.Dishes, r => r.Review.Dish.Id, d => d.Id, (r, d) => new MyReviewDTO
             {
                 restaurantReview = d == null
                 ? new RestaurantReviewDTO

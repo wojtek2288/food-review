@@ -2,7 +2,7 @@ using FoodReview.Core.Domain.Common;
 
 namespace FoodReview.Core.Domain;
 
-public class Dish : IEntity
+public class Dish : IAggregateRoot
 {
     public Guid Id { get; private init; }
     public Restaurant Restaurant { get; private init; } = default!;
@@ -10,9 +10,7 @@ public class Dish : IEntity
     public string? Description { get; private set; }
     public string ImageUrl { get; private set; } = default!;
     public decimal Price { get; private set; }
-    public IReadOnlyList<TagToDish> Tags => tags;
-
-    private List<TagToDish> tags = new();
+    public ICollection<Tag> Tags { get; set; }
 
     private Dish() { }
 

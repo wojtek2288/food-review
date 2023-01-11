@@ -1,5 +1,5 @@
 using FluentValidation;
-using FoodReview.Core.Contracts.Admin;
+using FoodReview.Core.Contracts.Admin.Restaurants;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
@@ -9,7 +9,7 @@ using FoodReview.Core.Services.DataAccess.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodReview.Core.Services.CQRS.Example;
+namespace FoodReview.Core.Services.CQRS.Admin.Restaurants;
 
 public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, Unit>>
 {
@@ -18,17 +18,6 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
     public AddRestaurantCV(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
-        
-        RuleFor(x => x)
-            .MustAsync(async (x, cancellation) => 
-            {
-                var restaurantExists = await dbContext.Restaurants
-                    .AnyAsync(r => r.Id == x.Command.Id, x.Context.CancellationToken);
-
-                return !restaurantExists;
-            })
-            .WithCode(AddRestaurant.ErrorCodes.RestaurantWithSpecifiedIdAlreadyExists)
-            .WithMessage("Restaurant with specified Id already exists.");
 
         RuleFor(x => x.Command.Name)
             .NotEmpty()
@@ -44,23 +33,36 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
                 .WithMessage("Description is too long.")
             .When(e => e.Command.Description is not null);
 
-        RuleFor(x => x.Command.ImageLink)
+        RuleFor(x => x.Command.ImageUrl)
             .NotEmpty()
                 .WithCode(AddRestaurant.ErrorCodes.ImageLinkEmpty)
                 .WithMessage("ImageLink must not be empty.")
             .MaximumLength(StringLengths.LinkString)
                 .WithCode(AddRestaurant.ErrorCodes.ImageLinkTooLong)
                 .WithMessage("ImageLink too long.");
+                
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) =>
+            {
+                var tagsFound = x.Command.Tags.Distinct()
+                    .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);
+        
+                return tagsFound == x.Command.Tags.Count;
+            })
+            .WithCode(AddRestaurant.ErrorCodes.InvalidTagIdList)
+            .WithMessage("Invalid list of tag IDs.");
     }
 }
 
 public class AddRestaurantCH : CommandHandler<AddRestaurant>
 {
     private readonly Repository<Restaurant> restaurants;
+    private readonly CoreDbContext dbContext;
 
-    public AddRestaurantCH(Repository<Restaurant> restaurants)
+    public AddRestaurantCH(Repository<Restaurant> restaurants, CoreDbContext dbContext)
     {
         this.restaurants = restaurants;
+        this.dbContext = dbContext;
     }
 
     public override async Task HandleAsync(AddRestaurant command, CoreContext context)
@@ -68,8 +70,10 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
         var restaurant = Restaurant.Create(
             command.Name,
             command.Description,
-            command.ImageLink,
-            command.IsVisible);
+            command.ImageUrl,
+            false);
+        var tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
+        restaurant.Tags = tags;
 
         await restaurants.AddAsync(restaurant, context.CancellationToken);
     }
