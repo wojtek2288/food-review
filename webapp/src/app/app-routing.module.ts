@@ -58,7 +58,8 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [NotLoggedInGuard]
+    canActivate: [NotLoggedInGuard],
+    data: { animationState: 'login' }
   },
   {
     path: '',

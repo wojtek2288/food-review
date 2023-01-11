@@ -1,6 +1,6 @@
 import { animate, animateChild, group, query, style, transition, trigger } from '@angular/animations';
 export const routeTransitionAnimations = trigger('triggerName', [
-    transition('restaurants => dishes, dishes => users, restaurants => users, * => reviews, * => restaurantDetails, * => dishDetails, * => userDetails', [
+    transition('restaurants => dishes, dishes => users, restaurants => users, * => reviews, * => restaurantDetails, * => dishDetails, * => userDetails, * => login', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
@@ -18,7 +18,7 @@ export const routeTransitionAnimations = trigger('triggerName', [
            ]),
         query(':enter', animateChild())
       ]),
-      transition('* => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetails => *, dishDetails => *, userDetails => *', [
+      transition('login => *, dishes => restaurants, users => restaurants, reviews => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetails => *, dishDetails => *, userDetails => *', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
