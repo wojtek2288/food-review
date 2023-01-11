@@ -15,6 +15,8 @@ public static class Config
     {
         public static string ConnectionString(IConfiguration cfg)
         {
+            var kekium = cfg.GetStringFromEnvVariable("connectionString");
+            Console.WriteLine(kekium);
             return cfg.GetStringFromEnvVariable("connectionString");
         }
     }
