@@ -4,6 +4,7 @@ import { ApiService } from "src/app/api/api.service";
 import { ApiUser } from "src/app/api/model/api-user";
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from "@angular/router";
+import jwtDecode from "jwt-decode";
 
 @Injectable({
     providedIn: 'root'
@@ -28,6 +29,13 @@ export class AuthService {
     login(username: string, password: string): void {
         this.isLoadingSubject.next(true);
         this.api.loginAdmin(username, password).subscribe(response => {
+            const role = (<any>jwtDecode(response.access_token))['role'];
+            if(role !== 'admin')
+            {
+                this.snackBar.open("You do not have permission to access this site", "", { duration: 3000 });
+                this.isLoadingSubject.next(false);
+                return;
+            }
             this.loggedInUser = response;
             localStorage.setItem('apiUser', JSON.stringify(this.loggedInUser));
             this.isUserLoggedIn$.next(true);
