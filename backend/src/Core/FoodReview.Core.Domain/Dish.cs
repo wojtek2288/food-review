@@ -10,9 +10,7 @@ public class Dish : IAggregateRoot
     public string? Description { get; private set; }
     public string ImageUrl { get; private set; } = default!;
     public decimal Price { get; private set; }
-    public IReadOnlyList<TagToDish> Tags => tags;
-
-    private List<TagToDish> tags = new();
+    public ICollection<Tag> Tags { get; set; }
 
     private Dish() { }
 
@@ -40,15 +38,5 @@ public class Dish : IAggregateRoot
         Description = description;
         Price = price;
         ImageUrl = imageUrl;
-    }
-    
-    
-    public void SetTags(List<string> tagIds)
-    {
-        tags = tagIds.Select(x => new TagToDish
-        {
-            DishId = Id,
-            TagId = Guid.Parse(x)
-        }).ToList();
     }
 }

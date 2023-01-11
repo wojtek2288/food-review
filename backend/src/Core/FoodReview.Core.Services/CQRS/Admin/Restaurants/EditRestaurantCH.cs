@@ -68,22 +68,26 @@ public class EditRestaurantCV : AbstractValidator<CommandRequest<EditRestaurant,
 public class EditRestaurantCH : CommandHandler<EditRestaurant>
 {
     private readonly Repository<Restaurant> restaurants;
+    private readonly CoreDbContext dbContext;
 
-    public EditRestaurantCH(Repository<Restaurant> restaurants)
+    public EditRestaurantCH(Repository<Restaurant> restaurants, CoreDbContext dbContext)
     {
         this.restaurants = restaurants;
+        this.dbContext = dbContext;
     }
 
     public override async Task HandleAsync(EditRestaurant command, CoreContext context)
     {
-        var restaurant = await restaurants.FindAndEnsureExistsAsync(Guid.Parse(command.Id));
+        var restaurant = await dbContext.Restaurants.Include(x => x.Tags)
+            .SingleAsync(x => command.Id == x.Id.ToString());
         
         restaurant.Edit(
             command.Name,
             command.Description,
             command.ImageUrl);
-        restaurant.SetTags(command.Tags);
-        
-        await restaurants.UpdateAsync(restaurant);
+        var tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
+        restaurant.Tags = tags;
+
+        await dbContext.SaveChangesAsync();
     }
 }

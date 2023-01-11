@@ -19,6 +19,7 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO?>
     public override Task<DishDetailsDTO?> HandleAsync(DishDetails query, CoreContext context)
     {
         return dbContext.Dishes
+            .Include(x => x.Tags)
             .Where(d => d.Id == query.DishId)
             .Select(d => new DishDetailsDTO
             {
@@ -32,18 +33,12 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO?>
                     .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
                 Description = d.Description,
-                Tags = d.Tags
-                    .Join(
-                        dbContext.Tags,
-                        ttd => ttd.TagId,
-                        t => t.Id,
-                        (_, t) => new TagDTO
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            ColorHex = t.ColorHex,
-                        })
-                    .ToList(),
+                Tags = d.Tags.Select(x => new TagDTO
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ColorHex = x.ColorHex
+                }).ToList()
             })
             .FirstOrDefaultAsync(context.CancellationToken);
     }

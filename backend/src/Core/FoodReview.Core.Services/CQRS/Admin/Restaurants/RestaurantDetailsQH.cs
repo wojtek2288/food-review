@@ -45,7 +45,8 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
 
     public override async Task<RestaurantDetailsDTO> HandleAsync(RestaurantDetails query, CoreContext context)
     {
-        var restaurant = await dbContext.Restaurants.SingleAsync(x => x.Id.ToString() == query.Id);
+        var restaurant = await dbContext.Restaurants.Include(x => x.Tags)
+            .SingleAsync(x => x.Id.ToString() == query.Id);
 
         return new RestaurantDetailsDTO
         {
@@ -53,19 +54,13 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
             Name = restaurant.Name,
             ImageUrl = restaurant.ImageUrl,
             Description = restaurant.Description,
-            IsVisible = restaurant.IsVisible,
-            Tags = restaurant.Tags
-                .Join(
-                    dbContext.Tags,
-                    ttd => ttd.TagId,
-                    t => t.Id,
-                    (_, t) => new TagDTO
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        ColorHex = t.ColorHex,
-                    })
-                .ToList(),
+            IsVisible = restaurant.IsVisible,            
+            Tags = restaurant.Tags.Select(x => new TagDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ColorHex = x.ColorHex
+            }).ToList()
         };
     }
 }

@@ -4,6 +4,7 @@ using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodReview.Core.Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230111160134_ChangeTagsToManyToMany")]
+    partial class ChangeTagsToManyToMany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +23,6 @@ namespace FoodReview.Core.Services.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("DishTag", b =>
-                {
-                    b.Property<Guid>("DishesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TagsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("DishesId", "TagsId");
-
-                    b.HasIndex("TagsId");
-
-                    b.ToTable("DishTag");
-                });
 
             modelBuilder.Entity("FoodReview.Core.Domain.Dish", b =>
                 {
@@ -400,21 +387,6 @@ namespace FoodReview.Core.Services.Migrations
                     b.ToTable("RestaurantTag");
                 });
 
-            modelBuilder.Entity("DishTag", b =>
-                {
-                    b.HasOne("FoodReview.Core.Domain.Dish", null)
-                        .WithMany()
-                        .HasForeignKey("DishesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FoodReview.Core.Domain.Tag", null)
-                        .WithMany()
-                        .HasForeignKey("TagsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("FoodReview.Core.Domain.Dish", b =>
                 {
                     b.HasOne("FoodReview.Core.Domain.Restaurant", "Restaurant")
@@ -423,7 +395,26 @@ namespace FoodReview.Core.Services.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.OwnsMany("FoodReview.Core.Domain.TagToDish", "Tags", b1 =>
+                        {
+                            b1.Property<Guid>("DishId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<Guid>("TagId")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.HasKey("DishId", "TagId");
+
+                            b1.ToTable("TagToDish");
+
+                            b1.WithOwner()
+                                .HasForeignKey("DishId");
+                        });
+
                     b.Navigation("Restaurant");
+
+                    b.Navigation("Tags");
                 });
 
             modelBuilder.Entity("FoodReview.Core.Domain.Review", b =>

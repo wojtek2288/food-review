@@ -24,15 +24,16 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
             .CountAsync(context.CancellationToken);
 
         var restaurants = await dbContext.Restaurants
+            .Include(x => x.Tags)
             .Where(r => r.Name.Trim().ToLower().Contains(query.SearchPhrase.Trim().ToLower())
-                && r.IsVisible)
+                        && r.IsVisible)
             .Select(r => new RestaurantSummaryDTO
             {
                 Id = r.Id,
                 Name = r.Name,
                 ImageUrl = r.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(rev => rev.Dish.Id == null && rev.Restaurant.Id == r.Id)
+                    .Where(rev => rev.Dish == null && rev.Restaurant.Id == r.Id)
                     .Average(r => r.Rating),
             })
             .Skip(query.PageCount * query.PageSize)

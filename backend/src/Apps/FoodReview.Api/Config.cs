@@ -15,8 +15,7 @@ public static class Config
     {
         public static string ConnectionString(IConfiguration cfg)
         {
-            var kekium = cfg.GetStringFromEnvVariable("connectionString");
-            Console.WriteLine(kekium);
+            //return "Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false";
             return cfg.GetStringFromEnvVariable("connectionString");
         }
     }

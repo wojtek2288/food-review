@@ -27,6 +27,7 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
         var searchPhrase = query.SearchPhrase.ToLower();
         var dbData = dbContext.Dishes
             .Include(x => x.Restaurant)
+            .Include(x => x.Tags)
             .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.Restaurant.Id.ToString() == query.RestaurantId)
             .Where(x => x.Name.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)) ||
@@ -48,18 +49,12 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
                 RestaurantId = x.Restaurant.Id.ToString(),
                 ImageUrl = x.ImageUrl,
                 Price = x.Price,
-                Tags = x.Tags
-                    .Join(
-                        dbContext.Tags,
-                        ttd => ttd.TagId,
-                        t => t.Id,
-                        (_, t) => new TagDTO
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            ColorHex = t.ColorHex,
-                        })
-                    .ToList(),
+                Tags = x.Tags.Select(y => new TagDTO
+                {
+                    Id = y.Id,
+                    Name = y.Name,
+                    ColorHex = y.ColorHex
+                }).ToList()
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

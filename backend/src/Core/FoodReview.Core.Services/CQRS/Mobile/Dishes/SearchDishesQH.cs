@@ -25,6 +25,7 @@ public class SearchDishesQH : QueryHandler<SearchDishes, PaginatedResult<DishSum
             .CountAsync(context.CancellationToken);
 
         var dishes = await dbContext.Restaurants
+            .Include(x => x.Tags)
             .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes, (r, d) => new DishSummaryDTO
             {

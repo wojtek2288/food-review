@@ -62,22 +62,25 @@ public class EditDishCV : AbstractValidator<CommandRequest<EditDish, Unit>>
 public class EditDishCH : CommandHandler<EditDish>
 {
     private readonly Repository<Dish> dishes;
+    private readonly CoreDbContext dbContext;
 
-    public EditDishCH(Repository<Dish> dishes)
+    public EditDishCH(Repository<Dish> dishes, CoreDbContext dbContext)
     {
         this.dishes = dishes;
+        this.dbContext = dbContext;
     }
 
     public override async Task HandleAsync(EditDish command, CoreContext context)
     {
-        var dish = await dishes.FindAndEnsureExistsAsync(Guid.Parse(command.Id));
+        var dish = await dbContext.Dishes.Include(x => x.Tags).SingleAsync(x => x.Id == Guid.Parse(command.Id));
         
         dish.Edit(command.Name,
             command.Description,
             command.ImageUrl,
             command.Price);
-        dish.SetTags(command.Tags);
+        var tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
+        dish.Tags = tags;
 
-        await dishes.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 }

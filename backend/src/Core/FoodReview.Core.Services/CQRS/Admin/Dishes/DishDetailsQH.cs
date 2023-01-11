@@ -42,6 +42,7 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO>
     public override async Task<DishDetailsDTO> HandleAsync(DishDetails query, CoreContext context)
     {
         var dish = await dbContext.Dishes.Include(x => x.Restaurant)
+            .Include(x => x.Tags)
             .SingleAsync(x => x.Id.ToString() == query.Id);
 
         return new DishDetailsDTO
@@ -53,18 +54,12 @@ public class DishDetailsQH : QueryHandler<DishDetails, DishDetailsDTO>
             RestaurantName = dish.Restaurant.Name,
             RestaurantId = dish.Restaurant.Id.ToString(),
             Price = dish.Price,
-            Tags = dish.Tags
-                .Join(
-                    dbContext.Tags,
-                    ttd => ttd.TagId,
-                    t => t.Id,
-                    (_, t) => new TagDTO
-                    {
-                        Id = t.Id,
-                        Name = t.Name,
-                        ColorHex = t.ColorHex,
-                    })
-                .ToList(),
+            Tags = dish.Tags.Select(x => new TagDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                ColorHex = x.ColorHex
+            }).ToList()
         };
     }
 }

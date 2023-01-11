@@ -70,7 +70,7 @@ public class AddDishCH : CommandHandler<AddDish>
             command.Description,
             command.ImageUrl,
             command.Price);
-        dish.SetTags(command.Tags);
+        dish.Tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
 
         await dbContext.Dishes.AddAsync(dish);
         await dbContext.SaveChangesAsync();
