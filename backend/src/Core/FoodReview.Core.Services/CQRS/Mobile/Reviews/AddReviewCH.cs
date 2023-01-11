@@ -36,14 +36,15 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
                 if (cmd.Command.DishId != null)
                 {
                     return !(await dbContext.Reviews
+                        .Where(r => r.Dish != null)
                         .AnyAsync(r => r.User.Id == cmd.Context.UserId
-                            && r.User.Id == cmd.Command.DishId));
+                            && r.Dish!.Id == cmd.Command.DishId));
                 }
                 else
                 {
                     return !(await dbContext.Reviews
                         .AnyAsync(r => r.User.Id == cmd.Context.UserId
-                            && r.User.Id == cmd.Command.RestaurantId));
+                            && r.Restaurant.Id == cmd.Command.RestaurantId));
                 }
             })
             .WithCode(AddReview.ErrorCodes.UserAlreadyRated)
@@ -77,28 +78,20 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
 
 public class AddReviewCH : CommandHandler<AddReview>
 {
-    private readonly Repository<Review> reviews;
-    private readonly Repository<User> users;
-    private readonly Repository<Dish> dishes;
-    private readonly Repository<Restaurant> restaurants;
+    private readonly CoreDbContext dbContext;
 
-    public AddReviewCH(
-        Repository<Review> reviews,
-        Repository<User> users,
-        Repository<Dish> dishes,
-        Repository<Restaurant> restaurants)
+    public AddReviewCH(CoreDbContext dbContext)
     {
-        this.reviews = reviews;
-        this.users = users;
-        this.dishes = dishes;
-        this.restaurants = restaurants;
+        this.dbContext = dbContext;
     }
 
     public override async Task HandleAsync(AddReview command, CoreContext context)
     {
-        var user = await users.FindAndEnsureExistsAsync(context.UserId);
-        var restaurant = await restaurants.FindAndEnsureExistsAsync(command.RestaurantId);
-        var dish = command.DishId != null ? await dishes.FindAsync(command.DishId.Value) : null;
+        var user = await dbContext.Users.FirstAsync(u => u.Id == context.UserId, context.CancellationToken);
+        var restaurant = await dbContext.Restaurants.FirstAsync(r => r.Id == command.RestaurantId, context.CancellationToken);
+        var dish = command.DishId != null
+            ? await dbContext.Dishes.FirstAsync(d => d.Id == command.DishId.Value)
+            : null;
 
         var review = Review.Create(
             user,
@@ -107,6 +100,7 @@ public class AddReviewCH : CommandHandler<AddReview>
             command.Description,
             command.Rating);
 
-        await reviews.AddAsync(review, context.CancellationToken);
+        await dbContext.AddAsync(review);
+        await dbContext.SaveChangesAsync(context.CancellationToken);
     }
 }
