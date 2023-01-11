@@ -41,9 +41,9 @@ public class Startup
     {
         app
             .UseRouting()
+            .UseCors(ApiModule.ApiCorsPolicy)
             .UseAuthentication()
             .UseAuthorization()
-            .UseCors(ApiModule.ApiCorsPolicy)
             .UseFluentValidationExceptionHandler()
             .UseEndpoints(endpoints => endpoints.MapControllers());
 

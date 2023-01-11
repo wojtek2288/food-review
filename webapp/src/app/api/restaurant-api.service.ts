@@ -37,17 +37,17 @@ export class RestaurantApiService {
 
     public getRestaurants(criteria: PaginatedQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getRestaurants(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        this.apiService.getRestaurants(criteria).subscribe(x => {
             this.restaurantsSubject.next(x);
             this.isLoadingSubject.next(false);
-        });
+        }, x => console.log(x));
     }
 
     public getRestaurantDetails(id: string): void {
         this.isLoadingSubject.next(true);
         this.apiService.getRestaurantDetails({
             id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        }).subscribe(x => {
             this.restaurantDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
         }, x => {
@@ -68,7 +68,7 @@ export class RestaurantApiService {
         dialogRef.afterClosed().subscribe(x => {
             if (x) {
                 this.isLoadingSubject.next(true);
-                this.apiService.addRestaurant(x, this.authService.loggedInUser?.access_token!).subscribe(
+                this.apiService.addRestaurant(x).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly added restaurant", "", { duration: 3000 });
                         this.afterCommandFinishedSubject.next();
@@ -89,7 +89,7 @@ export class RestaurantApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.editRestaurant(Object.assign({
                     id: data.id
-                }, x), this.authService.loggedInUser?.access_token!).subscribe(
+                }, x)).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly edited restaurant", "", { duration: 3000 });
                         this.afterCommandFinishedSubject.next();
@@ -107,7 +107,7 @@ export class RestaurantApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.deleteRestaurant({
                     id: id
-                }, this.authService.loggedInUser?.access_token!).subscribe(
+                }).subscribe(
                     _ => {
                         if (!this.router.url.startsWith('/restaurants/details'))
                             this.afterCommandFinishedSubject.next();
@@ -127,7 +127,7 @@ export class RestaurantApiService {
         this.isLoadingSubject.next(true);
         this.apiService.toggleRestaurantVisibility({
             id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(
+        }).subscribe(
             _ => {
                 this.snackBar.open("Successfuly changed visibility", "", { duration: 3000 });
                 this.afterCommandFinishedSubject.next();

@@ -20,7 +20,7 @@ export class TagApiService {
 
     public getTags() {
         this.isLoadingSubject.next(true);
-        this.apiService.getTags(this.authService.loggedInUser?.access_token!).subscribe(x => {
+        this.apiService.getTags().subscribe(x => {
             this.tagsSubject.next(x);
             this.isLoadingSubject.next(false);
         });

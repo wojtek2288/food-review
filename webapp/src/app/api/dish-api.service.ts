@@ -38,7 +38,7 @@ export class DishApiService {
 
     public getDishes(criteria: DishQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getDishes(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        this.apiService.getDishes(criteria).subscribe(x => {
             this.dishesSubject.next(x);
             this.isLoadingSubject.next(false);
         });
@@ -48,7 +48,7 @@ export class DishApiService {
         this.isLoadingSubject.next(true);
         this.apiService.getDishDetails({
             id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        }).subscribe(x => {
             this.dishDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
         }, x => {
@@ -71,7 +71,7 @@ export class DishApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.addDish(Object.assign({
                     restaurantId: restaurantId
-                }, x), this.authService.loggedInUser?.access_token!).subscribe(
+                }, x)).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly added dish", "", { duration: 3000 });
                         this.afterCommandFinishedSubject.next();
@@ -92,7 +92,7 @@ export class DishApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.editDish(Object.assign({
                     id: data.id
-                }, x), this.authService.loggedInUser?.access_token!).subscribe(
+                }, x)).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly edited dish", "", { duration: 3000 });
                         this.afterCommandFinishedSubject.next();
@@ -110,7 +110,7 @@ export class DishApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.deleteDish({
                     id: id
-                }, this.authService.loggedInUser?.access_token!).subscribe(
+                }).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly deleted dish", "", { duration: 3000 });
                         if (!this.router.url.startsWith('/dishes/details'))

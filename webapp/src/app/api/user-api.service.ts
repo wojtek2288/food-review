@@ -36,7 +36,7 @@ export class UserApiService {
 
     public getUsers(criteria: PaginatedQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getUsers(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        this.apiService.getUsers(criteria).subscribe(x => {
             this.usersSubject.next(x);
             this.isLoadingSubject.next(false);
         });
@@ -46,7 +46,7 @@ export class UserApiService {
         this.isLoadingSubject.next(true);
         this.apiService.getUserDetails({
             id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        }).subscribe(x => {
             this.userDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
         }, x => {
@@ -62,7 +62,7 @@ export class UserApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.banUser({
                     id: id
-                }, this.authService.loggedInUser?.access_token!).subscribe(
+                }).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly banned user", "", { duration: 3000 });
                         if (!this.router.url.startsWith('/users/details'))

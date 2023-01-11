@@ -30,7 +30,7 @@ export class ReviewApiService {
 
     public getReviews(criteria: ReviewQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getReviews(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
+        this.apiService.getReviews(criteria).subscribe(x => {
             this.reviewsSubject.next(x);
             this.isLoadingSubject.next(false);
         });
@@ -43,7 +43,7 @@ export class ReviewApiService {
                 this.isLoadingSubject.next(true);
                 this.apiService.deleteReview({
                     id: id
-                }, this.authService.loggedInUser?.access_token!).subscribe(
+                }).subscribe(
                     _ => {
                         this.snackBar.open("Successfuly deleted review", "", { duration: 3000 });
                         this.afterCommandFinishedSubject.next();

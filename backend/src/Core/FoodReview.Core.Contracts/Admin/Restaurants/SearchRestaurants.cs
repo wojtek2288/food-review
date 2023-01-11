@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Restaurants;
 
-[AllowAnonymous]
 public class SearchRestaurants : QueryBase<SearchRestaurants, PaginatedResult<RestaurantDTO>>
 {
     public string? SortingField { get; set; }
