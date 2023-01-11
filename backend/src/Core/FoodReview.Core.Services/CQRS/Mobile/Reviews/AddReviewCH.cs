@@ -30,6 +30,25 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
             .WithCode(AddReview.ErrorCodes.RestaurantWithSpecifiedIdDoesNotExist)
             .WithMessage("Restaurant with specified Id does not exist.");
 
+        RuleFor(x => x)
+            .MustAsync(async (cmd, ct) =>
+            {
+                if (cmd.Command.DishId != null)
+                {
+                    return !(await dbContext.Reviews
+                        .AnyAsync(r => r.UserId == cmd.Context.UserId
+                            && r.DishId == cmd.Command.DishId));
+                }
+                else
+                {
+                    return !(await dbContext.Reviews
+                        .AnyAsync(r => r.UserId == cmd.Context.UserId
+                            && r.DishId == cmd.Command.RestaurantId));
+                }
+            })
+            .WithCode(AddReview.ErrorCodes.UserAlreadyRated)
+            .WithMessage("This has already been rated.");
+
         RuleFor(x => x.Command.DishId)
             .MustAsync(async (dishId, ct) => 
             {

@@ -2,6 +2,7 @@ import Dish from '../../responseTypes/Dish';
 import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native';
 import { Rating } from '../Common/Rating';
+import { TagCard } from '../Common/TagCard';
 
 export interface DishCardProps {
   dish: Dish;
@@ -28,6 +29,13 @@ export const DishCard: React.FC<DishCardProps> = ({ dish, navigation }) => {
             <Rating rating={dish.rating} />
           </View>
         </View>
+        {dish.tags.length > 0
+          ? <View style={styles.tagsContainer}>
+            {dish.tags.map((tag) => (
+              <TagCard key={tag.id} tag={tag} />
+            ))}
+          </View>
+          : null}
       </Card>
     </View>
   );
@@ -73,5 +81,11 @@ const styles = StyleSheet.create({
     width: '100 %',
     aspectRatio: 1,
     borderRadius: 10,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '3 %',
+    flexWrap: 'wrap',
   },
 });

@@ -8,6 +8,7 @@ import { DishReview } from '../../responseTypes/MyReviewResponse';
 import { useDeleteReviewCommand, useEditReviewCommand } from '../../api/services';
 import * as SecureStore from 'expo-secure-store';
 import { ReviewModal } from '../Reviews/ReviewModal';
+import { TagCard } from '../Common/TagCard';
 
 export interface MyProfileDishCardProps {
     dish: DishReview;
@@ -111,6 +112,13 @@ export const MyProfileDishCard: React.FC<MyProfileDishCardProps> = ({ dish, navi
                         <Rating rating={dish.rating} />
                     </View>
                 </View>
+                {dish.tags.length > 0
+                    ? <View style={styles.tagsContainer}>
+                        {dish.tags.map((tag) => (
+                            <TagCard key={tag.id} tag={tag} />
+                        ))}
+                    </View>
+                    : null}
             </Card>
         </View>
     );
@@ -160,5 +168,11 @@ const styles = StyleSheet.create({
     iconsContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-    }
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '3 %',
+        flexWrap: 'wrap',
+    },
 });

@@ -23,9 +23,10 @@ import EditMyDescriptionRequest from '../requestTypes.ts/EditMyDescriptionReques
 import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import DeleteReviewRequest from '../requestTypes.ts/DeleteReviewRequest';
 import EditReviewRequest from '../requestTypes.ts/EditReviewRequest';
+import FeedRequest from '../requestTypes.ts/FeedRequest';
 
-export const useFeedQuery = (req: PaginatedRequest) => (
-    useAxios<PaginatedResult<Dish>, PaginatedRequest>(RequestType.Query, 'Dishes.Feed', req)
+export const useFeedQuery = (req: FeedRequest) => (
+    useAxios<PaginatedResult<Dish>, FeedRequest>(RequestType.Query, 'Dishes.Feed', req)
 );
 
 export const useSearchDishesQuery = (req: PaginatedRequestWithSearch) => (

@@ -6,4 +6,5 @@ public class RestaurantSummaryDTO
     public string Name { get; set; } = default!;
     public string ImageUrl { get; set; } = default!;
     public double? Rating { get; set; }
+    public List<TagDTO> Tags { get; set; } = new();
 }

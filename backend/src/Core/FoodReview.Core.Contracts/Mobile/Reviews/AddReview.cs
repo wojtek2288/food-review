@@ -17,5 +17,6 @@ public class AddReview : CommandBase<AddReview>
         public const int DishWithSpecifiedIdDoesNotExist = 2;
         public const int DescriptionTooLong = 3;
         public const int RatingIsInvalid = 4;
+        public const int UserAlreadyRated = 5;
     }
 }

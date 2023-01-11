@@ -1,3 +1,5 @@
+import Tag from "./Tag";
+
 export default interface MyReviewResponse {
     dishReview: DishReview | null;
     restaurantReview: RestaurantReview | null;
@@ -11,6 +13,7 @@ export interface DishReview {
     imageUrl: string;
     rating: number;
     description: string | null;
+    tags: Tag[];
 }
 
 export interface RestaurantReview {
@@ -20,4 +23,5 @@ export interface RestaurantReview {
     imageUrl: string;
     rating: number;
     description: string | null;
+    tags: Tag[];
 }

@@ -8,6 +8,7 @@ import { RestaurantReview } from '../../responseTypes/MyReviewResponse';
 import { useDeleteReviewCommand, useEditReviewCommand } from '../../api/services';
 import * as SecureStore from 'expo-secure-store';
 import { ReviewModal } from '../Reviews/ReviewModal';
+import { TagCard } from '../Common/TagCard';
 
 export interface MyProfileRestaurantCardProps {
     restaurant: RestaurantReview;
@@ -110,6 +111,13 @@ export const MyProfileRestaurantCard: React.FC<MyProfileRestaurantCardProps> = (
                         <Rating rating={restaurant.rating} />
                     </View>
                 </View>
+                {restaurant.tags.length > 0
+                    ? <View style={styles.tagsContainer}>
+                        {restaurant.tags.map((tag) => (
+                            <TagCard key={tag.id} tag={tag} />
+                        ))}
+                    </View>
+                    : null}
             </Card>
         </View>
     );
@@ -159,6 +167,12 @@ const styles = StyleSheet.create({
     iconsContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
-    }
+    },
+    tagsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: '3 %',
+        flexWrap: 'wrap',
+    },
 });
 
