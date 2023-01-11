@@ -1,4 +1,4 @@
-namespace FoodReview.Core.Domain.DTO.Admin;
+namespace FoodReview.Core.Contracts.Admin.DTO.Admin;
 
 public class TagDTO
 {

@@ -1,6 +1,6 @@
+using FoodReview.Core.Contracts.Admin.DTO.Admin;
 using FoodReview.Core.Contracts.Admin.Tags;
 using FoodReview.Core.Contracts.Common;
-using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;

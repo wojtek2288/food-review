@@ -1,7 +1,7 @@
 using FluentValidation;
 using FoodReview.Core.Contracts.Admin.Dishes;
+using FoodReview.Core.Contracts.Admin.DTO.Admin;
 using FoodReview.Core.Contracts.Common;
-using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;

@@ -1,6 +1,6 @@
-namespace FoodReview.Core.Domain.DTO.Admin;
+namespace FoodReview.Core.Contracts.Admin.DTO.Admin;
 
-public class DishDTO
+public class DishDetailsDTO
 {
     public string Id { get; set; }
     public string Name { get; set; }

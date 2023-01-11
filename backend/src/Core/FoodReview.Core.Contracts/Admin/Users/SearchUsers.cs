@@ -1,6 +1,6 @@
+using FoodReview.Core.Contracts.Admin.DTO.Admin;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
-using FoodReview.Core.Domain.DTO.Admin;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Users;

@@ -1,15 +1,15 @@
 using System.ComponentModel;
 using FoodReview.Core.Contracts.Admin;
 using FoodReview.Core.Contracts.Admin.Dishes;
+using FoodReview.Core.Contracts.Admin.DTO.Admin;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
 using FoodReview.Core.Domain;
-using FoodReview.Core.Domain.DTO.Admin;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
 using Microsoft.EntityFrameworkCore;
-using TagDTO = FoodReview.Core.Domain.DTO.Admin.TagDTO;
+using TagDTO = FoodReview.Core.Contracts.Admin.DTO.Admin.TagDTO;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Dishes;
 
