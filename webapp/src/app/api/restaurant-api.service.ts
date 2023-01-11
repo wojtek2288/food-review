@@ -1,3 +1,4 @@
+import { Location } from "@angular/common";
 import { Injectable } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -30,7 +31,8 @@ export class RestaurantApiService {
         private authService: AuthService,
         private dialog: MatDialog,
         private snackBar: MatSnackBar,
-        private router: Router) {
+        private router: Router,
+        private location: Location) {
     }
 
     public getRestaurants(criteria: PaginatedQueryCriteria) {
@@ -107,9 +109,13 @@ export class RestaurantApiService {
                     id: id
                 }, this.authService.loggedInUser?.access_token!).subscribe(
                     _ => {
-                        this.snackBar.open("Successfuly deleted restaurant", "", { duration: 3000 });
-                        this.afterCommandFinishedSubject.next();
-                        this.router.navigate(['']);
+                        if (!this.router.url.startsWith('/restaurants/details'))
+                            this.afterCommandFinishedSubject.next();
+                        else
+                        {
+                            this.location.back();
+                            this.isLoadingSubject.next(false);
+                        }
                     },
                     x => this.snackBar.open("Restaurant with specified Id does not exist", "", { duration: 3000 })
                 );

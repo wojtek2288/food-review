@@ -9,16 +9,16 @@ export const routeTransitionAnimations = trigger('triggerName', [
             right: 0,
             width: '100%'
           })
-        ]),
+        ], { optional: true }),
         query(':enter', [style({ right: '-100%', opacity: 0 })]),
-        query(':leave', animateChild()),
+        query(':leave', animateChild(), { optional: true }),
         group([
-            query(':leave', [animate('0.5s ease-out', style({ right: '100%', opacity: 0 }))]),
+            query(':leave', [animate('0.5s ease-out', style({ right: '100%', opacity: 0 }))], { optional: true }),
             query(':enter', [animate('0.5s ease-out', style({ right: '0%', opacity: 1 }))])
            ]),
         query(':enter', animateChild())
       ]),
-      transition('login => *, dishes => restaurants, users => restaurants, reviews => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetails => *, dishDetails => *, userDetails => *', [
+      transition('login => *, * => restaurants, users => dishes, reviews => users, reviews => dishes, restaurantDetails => *, dishDetails => *, userDetails => *', [
         style({ position: 'relative' }),
         query(':enter, :leave', [
           style({
@@ -27,12 +27,12 @@ export const routeTransitionAnimations = trigger('triggerName', [
             left: 0,
             width: '100%'
           })
-        ]),
+        ], { optional: true }),
         query(':enter', [style({ left: '-100%', opacity: 0 })]),
-        query(':leave', animateChild()),
+        query(':leave', animateChild(), { optional: true }),
         group([
-          query(':leave', [animate('0.5s ease-out', style({ left: '100%', opacity: 0 }))]),
-          query(':enter', [animate('0.5s ease-out', style({ left: '0%', opacity: 1 }))])
+          query(':leave', [animate('0.5s ease-out', style({ left: '100%', opacity: 0 }))], { optional: true }),
+          query(':enter', [animate('0.5s ease-out', style({ left: '0%', opacity: 1 }))], { optional: true })
          ]),
          query(':enter', animateChild())
        ]),

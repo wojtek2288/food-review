@@ -19,7 +19,7 @@ export class UserSearchComponent extends BaseSearchComponent<User> implements On
         private router: Router) {
         super();
         this.dataSource = new MatTableDataSource<User>();
-        this.displayedColumns = ['id', 'name', 'description', 'userButtons'];
+        this.displayedColumns = ['id', 'username', 'description', 'userButtons'];
         this.header = "Users";
         this.isLoading$ = this.userService.isLoading$;
         this.userService.afterCommandFinished$.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {

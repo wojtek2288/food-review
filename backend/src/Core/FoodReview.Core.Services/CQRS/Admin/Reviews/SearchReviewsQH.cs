@@ -34,6 +34,7 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             .Where(x => string.IsNullOrEmpty(query.UserId) || x.User.Id.ToString() == query.UserId)
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase) ||
+                        x.User.Username.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Dish != null && x.Dish.Name.Trim().ToLower().Contains(searchPhrase)));
         
         var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);

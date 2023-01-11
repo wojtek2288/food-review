@@ -39,7 +39,7 @@ public class SearchUsersQH : QueryHandler<SearchUsers, PaginatedResult<UserDTO>>
             .Select(x => new UserDTO
             {
                 Id = x.Id.ToString(),
-                Name = x.Username,
+                Username = x.Username,
                 Description = x.Description
             })
             .Skip(query.PageCount * query.PageSize)

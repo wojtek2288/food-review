@@ -117,8 +117,8 @@ export class DishApiService {
                             this.afterCommandFinishedSubject.next();
                         else
                         {
-                            this.isLoadingSubject.next(false);
                             this.location.back();
+                            this.isLoadingSubject.next(false);
                         }
                     },
                     x => this.snackBar.open("Dish with specified Id does not exist", "", { duration: 3000 })
