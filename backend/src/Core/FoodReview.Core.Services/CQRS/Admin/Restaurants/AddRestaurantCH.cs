@@ -56,12 +56,10 @@ public class AddRestaurantCV : AbstractValidator<CommandRequest<AddRestaurant, U
 
 public class AddRestaurantCH : CommandHandler<AddRestaurant>
 {
-    private readonly Repository<Restaurant> restaurants;
     private readonly CoreDbContext dbContext;
 
-    public AddRestaurantCH(Repository<Restaurant> restaurants, CoreDbContext dbContext)
+    public AddRestaurantCH(CoreDbContext dbContext)
     {
-        this.restaurants = restaurants;
         this.dbContext = dbContext;
     }
 
@@ -75,6 +73,7 @@ public class AddRestaurantCH : CommandHandler<AddRestaurant>
         var tags = await dbContext.Tags.Where(x => command.Tags.Contains(x.Id.ToString())).ToListAsync();
         restaurant.Tags = tags;
 
-        await restaurants.AddAsync(restaurant, context.CancellationToken);
+        await dbContext.Restaurants.AddAsync(restaurant);
+        await dbContext.SaveChangesAsync();
     }
 }
