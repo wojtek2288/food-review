@@ -6,7 +6,7 @@ namespace FoodReview.Core.Contracts.Admin.Users;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class BanUser : CommandBase<BanUser>
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     public static class ErrorCodes
     {

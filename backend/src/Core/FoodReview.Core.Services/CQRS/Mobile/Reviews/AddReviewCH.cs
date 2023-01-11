@@ -36,14 +36,14 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
                 if (cmd.Command.DishId != null)
                 {
                     return !(await dbContext.Reviews
-                        .AnyAsync(r => r.UserId == cmd.Context.UserId
-                            && r.DishId == cmd.Command.DishId));
+                        .AnyAsync(r => r.User.Id == cmd.Context.UserId
+                            && r.User.Id == cmd.Command.DishId));
                 }
                 else
                 {
                     return !(await dbContext.Reviews
-                        .AnyAsync(r => r.UserId == cmd.Context.UserId
-                            && r.DishId == cmd.Command.RestaurantId));
+                        .AnyAsync(r => r.User.Id == cmd.Context.UserId
+                            && r.User.Id == cmd.Command.RestaurantId));
                 }
             })
             .WithCode(AddReview.ErrorCodes.UserAlreadyRated)
@@ -82,9 +82,16 @@ public class AddReviewCH : CommandHandler<AddReview>
     private readonly Repository<Dish> dishes;
     private readonly Repository<Restaurant> restaurants;
 
-    public AddReviewCH(Repository<Review> reviews)
+    public AddReviewCH(
+        Repository<Review> reviews,
+        Repository<User> users,
+        Repository<Dish> dishes,
+        Repository<Restaurant> restaurants)
     {
         this.reviews = reviews;
+        this.users = users;
+        this.dishes = dishes;
+        this.restaurants = restaurants;
     }
 
     public override async Task HandleAsync(AddReview command, CoreContext context)
@@ -92,6 +99,7 @@ public class AddReviewCH : CommandHandler<AddReview>
         var user = await users.FindAndEnsureExistsAsync(context.UserId);
         var restaurant = await restaurants.FindAndEnsureExistsAsync(command.RestaurantId);
         var dish = command.DishId != null ? await dishes.FindAsync(command.DishId.Value) : null;
+
         var review = Review.Create(
             user,
             restaurant,

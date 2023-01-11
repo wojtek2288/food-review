@@ -30,7 +30,7 @@ public class DeleteMyAccountCH : CommandHandler<DeleteMyAccount>
     {
         var user = await users.FindAndEnsureExistsAsync(context.UserId, context.CancellationToken);
         var authUser = await userManager.FindByIdAsync(context.UserId.ToString());
-        var reviews = await dbContext.Reviews.Where(r => r.UserId == context.UserId).ToListAsync(context.CancellationToken);
+        var reviews = await dbContext.Reviews.Where(r => r.User.Id == context.UserId).ToListAsync(context.CancellationToken);
 
         await userManager.DeleteAsync(authUser);
         dbContext.RemoveRange(reviews);

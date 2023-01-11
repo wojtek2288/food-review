@@ -23,7 +23,7 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
             .Where(r => r.IsVisible)
             .SelectMany(r => r.Dishes)
             .ConditionalWhere(
-                d => d.Tags.Any(t => query.TagIds!.Contains(t.TagId)),
+                d => d.Tags.Any(t => query.TagIds!.Contains(t.Id)),
                 query.TagIds.Count > 0)
             .CountAsync(context.CancellationToken);
 
@@ -36,20 +36,16 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(r => r.Dish.Id == d.Id)
+                    .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
                 Tags = d.Tags
-                    .Join(
-                        dbContext.Tags,
-                        dt => dt.TagId,
-                        t => t.Id,
-                        (_, t) => new TagDTO
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            ColorHex = t.ColorHex,
-                        })
-                        .ToList(),
+                    .Select(t => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                    .ToList(),
             })
             .ConditionalWhere(
                 d => d.Tags.Any(t => query.TagIds!.Contains(t.Id)),
@@ -74,11 +70,13 @@ public class FeedQH : QueryHandler<Feed, PaginatedResult<DishSummaryDTO>>
         {
             FeedSortBy.MostPopular => dishes.OrderByDescending(
                 d => dbContext.Reviews
-                    .Where(r => r.DishId == d.Id)
+                    .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Count()),
             FeedSortBy.MostRecent => dishes.OrderByDescending(
                 d => dbContext.Reviews
-                    .Where(r => r.DateAdded >= DateTime.Now.AddDays(-7) && r.DishId == d.Id)
+                    .Where(r => r.DateAdded >= DateTime.Now.AddDays(-7)
+                        && r.Dish != null
+                        && r.Dish.Id == d.Id)
                     .Count()),
             _ => throw new InvalidOperationException("Invalid sort by"),
         };

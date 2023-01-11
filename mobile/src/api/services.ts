@@ -24,9 +24,14 @@ import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import DeleteReviewRequest from '../requestTypes.ts/DeleteReviewRequest';
 import EditReviewRequest from '../requestTypes.ts/EditReviewRequest';
 import FeedRequest from '../requestTypes.ts/FeedRequest';
+import Tag from '../responseTypes/Tag';
 
 export const useFeedQuery = (req: FeedRequest) => (
     useAxios<PaginatedResult<Dish>, FeedRequest>(RequestType.Query, 'Dishes.Feed', req)
+);
+
+export const useTagsQuery = (req: {}) => (
+    useAxios<Tag[], {}>(RequestType.Query, 'Common.Tags', req)
 );
 
 export const useSearchDishesQuery = (req: PaginatedRequestWithSearch) => (
@@ -95,4 +100,8 @@ export const useDeleteReviewCommand = (req: DeleteReviewRequest) => (
 
 export const useEditReviewCommand = (req: EditReviewRequest) => (
     useAxios<any, EditReviewRequest>(RequestType.Command, 'Reviews.EditReview', req)
+);
+
+export const useDeleteMyAccountCommand = (req: {}) => (
+    useAxios<any, {}>(RequestType.Command, "Users.DeleteMyAccount", req)
 );

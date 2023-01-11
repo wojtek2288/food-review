@@ -10,7 +10,7 @@ public class Dish : IAggregateRoot
     public string? Description { get; private set; }
     public string ImageUrl { get; private set; } = default!;
     public decimal Price { get; private set; }
-    public ICollection<Tag> Tags { get; set; }
+    public ICollection<Tag> Tags { get; set; } = default!;
 
     private Dish() { }
 

@@ -7,7 +7,7 @@ namespace FoodReview.Core.Contracts.Admin.Dishes;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class DishDetails: QueryBase<DishDetails, DishDetailsDTO>
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     public static class ErrorCodes
     {

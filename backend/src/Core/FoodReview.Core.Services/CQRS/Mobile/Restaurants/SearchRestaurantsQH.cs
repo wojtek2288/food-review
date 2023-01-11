@@ -36,17 +36,13 @@ public class SearchRestaurantsQH : QueryHandler<SearchRestaurants, PaginatedResu
                     .Where(rev => rev.Dish == null && rev.Restaurant.Id == r.Id)
                     .Average(r => r.Rating),
                 Tags = r.Tags
-                    .Join(
-                        dbContext.Tags,
-                        rt => rt.TagId,
-                        t => t.Id,
-                        (_, t) => new TagDTO
-                        {
-                            Id = t.Id,
-                            Name = t.Name,
-                            ColorHex = t.ColorHex,
-                        })
-                        .ToList(),
+                    .Select(t => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                    .ToList(),
             })
             .Skip(query.PageCount * query.PageSize)
             .Take(query.PageSize)

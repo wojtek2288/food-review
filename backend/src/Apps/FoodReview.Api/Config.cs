@@ -15,7 +15,6 @@ public static class Config
     {
         public static string ConnectionString(IConfiguration cfg)
         {
-            //return "Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false";
             return cfg.GetStringFromEnvVariable("connectionString");
         }
     }

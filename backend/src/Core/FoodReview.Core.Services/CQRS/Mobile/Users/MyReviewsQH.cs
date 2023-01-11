@@ -31,7 +31,13 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
                 r => r.Restaurant.Id,
                 res => res.Id,
                 (r, res) => new { Review = r, Restaurant = res })
-            .LeftJoin(dbContext.Dishes, r => r.Review.Dish.Id, d => d.Id, (r, d) => new MyReviewDTO
+            .LeftJoin(
+                dbContext.Dishes,
+                r =>  r.Review.Dish == null
+                    ? null
+                    : r.Review.Dish.Id,
+                d => (Guid?)d.Id,
+                (r, d) => new MyReviewDTO
             {
                 restaurantReview = d == null
                 ? new RestaurantReviewDTO
@@ -43,17 +49,13 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
                     ImageUrl = r.Restaurant.ImageUrl,
                     Rating = r.Review.Rating,
                     Tags = r.Restaurant.Tags
-                        .Join(
-                            dbContext.Tags,
-                            rt => rt.TagId,
-                            t => t.Id,
-                            (_, t) => new TagDTO
-                            {
-                                Id = t.Id,
-                                Name = t.Name,
-                                ColorHex = t.ColorHex,
-                            })
-                            .ToList(),
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
                 dishReview = d != null
@@ -67,17 +69,13 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
                     ImageUrl = d.ImageUrl,
                     Rating = r.Review.Rating,
                     Tags = d.Tags
-                        .Join(
-                            dbContext.Tags,
-                            dt => dt.TagId,
-                            t => t.Id,
-                            (_, t) => new TagDTO
-                            {
-                                Id = t.Id,
-                                Name = t.Name,
-                                ColorHex = t.ColorHex,
-                            })
-                            .ToList(),
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
             })

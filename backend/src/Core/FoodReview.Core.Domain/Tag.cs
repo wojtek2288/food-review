@@ -8,8 +8,8 @@ public class Tag : IAggregateRoot
     public string Name { get; private set; } = default!;
     public string ColorHex { get; private set; } = default!;
     
-    public ICollection<Restaurant> Restaurants { get; set; }
-    public ICollection<Dish> Dishes { get; set; }
+    public ICollection<Restaurant> Restaurants { get; set; } = default!;
+    public ICollection<Dish> Dishes { get; set; } = default!;
 
     public static Tag Create(string name, string colorHex)
     {

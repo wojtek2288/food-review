@@ -10,7 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
-import { useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery } from '../api/services';
+import { useDeleteMyAccountCommand, useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery } from '../api/services';
 import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
 import { MyProfileDishCard } from '../components/Dishes/MyProfileDishCard';
@@ -38,7 +38,16 @@ export default function MyProfile({
 
   const { run: detailsRun, response: detailsResponse } = useMyProfileQuery(detailsReq);
   const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useMyReviewsQuery(reviewsReq);
-  const { run: editMyDescriptionRun, isLoading: editMyDescriptionLoading, requestSuccessful } = useEditMyDescriptionCommand(editMyDescriptionReq);
+  const {
+    run: editMyDescriptionRun,
+    isLoading: editMyDescriptionLoading,
+    requestSuccessful: editRequestSuccessful
+  } = useEditMyDescriptionCommand(editMyDescriptionReq);
+  const {
+    run: deleteMyAccountRun,
+    isLoading: deleteMyAccountLoading,
+    requestSuccessful: deleteMyAccountRequestSuccessful,
+  } = useDeleteMyAccountCommand({});
 
   const fetchData = async () => {
     const token = await SecureStore.getItemAsync('accessToken');
@@ -75,14 +84,14 @@ export default function MyProfile({
   }, [reviewsResponse]);
 
   useEffect(() => {
-    if (requestSuccessful === true) {
+    if (editRequestSuccessful === true) {
       setDescriptionModalVisible(false);
       detailsRun(detailsReq, token)
     }
-    else if (requestSuccessful === false) {
+    else if (editRequestSuccessful === false) {
       setDescriptionModalVisible(false);
     }
-  }, [requestSuccessful]);
+  }, [editRequestSuccessful]);
 
   useEffect(() => {
     if (refreshReviews) {

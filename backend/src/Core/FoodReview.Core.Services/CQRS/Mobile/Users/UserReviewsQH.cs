@@ -30,7 +30,12 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                 r => r.Restaurant.Id,
                 res => res.Id,
                 (r, res) => new { Review = r, Restaurant = res })
-            .LeftJoin(dbContext.Dishes, r => r.Review.Dish.Id, d => d.Id, (r, d) => new UserReviewDTO
+            .LeftJoin(
+                dbContext.Dishes,
+                r => r.Review.Dish == null
+                    ? null
+                    : r.Review.Dish.Id,
+                d => (Guid?)d.Id, (r, d) => new UserReviewDTO
             {
                 restaurantReview = d == null
                 ? new RestaurantSummaryDTO
@@ -40,17 +45,13 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                     ImageUrl = r.Restaurant.ImageUrl,
                     Rating = r.Review.Rating,
                     Tags = r.Restaurant.Tags
-                        .Join(
-                            dbContext.Tags,
-                            dt => dt.TagId,
-                            t => t.Id,
-                            (_, t) => new TagDTO
-                            {
-                                Id = t.Id,
-                                Name = t.Name,
-                                ColorHex = t.ColorHex,
-                            })
-                            .ToList(),
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
                 dishReview = d != null
@@ -62,17 +63,13 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                     ImageUrl = d.ImageUrl,
                     Rating = r.Review.Rating,
                     Tags = d.Tags
-                        .Join(
-                            dbContext.Tags,
-                            dt => dt.TagId,
-                            t => t.Id,
-                            (_, t) => new TagDTO
-                            {
-                                Id = t.Id,
-                                Name = t.Name,
-                                ColorHex = t.ColorHex,
-                            })
-                            .ToList(),
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
             })
