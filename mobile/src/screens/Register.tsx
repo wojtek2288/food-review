@@ -119,6 +119,7 @@ export default function Register({
             <KeyboardAwareScrollView
               contentContainerStyle={styles.inputsContainer}
               showsVerticalScrollIndicator={false}
+              scrollEnabled={true}
             >
               <Text style={styles.signInText}>Sign Up</Text>
               {emailError !== null ? (

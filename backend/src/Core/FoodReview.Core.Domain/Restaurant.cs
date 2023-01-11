@@ -11,8 +11,7 @@ public class Restaurant : IAggregateRoot
     public bool IsVisible { get; private set; }
     public IReadOnlyList<Dish> Dishes => dishes;
 
-    public ICollection<Tag> Tags { get; set; }
-    //public List<TagToRestaurant> Tags => tags;
+    public ICollection<Tag> Tags { get; set; } = default!;
 
     private List<Dish> dishes = new();
     private List<TagToRestaurant> tags = new();

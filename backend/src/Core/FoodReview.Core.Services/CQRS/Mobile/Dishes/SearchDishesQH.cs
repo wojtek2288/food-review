@@ -34,8 +34,16 @@ public class SearchDishesQH : QueryHandler<SearchDishes, PaginatedResult<DishSum
                 RestaurantName = r.Name,
                 ImageUrl = d.ImageUrl,
                 Rating = dbContext.Reviews
-                    .Where(r => r.Dish.Id != null && r.Dish.Id == d.Id)
+                    .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
+                Tags = d.Tags
+                    .Select(t => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                    .ToList(),
             })
             .Where(d => d.Name.Replace(@"\s", "").ToLower().Contains(query.SearchPhrase.Replace(@"\s", "").ToLower()))
             .Skip(query.PageCount * query.PageSize)

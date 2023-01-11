@@ -30,6 +30,25 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
             .WithCode(AddReview.ErrorCodes.RestaurantWithSpecifiedIdDoesNotExist)
             .WithMessage("Restaurant with specified Id does not exist.");
 
+        RuleFor(x => x)
+            .MustAsync(async (cmd, ct) =>
+            {
+                if (cmd.Command.DishId != null)
+                {
+                    return !(await dbContext.Reviews
+                        .AnyAsync(r => r.User.Id == cmd.Context.UserId
+                            && r.User.Id == cmd.Command.DishId));
+                }
+                else
+                {
+                    return !(await dbContext.Reviews
+                        .AnyAsync(r => r.User.Id == cmd.Context.UserId
+                            && r.User.Id == cmd.Command.RestaurantId));
+                }
+            })
+            .WithCode(AddReview.ErrorCodes.UserAlreadyRated)
+            .WithMessage("This has already been rated.");
+
         RuleFor(x => x.Command.DishId)
             .MustAsync(async (dishId, ct) => 
             {
@@ -63,9 +82,16 @@ public class AddReviewCH : CommandHandler<AddReview>
     private readonly Repository<Dish> dishes;
     private readonly Repository<Restaurant> restaurants;
 
-    public AddReviewCH(Repository<Review> reviews)
+    public AddReviewCH(
+        Repository<Review> reviews,
+        Repository<User> users,
+        Repository<Dish> dishes,
+        Repository<Restaurant> restaurants)
     {
         this.reviews = reviews;
+        this.users = users;
+        this.dishes = dishes;
+        this.restaurants = restaurants;
     }
 
     public override async Task HandleAsync(AddReview command, CoreContext context)
@@ -73,6 +99,7 @@ public class AddReviewCH : CommandHandler<AddReview>
         var user = await users.FindAndEnsureExistsAsync(context.UserId);
         var restaurant = await restaurants.FindAndEnsureExistsAsync(command.RestaurantId);
         var dish = command.DishId != null ? await dishes.FindAsync(command.DishId.Value) : null;
+
         var review = Review.Create(
             user,
             restaurant,

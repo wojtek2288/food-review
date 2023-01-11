@@ -30,7 +30,12 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                 r => r.Restaurant.Id,
                 res => res.Id,
                 (r, res) => new { Review = r, Restaurant = res })
-            .LeftJoin(dbContext.Dishes, r => r.Review.Dish.Id, d => d.Id, (r, d) => new UserReviewDTO
+            .LeftJoin(
+                dbContext.Dishes,
+                r => r.Review.Dish == null
+                    ? null
+                    : r.Review.Dish.Id,
+                d => (Guid?)d.Id, (r, d) => new UserReviewDTO
             {
                 restaurantReview = d == null
                 ? new RestaurantSummaryDTO
@@ -39,6 +44,14 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                     Name = r.Restaurant.Name,
                     ImageUrl = r.Restaurant.ImageUrl,
                     Rating = r.Review.Rating,
+                    Tags = r.Restaurant.Tags
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
                 dishReview = d != null
@@ -49,6 +62,14 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
                     RestaurantName = r.Restaurant.Name,
                     ImageUrl = d.ImageUrl,
                     Rating = r.Review.Rating,
+                    Tags = d.Tags
+                        .Select(t => new TagDTO
+                        {
+                            Id = t.Id,
+                            Name = t.Name,
+                            ColorHex = t.ColorHex,
+                        })
+                        .ToList(),
                 }
                 : null,
             })

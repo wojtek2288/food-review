@@ -5,8 +5,8 @@ namespace FoodReview.Core.Domain;
 public class Review : IAggregateRoot
 {
     public Guid Id { get; private init; }
-    public User User { get; private set; }
-    public Restaurant Restaurant { get; private set; }
+    public User User { get; private set; } = default!;
+    public Restaurant Restaurant { get; private set; } = default!;
     public Dish? Dish { get; private set; }
     public string Description { get; private set; } = default!;
     public double Rating { get; private set; }

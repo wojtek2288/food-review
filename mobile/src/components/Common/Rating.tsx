@@ -38,7 +38,7 @@ const getRatingColor = (rating: number | null): string => {
 
 const styles = (color: string) => StyleSheet.create({
     ratingContainer: {
-        width: '80 %',
+        width: '100 %',
         aspectRatio: 1,
         backgroundColor: color,
         alignItems: 'center',

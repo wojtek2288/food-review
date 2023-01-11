@@ -2,6 +2,7 @@ import { Card } from '@ui-kitten/components';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import { Rating } from '../Common/Rating';
 import Restaurant from '../../responseTypes/Restaurant';
+import { TagCard } from '../Common/TagCard';
 
 interface RestaurantCardProps {
   restaurant: Restaurant;
@@ -35,6 +36,13 @@ export const RestaurantCard: React.FC<RestaurantCardProps> = ({
             <Rating rating={restaurant.rating} />
           </View>
         </View>
+        {restaurant.tags.length > 0
+          ? <View style={styles.tagsContainer}>
+            {restaurant.tags.map((tag) => (
+              <TagCard key={tag.id} tag={tag} />
+            ))}
+          </View>
+          : null}
       </Card>
     </View>
   );
@@ -76,5 +84,11 @@ const styles = StyleSheet.create({
     width: '100 %',
     aspectRatio: 1,
     borderRadius: 10,
+  },
+  tagsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '3 %',
+    flexWrap: 'wrap',
   },
 });

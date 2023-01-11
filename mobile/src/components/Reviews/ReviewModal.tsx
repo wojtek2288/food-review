@@ -17,13 +17,17 @@ interface ReviewModalProps {
   onClose: (value: React.SetStateAction<boolean>) => void;
   onReviewAdd: (description: string, rating: number) => void;
   isLoading: boolean;
+  description: string | null;
+  rating: number | null;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading }) => {
+export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading, description, rating }) => {
   const textLimit = 500;
-  const [label, setLabel] = useState(`Review 0/${textLimit}`);
-  const [text, setText] = useState('');
-  const [sliderValue, setSliderValie] = useState(5.5);
+  const textCount = description !== null ? description.length : '0';
+  const initRating = rating !== null ? rating : 5.5;
+  const [label, setLabel] = useState(`Review ${textCount}/${textLimit}`);
+  const [text, setText] = useState(description !== null ? description : '');
+  const [sliderValue, setSliderValie] = useState(initRating);
 
   return (
     <Modal

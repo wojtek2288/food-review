@@ -8,7 +8,7 @@ public class AddReview : CommandBase<AddReview>
 {
     public Guid RestaurantId { get; set; }
     public Guid? DishId { get; set; }
-    public string? Description { get; set; } = default!;
+    public string Description { get; set; } = default!;
     public double Rating { get; set; }
 
     public static class ErrorCodes
@@ -17,5 +17,6 @@ public class AddReview : CommandBase<AddReview>
         public const int DishWithSpecifiedIdDoesNotExist = 2;
         public const int DescriptionTooLong = 3;
         public const int RatingIsInvalid = 4;
+        public const int UserAlreadyRated = 5;
     }
 }

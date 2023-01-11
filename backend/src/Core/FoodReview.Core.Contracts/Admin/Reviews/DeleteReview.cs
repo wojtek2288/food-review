@@ -6,7 +6,7 @@ namespace FoodReview.Core.Contracts.Admin.Reviews;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class DeleteReview : CommandBase<DeleteReview>
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     public static class ErrorCodes
     {

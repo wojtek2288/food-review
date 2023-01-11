@@ -1,29 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Dimensions,
     Keyboard,
     StyleSheet,
     TouchableOpacity,
     View,
+    Text,
 } from 'react-native';
-import { Button, Input, Modal, Spinner } from '@ui-kitten/components';
-import Colors from '../../constants/Colors';
+import { Button, Modal, Spinner } from '@ui-kitten/components';
 import { AntDesign } from '@expo/vector-icons';
 import { TouchableWithoutFeedback } from '@ui-kitten/components/devsupport';
 
-interface EditDescriptionModalModalProps {
+interface DeleteReviewConfirmationModalProps {
     onClose: (value: React.SetStateAction<boolean>) => void;
-    onDescriptionEdited: (description: string) => void;
+    onReviewDelete: () => void;
     isLoading: boolean;
-    description: string | null;
 }
 
-export const EditDescriptionModal: React.FC<EditDescriptionModalModalProps> = ({ onClose, isLoading, onDescriptionEdited, description }) => {
-    const textLimit = 500;
-    const textCount = description == null ? '0' : description.length.toString();
-    const [label, setLabel] = useState(`Review ${textCount}/${textLimit}`);
-    const [text, setText] = useState(description == null ? '' : description);
-
+export const DeleteReviewConfirmation: React.FC<DeleteReviewConfirmationModalProps> = ({ onClose, onReviewDelete, isLoading }) => {
     return (
         <Modal
             visible={true}
@@ -37,25 +31,20 @@ export const EditDescriptionModal: React.FC<EditDescriptionModalModalProps> = ({
                         <AntDesign name='close' size={30} color='black' />
                     </TouchableOpacity>
                 </View>
-                <Input
-                    multiline={true}
-                    textStyle={{ height: Dimensions.get('window').height * 0.20 }}
-                    placeholder='Description'
-                    label={label}
-                    scrollEnabled={true}
-                    onChangeText={(text) => {
-                        if (text.length <= textLimit) {
-                            setText(text);
-                            setLabel(`Description ${text.length}/${textLimit}`);
-                        }
-                    }}
-                    value={text}
-                />
-                {isLoading
-                    ? <View style={styles.spinnerContainer}><Spinner status='warning' /></View>
-                    : <Button onPress={() => onDescriptionEdited(text)} style={styles.button}>
-                        Edit
-                    </Button>}
+                <View style={styles.textContainer}>
+                    <Text style={styles.textConfirmation}>Are you sure you want to delete this review ?</Text>
+                </View>
+                <View style={styles.buttonsContainer}>
+                    {isLoading
+                        ? <Spinner status='warning' />
+                        :
+                        <>
+                            <Button onPress={() => onReviewDelete()} style={styles.deleteButton}>
+                                Delete
+                            </Button>
+                            <Button onPress={() => onClose(false)} style={styles.cancelButton}>Cancel</Button>
+                        </>}
+                </View>
             </TouchableWithoutFeedback>
         </Modal>
     );
@@ -77,11 +66,21 @@ const styles = StyleSheet.create({
         padding: 20,
         flex: 1,
     },
-    button: {
-        backgroundColor: Colors.background,
-        borderColor: Colors.background,
+    spinnerContainer: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    cancelButton: {
         borderRadius: 10,
         marginTop: 20,
+    },
+    deleteButton: {
+        backgroundColor: 'red',
+        borderColor: 'red',
+        borderRadius: 10,
+        marginTop: 20,
+        marginRight: 20,
     },
     close: {
         flex: 1,
@@ -97,9 +96,20 @@ const styles = StyleSheet.create({
     backdrop: {
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
-    spinnerContainer: {
-        flex: 1,
-        alignItems: 'center',
+    buttonsContainer: {
+        flexDirection: 'row',
         justifyContent: 'center',
     },
+    textConfirmation: {
+        fontWeight: '600',
+        fontSize: 20,
+        textAlign: 'center'
+    },
+    textContainer: {
+        flex: 1,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        width: '80 %',
+        marginBottom: '5 %',
+    }
 });

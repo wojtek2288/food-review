@@ -11,10 +11,10 @@ import Colors from '../constants/Colors';
 import { DishCard } from '../components/Dishes/DishCard';
 import { defaultPageSize } from '../constants/Pagination';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
-import UserReviewResponse from '../responseTypes/UserReviewResponse';
 import { useUserDetailsQuery, useUserReviewsQuery } from '../api/services';
 import { Spinner } from '@ui-kitten/components';
 import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
+import UserReviewResponse from '../responseTypes/UserReviewResponse';
 
 export default function UserDetailsScreen({
   route,
@@ -109,7 +109,8 @@ export default function UserDetailsScreen({
             data={reviews}
             renderItem={(review) => (
               <View style={styles.card}>
-                {review.item.dishReview !== null ? <DishCard dish={review.item.dishReview} navigation={navigation} />
+                {review.item.dishReview !== null
+                  ? <DishCard dish={review.item.dishReview} navigation={navigation} />
                   : <RestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} />}
               </View>
             )}

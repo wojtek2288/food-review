@@ -34,6 +34,14 @@ public class RestaurantDishesQH : QueryHandler<RestaurantDishes, PaginatedResult
                 Rating = dbContext.Reviews
                     .Where(r => r.Dish != null && r.Dish.Id == d.Id)
                     .Average(r => r.Rating),
+                Tags = d.Tags
+                    .Select(t => new TagDTO
+                    {
+                        Id = t.Id,
+                        Name = t.Name,
+                        ColorHex = t.ColorHex,
+                    })
+                    .ToList(),
             })
             .OrderBy(d => d.Name)
             .Skip(query.PageCount * query.PageSize)

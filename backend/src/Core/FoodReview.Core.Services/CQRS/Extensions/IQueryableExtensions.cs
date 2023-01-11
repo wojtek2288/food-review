@@ -76,4 +76,12 @@ public static class IQueryableExtensions
         return sortDirection is "asc" ? list.OrderBy(x => descriptor.GetValue(x)) 
             : list.OrderByDescending(x => descriptor.GetValue((x)));
     }
+
+    public static IQueryable<T> ConditionalWhere<T>(
+        this IQueryable<T> queryable, Expression<Func<T, bool>> predicate, bool condition)
+    {
+        return condition
+            ? queryable.Where(predicate)
+            : queryable;
+    }
 }

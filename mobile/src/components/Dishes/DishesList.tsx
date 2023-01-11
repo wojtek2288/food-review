@@ -5,7 +5,7 @@ import Dish from '../../responseTypes/Dish';
 import { DishCard } from './DishCard';
 
 interface DishesListProps {
-  headerText?: string;
+  headerComponent?: React.ComponentType<any>;
   dishes: Dish[];
   onEndReached?: () => void;
   isLoading: boolean;
@@ -13,7 +13,7 @@ interface DishesListProps {
 }
 
 export const DishesList: React.FC<DishesListProps> = ({
-  headerText,
+  headerComponent,
   dishes,
   onEndReached,
   isLoading,
@@ -21,26 +21,23 @@ export const DishesList: React.FC<DishesListProps> = ({
 }) => {
   return (
     <View style={styles.dishesContainer}>
-      {isLoading ? (
-        <Spinner status='warning' />
-      ) : (
-        <FlatList
-          ListHeaderComponent={() =>
-            headerText == null ? null : (
-              <Text style={styles.headerText}>{headerText}</Text>
-            )
-          }
-          data={dishes}
-          renderItem={(dish) => {
-            return <DishCard dish={dish.item} navigation={navigation} />;
-          }}
-          keyExtractor={(item, _) => {
-            return item.id.toString();
-          }}
-          showsVerticalScrollIndicator={false}
-          onEndReached={onEndReached}
-        />
-      )}
+      <FlatList
+        ListHeaderComponent={headerComponent}
+        data={dishes}
+        renderItem={(dish) => {
+          return <DishCard dish={dish.item} navigation={navigation} />;
+        }}
+        keyExtractor={(item, _) => {
+          return item.id.toString();
+        }}
+        showsVerticalScrollIndicator={false}
+        onEndReached={onEndReached}
+        ListFooterComponent={() => isLoading
+          ? <View style={styles.container}>
+            <Spinner status='warning' />
+          </View>
+          : null}
+      />
     </View>
   );
 };
@@ -57,4 +54,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginTop: '5 %',
   },
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  }
 });

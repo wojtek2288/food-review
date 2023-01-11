@@ -4,9 +4,9 @@
     "FoodReview.Api": {
       "commandName": "Project",
       "environmentVariables": {
-        "SQL_CONNECTION_STRING": "Server=localhost;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false",
-        "ASPNETCORE_URLS": "http://+:8080",
-        "API_DOMAIN": "localhost:8080"
+        "SQL_CONNECTION_STRING": "Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false",
+        "ASPNETCORE_URLS": "http://+:8000",
+        "API_DOMAIN": "localhost:8000"
       }
     }
   }
