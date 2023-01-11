@@ -5,7 +5,7 @@ using ReviewDTO = FoodReview.Core.Contracts.Admin.DTO.Admin.ReviewDTO;
 
 namespace FoodReview.Core.Contracts.Admin.Reviews;
 
-[AllowAnonymous]
+[Authorize(Roles = Auth.Roles.Admin)]
 public class SearchReviews: QueryBase<SearchReviews, PaginatedResult<ReviewDTO>>
 {
     public string? SortingField { get; set; }

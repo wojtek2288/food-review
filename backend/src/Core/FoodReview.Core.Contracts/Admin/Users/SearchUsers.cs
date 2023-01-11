@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Users;
 
-[Authorize(Roles = Auth.Roles.User)]
+[Authorize(Roles = Auth.Roles.Admin)]
 public class SearchUsers: QueryBase<SearchUsers, PaginatedResult<UserDTO>>
 {
     public string? SortingField { get; set; }

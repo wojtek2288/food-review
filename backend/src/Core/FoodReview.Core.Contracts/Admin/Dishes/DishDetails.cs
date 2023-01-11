@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace FoodReview.Core.Contracts.Admin.Dishes;
 
-[AllowAnonymous]
+[Authorize(Roles = Auth.Roles.Admin)]
 public class DishDetails: QueryBase<DishDetails, DishDetailsDTO>
 {
     public string Id { get; set; }
