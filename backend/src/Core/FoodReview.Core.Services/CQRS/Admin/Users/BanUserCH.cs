@@ -40,9 +40,10 @@ public class BanUserCH : CommandHandler<BanUser>
     private readonly UserManager<AuthUser> userManager;
     private readonly Repository<User> users;
 
-    public BanUserCH(Repository<User> users)
+    public BanUserCH(Repository<User> users, UserManager<AuthUser> userManager)
     {
         this.users = users;
+        this.userManager = userManager;
     }
 
     public override async Task HandleAsync(BanUser command, CoreContext context)
@@ -52,7 +53,10 @@ public class BanUserCH : CommandHandler<BanUser>
 
         user.Ban();
         await users.SaveChangesAsync();
-        authUser.LockoutEnd = DateTimeOffset.MaxValue;
-        await userManager.UpdateAsync(authUser);
+        if (authUser != null)
+        {
+            authUser.LockoutEnd = DateTimeOffset.MaxValue;
+            await userManager.UpdateAsync(authUser);
+        }
     }
 }
