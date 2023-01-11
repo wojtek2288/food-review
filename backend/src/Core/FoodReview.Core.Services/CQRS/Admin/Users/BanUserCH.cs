@@ -5,8 +5,10 @@ using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
+using FoodReview.Core.Services.DataAccess.Entities;
 using FoodReview.Core.Services.DataAccess.Repositories;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FoodReview.Core.Services.CQRS.Admin.Users;
@@ -35,6 +37,7 @@ public class BanUserCV : AbstractValidator<CommandRequest<BanUser, Unit>>
 
 public class BanUserCH : CommandHandler<BanUser>
 {
+    private readonly UserManager<AuthUser> userManager;
     private readonly Repository<User> users;
 
     public BanUserCH(Repository<User> users)
@@ -45,8 +48,11 @@ public class BanUserCH : CommandHandler<BanUser>
     public override async Task HandleAsync(BanUser command, CoreContext context)
     {
         var user = await users.FindAndEnsureExistsAsync(Guid.Parse(command.Id), context.CancellationToken);
+        var authUser = await userManager.FindByIdAsync(command.Id);
 
         user.Ban();
         await users.SaveChangesAsync();
+        authUser.LockoutEnd = DateTimeOffset.MaxValue;
+        await userManager.UpdateAsync(authUser);
     }
 }
