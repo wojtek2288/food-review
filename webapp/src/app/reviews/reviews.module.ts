@@ -6,15 +6,15 @@ import { ReviewSearchComponent } from './review-search/review-search.component';
 
 
 @NgModule({
-  declarations: [
-    ReviewSearchComponent
-  ],
-  imports: [
-    CommonModule,
-    MainModule
-  ],
-  exports: [
-    ReviewSearchComponent
-  ]
+    declarations: [
+        ReviewSearchComponent
+    ],
+    imports: [
+        CommonModule,
+        MainModule
+    ],
+    exports: [
+        ReviewSearchComponent
+    ]
 })
 export class ReviewsModule { }

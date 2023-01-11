@@ -1,57 +1,65 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject, takeUntil } from 'rxjs';
 import { RestaurantDetails } from 'src/app/api/model/restaurant-details';
 import { Tag } from 'src/app/api/model/tag';
 import { RestaurantApiService } from 'src/app/api/restaurant-api.service';
 
 @Component({
-  selector: 'app-restaurant-details',
-  templateUrl: './restaurant-details.component.html',
-  styleUrls: ['./restaurant-details.component.css']
+    selector: 'app-restaurant-details',
+    templateUrl: './restaurant-details.component.html',
+    styleUrls: ['./restaurant-details.component.css']
 })
-export class RestaurantDetailsComponent implements OnInit {
-  isLoading$ = this.restaurantService.isLoading$;
-  restaurantId: string = "";
-  restaurant: RestaurantDetails = {
-    id: this.restaurantId,
-    name: "",
-    description: "",
-    imageUrl: "",
-    isVisible: false,
-    tags: []
-  };
+export class RestaurantDetailsComponent implements OnInit, OnDestroy {
+    isLoading$ = this.restaurantService.isLoading$;
+    private unsubscribe$ = new Subject();
 
-  constructor(private route: ActivatedRoute, private restaurantService: RestaurantApiService) { }
+    restaurantId: string = "";
+    restaurant: RestaurantDetails = {
+        id: this.restaurantId,
+        name: "",
+        description: "",
+        imageUrl: "",
+        isVisible: false,
+        tags: []
+    };
 
-  ngOnInit(): void {
-    this.route.params.subscribe(x => 
-      {
-        this.restaurantId = x['id'];
-        this.getDetails();
-      });
-    this.restaurantService.restaurantDetails$.subscribe(x => this.restaurant = x);
-    this.restaurantService.afterCommandFinished$.subscribe(x => this.getDetails());
-  }
+    constructor(
+        private route: ActivatedRoute,
+        private restaurantService: RestaurantApiService) { }
 
-  getDetails(): void {
-    this.restaurantService.getRestaurantDetails(this.restaurantId);
-  }
+    ngOnInit(): void {
+        this.route.params.subscribe(x => {
+            this.restaurantId = x['id'];
+            this.getDetails();
+        });
+        this.restaurantService.restaurantDetails$.pipe(takeUntil(this.unsubscribe$)).subscribe(x => this.restaurant = x);
+        this.restaurantService.afterCommandFinished$.pipe(takeUntil(this.unsubscribe$)).subscribe(x => this.getDetails());
+    }
 
-  get visibility(): string {
-    return this.restaurant.isVisible ? "Visible" : "Hidden";
-  }
+    ngOnDestroy(): void {
+        this.unsubscribe$.next(null);
+        this.unsubscribe$.complete();
+    }
 
-  onToggleVisibility(): void {
-    this.restaurantService.toggleRestaurantVisibility(this.restaurantId);
-  }
+    getDetails(): void {
+        this.restaurantService.getRestaurantDetails(this.restaurantId);
+    }
 
-  onEdit(): void {
-    this.restaurantService.editRestaurant(this.restaurant);
-  }
+    get visibility(): string {
+        return this.restaurant.isVisible ? "Visible" : "Hidden";
+    }
 
-  onDelete(): void {
-    this.restaurantService.deleteRestaurant(this.restaurantId);
-  }
+    onToggleVisibility(): void {
+        this.restaurantService.toggleRestaurantVisibility(this.restaurantId);
+    }
+
+    onEdit(): void {
+        this.restaurantService.editRestaurant(this.restaurant);
+    }
+
+    onDelete(): void {
+        this.restaurantService.deleteRestaurant(this.restaurantId);
+    }
 }

@@ -25,13 +25,17 @@ export class RestaurantApiService {
     private afterCommandFinishedSubject = new Subject<void>();
     public afterCommandFinished$ = this.afterCommandFinishedSubject.asObservable();
 
-    constructor(private apiService: ApiService, private authService: AuthService, private dialog: MatDialog, private snackBar: MatSnackBar, private router: Router) {}
+    constructor(
+        private apiService: ApiService,
+        private authService: AuthService,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private router: Router) {
+    }
 
-    public getRestaurants(criteria: PaginatedQueryCriteria)
-    {
+    public getRestaurants(criteria: PaginatedQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getRestaurants(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => 
-        {
+        this.apiService.getRestaurants(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.restaurantsSubject.next(x);
             this.isLoadingSubject.next(false);
         });
@@ -40,80 +44,76 @@ export class RestaurantApiService {
     public getRestaurantDetails(id: string): void {
         this.isLoadingSubject.next(true);
         this.apiService.getRestaurantDetails({
-          id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-          {
+            id: id
+        }, this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.restaurantDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
-          }, x => {
-          //this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000});
-          //this.router.navigate(['']);
+        }, x => {
+            this.snackBar.open("Restaurant with specified Id does not exist", "", { duration: 3000 });
+            this.router.navigate(['']);
         });
     }
 
     public addRestaurant(): void {
-      const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
-        data: {
-          name: "",
-          description: "",
-          imageUrl: ""
-        },
-        width: "500px"
-      });
-      dialogRef.afterClosed().subscribe(x => {
-        if (x)
-        {
-          this.isLoadingSubject.next(true);
-          this.apiService.addRestaurant(x, this.authService.loggedInUser?.access_token!).subscribe(
-            _ => {
-              this.snackBar.open("Successfuly added restaurant", "", {duration: 3000});
-              this.afterCommandFinishedSubject.next();
+        const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
+            data: {
+                name: "",
+                description: "",
+                imageUrl: ""
             },
-            x => this.snackBar.open("Adding restaurant did not succeed", "", {duration: 3000})
-          );
-        }
-      });
+            width: "500px"
+        });
+        dialogRef.afterClosed().subscribe(x => {
+            if (x) {
+                this.isLoadingSubject.next(true);
+                this.apiService.addRestaurant(x, this.authService.loggedInUser?.access_token!).subscribe(
+                    _ => {
+                        this.snackBar.open("Successfuly added restaurant", "", { duration: 3000 });
+                        this.afterCommandFinishedSubject.next();
+                    },
+                    x => this.snackBar.open("Adding restaurant did not succeed", "", { duration: 3000 })
+                );
+            }
+        });
     }
 
     public editRestaurant(data: Restaurant): void {
-      const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
-        data: {...data},
-        width: "500px"
-      });
-      dialogRef.afterClosed().subscribe(x => {
-        if (x)
-        {
-          this.isLoadingSubject.next(true);
-          this.apiService.editRestaurant(Object.assign({
-            id: data.id
-          }, x), this.authService.loggedInUser?.access_token!).subscribe(
-            _ => {
-              this.snackBar.open("Successfuly edited restaurant", "", {duration: 3000});
-              this.afterCommandFinishedSubject.next();
-            },
-            x => this.snackBar.open("Editing restaurant was not successful", "", {duration: 3000})
-          );
-        }
-      });
+        const dialogRef = this.dialog.open(EditRestaurantDetailsDialogComponent, {
+            data: { ...data },
+            width: "500px"
+        });
+        dialogRef.afterClosed().subscribe(x => {
+            if (x) {
+                this.isLoadingSubject.next(true);
+                this.apiService.editRestaurant(Object.assign({
+                    id: data.id
+                }, x), this.authService.loggedInUser?.access_token!).subscribe(
+                    _ => {
+                        this.snackBar.open("Successfuly edited restaurant", "", { duration: 3000 });
+                        this.afterCommandFinishedSubject.next();
+                    },
+                    x => this.snackBar.open("Editing restaurant was not successful", "", { duration: 3000 })
+                );
+            }
+        });
     }
-    
+
     public deleteRestaurant(id: string): void {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent);
         dialogRef.afterClosed().subscribe(x => {
-          if (x)
-          {
-            this.isLoadingSubject.next(true);
-            this.apiService.deleteRestaurant({
-              id: id
-            }, this.authService.loggedInUser?.access_token!).subscribe(
-              _ => {
-                this.snackBar.open("Successfuly deleted restaurant", "", {duration: 3000});
-                this.afterCommandFinishedSubject.next();
-                this.router.navigate(['']);
-              },
-              x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-            );
-          }
+            if (x) {
+                this.isLoadingSubject.next(true);
+                this.apiService.deleteRestaurant({
+                    id: id
+                }, this.authService.loggedInUser?.access_token!).subscribe(
+                    _ => {
+                        this.snackBar.open("Successfuly deleted restaurant", "", { duration: 3000 });
+                        this.afterCommandFinishedSubject.next();
+                        this.router.navigate(['']);
+                    },
+                    x => this.snackBar.open("Restaurant with specified Id does not exist", "", { duration: 3000 })
+                );
+            }
         });
     }
 
@@ -122,11 +122,11 @@ export class RestaurantApiService {
         this.apiService.toggleRestaurantVisibility({
             id: id
         }, this.authService.loggedInUser?.access_token!).subscribe(
-        _ => {
-          this.snackBar.open("Successfuly changed visibility", "", {duration: 3000});
-          this.afterCommandFinishedSubject.next();
-        },
-        x => this.snackBar.open("Restaurant with specified Id does not exist", "", {duration: 3000})
-      );
+            _ => {
+                this.snackBar.open("Successfuly changed visibility", "", { duration: 3000 });
+                this.afterCommandFinishedSubject.next();
+            },
+            x => this.snackBar.open("Restaurant with specified Id does not exist", "", { duration: 3000 })
+        );
     }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatToolbarModule } from "@angular/material/toolbar";
-import {MatButtonModule} from "@angular/material/button"
+import { MatButtonModule } from "@angular/material/button"
 import { NavbarComponent } from './navbar/navbar.component';
 import { MatIconModule } from "@angular/material/icon";
 import { RouterModule } from '@angular/router';
@@ -30,64 +30,64 @@ import { EditDishDetailsDialogComponent } from './edit-dish-details-dialog/edit-
 
 
 @NgModule({
-  declarations: [
-    NavbarComponent,
-    BaseSearchComponent,
-    LoginComponent,
-    NotFoundComponent,
-    ConfirmationDialogComponent,
-    EditRestaurantDetailsDialogComponent,
-    EditDishDetailsDialogComponent
-  ],
-  imports: [
-    CommonModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSortModule,
-    ReactiveFormsModule,
-    RouterModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatDividerModule,
-    MatTabsModule,
-    MatDialogModule,
-    MatMenuModule,
-    FormsModule,
-    MatSelectModule
-  ],
-  exports: [
-    NavbarComponent,
-    BaseSearchComponent,
-    LoginComponent,
-    NotFoundComponent,
-    MatToolbarModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    MatSortModule,
-    MatInputModule,
-    MatProgressSpinnerModule,
-    ReactiveFormsModule,
-    MatDividerModule,
-    MatTabsModule,
-    RouterModule,
-    MatDialogModule,
-    MatMenuModule,
-    FormsModule,
-    MatSelectModule
-  ],
-  providers: [
-    LoggedInGuard,
-    NotLoggedInGuard
-  ]
+    declarations: [
+        NavbarComponent,
+        BaseSearchComponent,
+        LoginComponent,
+        NotFoundComponent,
+        ConfirmationDialogComponent,
+        EditRestaurantDetailsDialogComponent,
+        EditDishDetailsDialogComponent
+    ],
+    imports: [
+        CommonModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSortModule,
+        ReactiveFormsModule,
+        RouterModule,
+        MatSnackBarModule,
+        MatProgressSpinnerModule,
+        MatDividerModule,
+        MatTabsModule,
+        MatDialogModule,
+        MatMenuModule,
+        FormsModule,
+        MatSelectModule
+    ],
+    exports: [
+        NavbarComponent,
+        BaseSearchComponent,
+        LoginComponent,
+        NotFoundComponent,
+        MatToolbarModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatFormFieldModule,
+        MatSortModule,
+        MatInputModule,
+        MatProgressSpinnerModule,
+        ReactiveFormsModule,
+        MatDividerModule,
+        MatTabsModule,
+        RouterModule,
+        MatDialogModule,
+        MatMenuModule,
+        FormsModule,
+        MatSelectModule
+    ],
+    providers: [
+        LoggedInGuard,
+        NotLoggedInGuard
+    ]
 })
 export class MainModule { }

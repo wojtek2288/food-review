@@ -8,18 +8,18 @@ import { ReviewsModule } from '../reviews/reviews.module';
 
 
 @NgModule({
-  declarations: [
-    UserSearchComponent,
-    UserDetailsComponent
-  ],
-  imports: [
-    CommonModule,
-    MainModule,
-    ReviewsModule
-  ],
-  exports: [
-    UserSearchComponent,
-    UserDetailsComponent
-  ]
+    declarations: [
+        UserSearchComponent,
+        UserDetailsComponent
+    ],
+    imports: [
+        CommonModule,
+        MainModule,
+        ReviewsModule
+    ],
+    exports: [
+        UserSearchComponent,
+        UserDetailsComponent
+    ]
 })
 export class UsersModule { }

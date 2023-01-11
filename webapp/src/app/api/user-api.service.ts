@@ -24,13 +24,17 @@ export class UserApiService {
     private afterCommandFinishedSubject = new Subject<void>();
     public afterCommandFinished$ = this.afterCommandFinishedSubject.asObservable();
 
-    constructor(private apiService: ApiService, private authService: AuthService, private dialog: MatDialog, private snackBar: MatSnackBar, private router: Router) {}
+    constructor(
+        private apiService: ApiService,
+        private authService: AuthService,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar,
+        private router: Router) {
+    }
 
-    public getUsers(criteria: PaginatedQueryCriteria)
-    {
+    public getUsers(criteria: PaginatedQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getUsers(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => 
-        {
+        this.apiService.getUsers(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.usersSubject.next(x);
             this.isLoadingSubject.next(false);
         });
@@ -39,34 +43,32 @@ export class UserApiService {
     public getUserDetails(id: string): void {
         this.isLoadingSubject.next(true);
         this.apiService.getUserDetails({
-          id: id
-        }, this.authService.loggedInUser?.access_token!).subscribe(x => 
-          {
+            id: id
+        }, this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.userDetailsSubject.next(x);
             this.isLoadingSubject.next(false);
-          }, x => {
-          this.snackBar.open("User with specified Id does not exist", "", {duration: 3000});
-          this.router.navigate(['']);
+        }, x => {
+            this.snackBar.open("User with specified Id does not exist", "", { duration: 3000 });
+            this.router.navigate(['']);
         });
     }
-    
+
     public banUser(id: string): void {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent);
         dialogRef.afterClosed().subscribe(x => {
-          if (x)
-          {
-            this.isLoadingSubject.next(true);
-            this.apiService.banUser({
-              id: id
-            }, this.authService.loggedInUser?.access_token!).subscribe(
-              _ => {
-                this.snackBar.open("Successfuly banned user", "", {duration: 3000});
-                this.isLoadingSubject.next(false);
-                this.afterCommandFinishedSubject.next();
-              },
-              x => this.snackBar.open("User with specified Id does not exist", "", {duration: 3000})
-            );
-          }
+            if (x) {
+                this.isLoadingSubject.next(true);
+                this.apiService.banUser({
+                    id: id
+                }, this.authService.loggedInUser?.access_token!).subscribe(
+                    _ => {
+                        this.snackBar.open("Successfuly banned user", "", { duration: 3000 });
+                        this.isLoadingSubject.next(false);
+                        this.afterCommandFinishedSubject.next();
+                    },
+                    x => this.snackBar.open("User with specified Id does not exist", "", { duration: 3000 })
+                );
+            }
         });
     }
 }

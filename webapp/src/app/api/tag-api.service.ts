@@ -13,14 +13,14 @@ export class TagApiService {
     private tagsSubject = new Subject<Tag[]>();
     public tags$ = this.tagsSubject.asObservable();
 
-    constructor(private apiService: ApiService, private authService: AuthService) {}
+    constructor(
+        private apiService: ApiService,
+        private authService: AuthService) {
+    }
 
-    public getTags()
-    {
+    public getTags() {
         this.isLoadingSubject.next(true);
-        this.apiService.getTags(this.authService.loggedInUser?.access_token!).subscribe(x => 
-        {
-            console.log(x)
+        this.apiService.getTags(this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.tagsSubject.next(x);
             this.isLoadingSubject.next(false);
         });

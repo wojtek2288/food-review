@@ -7,25 +7,25 @@ import { Router } from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
- })
- export class AuthService {
-     private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-     public isLoading$ = this.isLoadingSubject.asObservable();
-     public loggedInUser: ApiUser | null = null;
-     public isUserLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+})
+export class AuthService {
+    private isLoadingSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public isLoading$ = this.isLoadingSubject.asObservable();
+    public loggedInUser: ApiUser | null = null;
+    public isUserLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-     constructor(private api: ApiService, private router: Router, private snackBar: MatSnackBar)
-     {
-         const user = localStorage.getItem('apiUser');
-         if (user)
-         {
-             this.loggedInUser = JSON.parse(user);
-             this.isUserLoggedIn$.next(true);
-         }
-     }
+    constructor(
+        private api: ApiService,
+        private router: Router,
+        private snackBar: MatSnackBar) {
+        const user = localStorage.getItem('apiUser');
+        if (user) {
+            this.loggedInUser = JSON.parse(user);
+            this.isUserLoggedIn$.next(true);
+        }
+    }
 
-     login(username: string, password: string): void
-     {
+    login(username: string, password: string): void {
         this.isLoadingSubject.next(true);
         this.api.loginAdmin(username, password).subscribe(response => {
             this.loggedInUser = response;
@@ -33,18 +33,17 @@ import { Router } from "@angular/router";
             this.isUserLoggedIn$.next(true);
             this.isLoadingSubject.next(false);
         },
-        () => {
-            this.snackBar.open("Login failed", "", {duration: 3000});
-            this.isLoadingSubject.next(false);
-        },
-        () => this.router.navigate(['/restaurants']));
-     }
+            () => {
+                this.snackBar.open("Login failed", "", { duration: 3000 });
+                this.isLoadingSubject.next(false);
+            },
+            () => this.router.navigate(['/restaurants']));
+    }
 
-     logout(): void 
-     {
-         localStorage.clear();
-         this.loggedInUser = null;
-         this.isUserLoggedIn$.next(false);
-         this.router.navigate(['/login']);
-     }
- }
+    logout(): void {
+        localStorage.clear();
+        this.loggedInUser = null;
+        this.isUserLoggedIn$.next(false);
+        this.router.navigate(['/login']);
+    }
+}

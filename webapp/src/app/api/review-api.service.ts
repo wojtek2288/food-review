@@ -21,34 +21,36 @@ export class ReviewApiService {
     private afterCommandFinishedSubject = new Subject<void>();
     public afterCommandFinished$ = this.afterCommandFinishedSubject.asObservable();
 
-    constructor(private apiService: ApiService, private authService: AuthService, private dialog: MatDialog, private snackBar: MatSnackBar, private router: Router) {}
+    constructor(
+        private apiService: ApiService,
+        private authService: AuthService,
+        private dialog: MatDialog,
+        private snackBar: MatSnackBar) {
+    }
 
-    public getReviews(criteria: ReviewQueryCriteria)
-    {
+    public getReviews(criteria: ReviewQueryCriteria) {
         this.isLoadingSubject.next(true);
-        this.apiService.getReviews(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => 
-        {
+        this.apiService.getReviews(criteria, this.authService.loggedInUser?.access_token!).subscribe(x => {
             this.reviewsSubject.next(x);
             this.isLoadingSubject.next(false);
         });
     }
-    
+
     public deleteReview(id: string): void {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent);
         dialogRef.afterClosed().subscribe(x => {
-          if (x)
-          {
-            this.isLoadingSubject.next(true);
-            this.apiService.deleteReview({
-              id: id
-            }, this.authService.loggedInUser?.access_token!).subscribe(
-              _ => {
-                this.snackBar.open("Successfuly deleted review", "", {duration: 3000});
-                this.afterCommandFinishedSubject.next();
-              },
-              x => this.snackBar.open("Review with specified Id does not exist", "", {duration: 3000})
-            );
-          }
+            if (x) {
+                this.isLoadingSubject.next(true);
+                this.apiService.deleteReview({
+                    id: id
+                }, this.authService.loggedInUser?.access_token!).subscribe(
+                    _ => {
+                        this.snackBar.open("Successfuly deleted review", "", { duration: 3000 });
+                        this.afterCommandFinishedSubject.next();
+                    },
+                    x => this.snackBar.open("Review with specified Id does not exist", "", { duration: 3000 })
+                );
+            }
         });
     }
 }

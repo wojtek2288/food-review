@@ -7,19 +7,19 @@ import { DishesModule } from '../dishes/dishes.module';
 import { ReviewsModule } from '../reviews/reviews.module';
 
 @NgModule({
-  declarations: [
-    RestaurantSearchComponent,
-    RestaurantDetailsComponent
-  ],
-  imports: [
-    CommonModule,
-    MainModule,
-    DishesModule,
-    ReviewsModule
-  ],
-  exports: [
-    RestaurantSearchComponent,
-    RestaurantDetailsComponent
-  ]
+    declarations: [
+        RestaurantSearchComponent,
+        RestaurantDetailsComponent
+    ],
+    imports: [
+        CommonModule,
+        MainModule,
+        DishesModule,
+        ReviewsModule
+    ],
+    exports: [
+        RestaurantSearchComponent,
+        RestaurantDetailsComponent
+    ]
 })
 export class RestaurantsModule { }

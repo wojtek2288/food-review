@@ -24,6 +24,7 @@ export class BaseSearchComponent<T> implements AfterViewInit {
   totalItems: number = 0;
   isLoading$: Observable<boolean> = of(true);
   searchFormControl = new FormControl('');
+  
   constructor() { }
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
