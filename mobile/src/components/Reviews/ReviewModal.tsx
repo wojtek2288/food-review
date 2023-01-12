@@ -20,7 +20,7 @@ interface ReviewModalProps {
   isLoading: boolean;
   description: string | null;
   rating: number | null;
-  displayError: boolean;
+  displayError?: boolean;
 }
 
 export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading, description, rating, displayError }) => {

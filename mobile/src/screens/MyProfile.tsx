@@ -15,6 +15,7 @@ import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
 import { MyProfileDishCard } from '../components/Dishes/MyProfileDishCard';
 import { MyProfileRestaurantCard } from '../components/Restaurants/MyProfileRestaurantCard';
+import { DeleteAccountConfirmation } from '../components/Users/DeleteAccountConfirmation';
 
 export default function MyProfile({
   navigation,
@@ -22,6 +23,7 @@ export default function MyProfile({
   const [token, setToken] = useState('');
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
+  const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
@@ -59,6 +61,13 @@ export default function MyProfile({
       detailsRun(detailsReq, token);
       reviewsRun(reviewsReq, token);
     }
+  }
+
+  const removeTokens = async () => {
+    await SecureStore.deleteItemAsync('refreshToken');
+    await SecureStore.deleteItemAsync('accessToken');
+    await SecureStore.deleteItemAsync('accessTokenExpiration');
+    navigation.replace('Profile');
   }
 
   useEffect(() => {
@@ -106,6 +115,12 @@ export default function MyProfile({
     }
   }, [refreshReviews]);
 
+  useEffect(() => {
+    if (deleteMyAccountRequestSuccessful === true) {
+      removeTokens();
+    }
+  }, [deleteMyAccountRequestSuccessful])
+
   const onEndReached = () => {
     if (currentPage * defaultPageSize >= totalCount || currentPage == 0 || areReviewsLoading) {
       return;
@@ -115,6 +130,10 @@ export default function MyProfile({
 
   const onDescriptionEdited = (description: string) => {
     editMyDescriptionRun({ description }, token);
+  }
+
+  const onAccountDeleted = () => {
+    deleteMyAccountRun({}, token);
   }
 
   return (
@@ -133,6 +152,12 @@ export default function MyProfile({
                   isLoading={editMyDescriptionLoading}
                   onDescriptionEdited={onDescriptionEdited}
                   description={user.description} />
+              ) : null}
+              {deleteAccountModalVisible ? (
+                <DeleteAccountConfirmation
+                  onClose={setDeleteAccountModalVisible}
+                  isLoading={deleteMyAccountLoading}
+                  onAccountDelete={onAccountDeleted} />
               ) : null}
               <View style={styles.container}>
                 <View style={styles.profile}>
@@ -166,18 +191,31 @@ export default function MyProfile({
                         placement='bottom end'
                         style={styles.popover}
                         onBackdropPress={() => setPopoverVisible(false)}>
-                        <View style={styles.signOutContainer}>
-                          <Pressable onPress={async () => {
-                            await SecureStore.deleteItemAsync('refreshToken');
-                            await SecureStore.deleteItemAsync('accessToken');
-                            await SecureStore.deleteItemAsync('accessTokenExpiration');
-                            navigation.replace('Profile');
-                          }}>
-                            <Text style={styles.signOutText}>
-                              Sign Out
-                            </Text>
-                          </Pressable>
-                        </View>
+                        <>
+                          <View style={styles.signOutContainer}>
+                            <Pressable onPress={async () => {
+                              await SecureStore.deleteItemAsync('refreshToken');
+                              await SecureStore.deleteItemAsync('accessToken');
+                              await SecureStore.deleteItemAsync('accessTokenExpiration');
+                              navigation.replace('Profile');
+                            }}>
+                              <Text style={styles.signOutText}>
+                                Sign Out
+                              </Text>
+                            </Pressable>
+                          </View>
+                          <View style={styles.deleteAccountContainer}>
+                            <Pressable onPress={() => {
+                              setPopoverVisible(false);
+                              setDeleteAccountModalVisible(true)
+                            }}>
+                              <Text style={styles.signOutText}>
+                                Delete my account
+                              </Text>
+                            </Pressable>
+                          </View>
+                        </>
+
                       </Popover>
                     </View>
                   </View>
@@ -301,12 +339,19 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   popover: {
-    borderWidth: 0,
+    padding: 20,
+    borderRadius: 10,
   },
   signOutContainer: {
     marginTop: 10,
-    padding: '10 %',
+    padding: 10,
     backgroundColor: Colors.background,
+    borderRadius: 20,
+  },
+  deleteAccountContainer: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: 'red',
     borderRadius: 20,
   },
   signOutText: {
