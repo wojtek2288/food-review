@@ -20,6 +20,7 @@ public class RestaurantDetailsQH : QueryHandler<RestaurantDetails, RestaurantDet
     {
         return dbContext.Restaurants
             .Include(x => x.Tags)
+            .Where(r => r.IsVisible)
             .Where(r => r.Id == query.RestaurantId)
             .Select(r => new RestaurantDetailsDTO
             {
