@@ -31,7 +31,18 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
             .Where(x => string.IsNullOrEmpty(query.RestaurantId) || x.Restaurant.Id.ToString() == query.RestaurantId)
             .Where(x => x.Name.Trim().ToLower().Contains(searchPhrase) ||
                         (x.Description != null && x.Description.Trim().ToLower().Contains(searchPhrase)) ||
-                        x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase));
+                        x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase))
+            .Select(x => new
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                RestaurantName = x.Restaurant.Name,
+                RestaurantId = x.Restaurant.Id,
+                ImageUrl = x.ImageUrl,
+                Price = x.Price,
+                Tags = x.Tags
+            });
         
         var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);
 
@@ -45,8 +56,8 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
                 Id = x.Id.ToString(),
                 Name = x.Name,
                 Description = x.Description,
-                RestaurantName = x.Restaurant.Name,
-                RestaurantId = x.Restaurant.Id.ToString(),
+                RestaurantName = x.RestaurantName,
+                RestaurantId = x.RestaurantId.ToString(),
                 ImageUrl = x.ImageUrl,
                 Price = x.Price,
                 Tags = x.Tags.Select(y => new TagDTO

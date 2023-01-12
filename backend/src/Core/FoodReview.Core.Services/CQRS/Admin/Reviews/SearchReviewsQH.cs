@@ -34,7 +34,19 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             .Where(x => x.Description.Trim().ToLower().Contains(searchPhrase) ||
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase) ||
                         x.User.Username.Trim().ToLower().Contains(searchPhrase) ||
-                        (x.Dish != null && x.Dish.Name.Trim().ToLower().Contains(searchPhrase)));
+                        (x.Dish != null && x.Dish.Name.Trim().ToLower().Contains(searchPhrase)))
+            .Select(x => new
+            {
+                Id = x.Id,
+                UserId = x.User.Id,
+                Username = x.User.Username,
+                Description = x.Description,
+                RestaurantName = x.Restaurant.Name,
+                RestaurantId = x.Restaurant.Id,
+                DishId = x.Dish == null ? (Guid?)null : x.Dish.Id,
+                DishName = x.Dish == null ? null : x.Dish.Name,
+                Rating = x.Rating
+            });
         
         var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);
 
@@ -46,12 +58,12 @@ public class SearchReviewsQH : QueryHandler<SearchReviews, PaginatedResult<Revie
             .Select(x => new ReviewDTO
             {
                 Id = x.Id.ToString(),
-                UserId = x.User.Id.ToString(),
-                Username = x.User.Username,
-                RestaurantId = x.Restaurant.Id.ToString(),
-                RestaurantName = x.Restaurant.Name,
-                DishId = x.Dish?.Id.ToString(),
-                DishName = x.Dish?.Name,
+                UserId = x.UserId.ToString(),
+                Username = x.Username,
+                RestaurantId = x.RestaurantId.ToString(),
+                RestaurantName = x.RestaurantName,
+                DishId = x.DishId?.ToString(),
+                DishName = x.DishName,
                 Description = x.Description,
                 Rating = x.Rating
             })
