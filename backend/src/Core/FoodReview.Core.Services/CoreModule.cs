@@ -6,16 +6,19 @@ using ListN.Core.Services.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 using FoodReview.Core.Services.DataAccess.Repositories;
 using FoodReview.Core.Domain;
+using FoodReview.Core.Services.Configuration;
 
 namespace FoodReview.Core.Services;
 
 public class CoreModule : IAppModule
 {
     private readonly string connectionString;
+    private readonly string blobConnectionString;
 
-    public CoreModule(string connectionString)
+    public CoreModule(string connectionString, string blobConnectionString)
     {
         this.connectionString = connectionString;
+        this.blobConnectionString = blobConnectionString;
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -23,6 +26,13 @@ public class CoreModule : IAppModule
         services.AddDbContext<CoreDbContext>(
             opts => opts.UseSqlServer(connectionString),
             ServiceLifetime.Transient);
+
+        services.AddSingleton<BlobStorageConfiguration>(
+            new BlobStorageConfiguration
+            {
+                ConnectionString = blobConnectionString,
+            });
+        services.AddSingleton<BlobStorage>();
 
         services
             .AddIdentity<AuthUser, AuthRole>()

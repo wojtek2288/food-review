@@ -19,6 +19,14 @@ public static class Config
         }
     }
 
+    public static class BlobStorage
+    {
+        public static string ConnectionString(IConfiguration cfg)
+        {
+            return cfg.GetStringFromEnvVariable("blobStorageConnectionString");
+        }
+    }
+
     public static class Services
     {
         public static string[] AllowedOrigins(IConfiguration cfg) =>

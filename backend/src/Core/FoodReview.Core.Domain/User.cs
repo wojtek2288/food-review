@@ -31,6 +31,11 @@ public class User : IAggregateRoot
         Description = description;
     }
 
+    public void EditPhoto(string photoLink)
+    {
+        ImageUrl = photoLink;
+    }
+
     public void Ban()
     {
         IsBanned = true;
