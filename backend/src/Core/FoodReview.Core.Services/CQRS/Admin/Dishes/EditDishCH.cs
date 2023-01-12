@@ -54,6 +54,17 @@ public class EditDishCV : AbstractValidator<CommandRequest<EditDish, Unit>>
             .GreaterThan(0)
             .WithCode(EditDish.ErrorCodes.NegativePrice)
             .WithMessage("Price cannot be negative or zero");
+        
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) =>
+            {
+                var tagsFound = x.Command.Tags.Distinct()
+                    .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);
+        
+                return tagsFound == x.Command.Tags.Count;
+            })
+            .WithCode(EditDish.ErrorCodes.InvalidTagIdList)
+            .WithMessage("Invalid list of tag IDs.");
     }
 }
 

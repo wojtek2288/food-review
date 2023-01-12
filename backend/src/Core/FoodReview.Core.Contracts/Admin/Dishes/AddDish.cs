@@ -16,12 +16,13 @@ public class AddDish : CommandBase<AddDish>
     public static class ErrorCodes
     {
         public const int RestaurantIdNotProvided = 1;
-        public const int NameIsEmpty = 2;
-        public const int NameTooLong = 3;
-        public const int DescriptionTooLong = 4;
-        public const int ImageLinkEmpty = 5;
-        public const int ImageLinkTooLong = 6;
-        public const int NegativePrice = 7;
-        public const int InvalidTagIdList = 8;
+        public const int RestaurantDoesNotExist = 2;
+        public const int NameIsEmpty = 3;
+        public const int NameTooLong = 4;
+        public const int DescriptionTooLong = 5;
+        public const int ImageLinkEmpty = 6;
+        public const int ImageLinkTooLong = 7;
+        public const int NegativePrice = 8;
+        public const int InvalidTagIdList = 9;
     }
 }
