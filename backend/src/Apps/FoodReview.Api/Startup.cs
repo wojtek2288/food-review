@@ -20,10 +20,11 @@ public class Startup
     protected static IAppModule[] ConfigureModules(IWebHostEnvironment hostEnv, IConfiguration config)
     {
         var dbConnStr = Config.SqlServer.ConnectionString(config);
+        var blobConnStr = Config.BlobStorage.ConnectionString(config);
 
         return new IAppModule[]
         {
-            new CoreModule(dbConnStr),
+            new CoreModule(dbConnStr, blobConnStr),
             new AuthModule(config, hostEnv),
             new ApiModule(config, hostEnv),
         };
