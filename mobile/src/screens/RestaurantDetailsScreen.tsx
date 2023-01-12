@@ -40,6 +40,7 @@ export const RestaurantDetailsScreen = ({
   const [reviewsTotalCount, setReviewsTotalCount] = useState(0);
   const [dishesCurrentPage, setDishesCurrentPage] = useState(0);
   const [dishesTotalCount, setDishesTotalCount] = useState(0);
+  const [displayError, setDisplayError] = useState(false);
   const [reviewModalVisible, setReviewModalVisible] = useState(false);
   const [restaurant, setRestaurant] = useState<RestaurantDetailsResponse | undefined>(undefined);
   const detailsReq = {
@@ -65,7 +66,7 @@ export const RestaurantDetailsScreen = ({
   const { run: detailsRun, response: detailsResponse } = useRestaurantDetailsQuery(detailsReq);
   const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useRestaurantReviewsQuery(reviewsReq);
   const { run: dishesRun, response: dishesResponse, isLoading: areDishesLoading } = useRestaurantDishesQuery(dishesReq);
-  const { run: addReviewRun, requestSuccessful, isLoading: isAddReviewLoading } = useAddReviewCommand(addReviewReq);
+  const { run: addReviewRun, requestSuccessful, isLoading: isAddReviewLoading, error } = useAddReviewCommand(addReviewReq);
   const { isLoading, isAuthenticated, run: signInRun } = useSignIn();
 
   useEffect(() => {
@@ -181,6 +182,7 @@ export const RestaurantDetailsScreen = ({
       setReviewsTotalCount(0);
       setReviews(undefined);
       setReviewModalVisible(false);
+      detailsRun(detailsReq)
       reviewsRun({
         pageSize: defaultPageSize,
         pageCount: 0,
@@ -191,6 +193,12 @@ export const RestaurantDetailsScreen = ({
       setReviewModalVisible(false);
     }
   }, [requestSuccessful])
+
+  useEffect(() => {
+    if (error !== null) {
+      setDisplayError(true);
+    }
+  }, [error])
 
 
   return (
@@ -212,6 +220,7 @@ export const RestaurantDetailsScreen = ({
               isLoading={isAddReviewLoading}
               description={null}
               rating={null}
+              displayError={displayError}
             />
           ) : null}
           <FlatList

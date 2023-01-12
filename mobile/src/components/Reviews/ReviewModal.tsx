@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Text,
 } from 'react-native';
 import { Button, Input, Modal, Spinner } from '@ui-kitten/components';
 import Colors from '../../constants/Colors';
@@ -19,9 +20,10 @@ interface ReviewModalProps {
   isLoading: boolean;
   description: string | null;
   rating: number | null;
+  displayError: boolean;
 }
 
-export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading, description, rating }) => {
+export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, isLoading, description, rating, displayError }) => {
   const textLimit = 500;
   const textCount = description !== null ? description.length : '0';
   const initRating = rating !== null ? rating : 5.5;
@@ -72,9 +74,14 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({ onClose, onReviewAdd, 
         />
         {isLoading
           ? <View style={styles.spinnerContainer}><Spinner status='warning' /></View>
-          : <Button onPress={() => onReviewAdd(text, sliderValue)} style={styles.button}>
-            Rate
-          </Button>}
+          :
+          <>
+            {displayError ? <Text style={styles.errorText}>You already rated this item.</Text> : null}
+            <Button onPress={() => onReviewAdd(text, sliderValue)} style={styles.button}>
+              Rate
+            </Button>
+          </>
+        }
       </TouchableWithoutFeedback>
     </Modal>
   );
@@ -121,4 +128,8 @@ const styles = StyleSheet.create({
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
+  errorText: {
+    color: 'red',
+    marginTop: '5 %',
+  }
 });
