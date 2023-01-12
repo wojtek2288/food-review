@@ -40,7 +40,7 @@ export class RestaurantApiService {
         this.apiService.getRestaurants(criteria).subscribe(x => {
             this.restaurantsSubject.next(x);
             this.isLoadingSubject.next(false);
-        }, x => console.log(x));
+        });
     }
 
     public getRestaurantDetails(id: string): void {
