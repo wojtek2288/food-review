@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, FlatList, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, View, Image, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -10,12 +10,13 @@ import * as SecureStore from 'expo-secure-store';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
-import { useDeleteMyAccountCommand, useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery } from '../api/services';
+import { useDeleteMyAccountCommand, useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery, usePhotoUploadLinkQuery } from '../api/services';
 import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
 import { MyProfileDishCard } from '../components/Dishes/MyProfileDishCard';
 import { MyProfileRestaurantCard } from '../components/Restaurants/MyProfileRestaurantCard';
 import { DeleteAccountConfirmation } from '../components/Users/DeleteAccountConfirmation';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function MyProfile({
   navigation,
@@ -24,11 +25,13 @@ export default function MyProfile({
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
   const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
   const [reviews, setReviews] = useState<MyReviewResponse[] | undefined>(undefined);
   const [refreshReviews, setRefreshReviews] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(false);
   const detailsReq = {};
   const reviewsReq = {
     pageSize: defaultPageSize,
@@ -50,6 +53,7 @@ export default function MyProfile({
     isLoading: deleteMyAccountLoading,
     requestSuccessful: deleteMyAccountRequestSuccessful,
   } = useDeleteMyAccountCommand({});
+  const photoUploadLink = usePhotoUploadLinkQuery({ extension: "" });
 
   const fetchData = async () => {
     const token = await SecureStore.getItemAsync('accessToken');
@@ -136,6 +140,49 @@ export default function MyProfile({
     deleteMyAccountRun({}, token);
   }
 
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    });
+    if (!result.cancelled) {
+      setSelectedImage(result.uri);
+      const extension = result.uri.split('.').pop();
+      if (extension !== undefined) {
+        photoUploadLink.run({ extension: extension }, token);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (photoUploadLink.response !== undefined) {
+      uploadImage(photoUploadLink.response);
+    }
+  }, [photoUploadLink.response])
+
+  const uploadImage = async (blobUrl: string) => {
+    setIsImageLoading(true);
+    const extension = selectedImage.split('.').pop();
+    console.log(selectedImage)
+    const imageResponse = await fetch(selectedImage);
+    const blob = await imageResponse.blob();
+    const response = await fetch(blobUrl, {
+      method: 'PUT',
+      body: blob,
+      headers: {
+        'Content-Type': `image/${extension}`,
+        'x-ms-blob-type': 'BlockBlob',
+        'x-ms-blob-content-type': `image/${extension}`
+      },
+    });
+    if (response.ok) {
+      setIsImageLoading(false);
+      console.log('Image uploaded successfully!');
+      detailsRun(detailsReq, token);
+    } else {
+      console.log(response);
+    }
+  }
+
   return (
     <>
       {user === undefined ?
@@ -163,14 +210,20 @@ export default function MyProfile({
                 <View style={styles.profile}>
                   <View style={styles.upperContainer}>
                     <View style={styles.avatarContainer}>
-                      <Image
-                        style={styles.profileAvatar}
-                        source={
-                          user.imageUrl == null
-                            ? require('../assets/images/userEmpty.png')
-                            : { uri: user.imageUrl }
-                        }
-                      />
+                      <TouchableOpacity style={styles.editImageIcon} onPress={pickImage}>
+                        <AntDesign name="edit" size={30} color="black" />
+                      </TouchableOpacity>
+                      {isImageLoading
+                        ? <Spinner status='warning' />
+                        : <Image
+                          style={styles.profileAvatar}
+                          source={
+                            user.imageUrl == null
+                              ? require('../assets/images/userEmpty.png')
+                              : { uri: user.imageUrl }
+                          }
+                        />}
+
                     </View>
                     <View style={styles.settingsContainer}>
                       <Popover
@@ -292,6 +345,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     height: Dimensions.get('window').height * 0.15,
+    // backgroundColor: 'red',
   },
   settingsContainer: {
     alignSelf: 'flex-start',
@@ -362,4 +416,7 @@ const styles = StyleSheet.create({
     width: '85 %',
     alignSelf: 'center',
   },
+  editImageIcon: {
+    marginBottom: '2 %'
+  }
 });
