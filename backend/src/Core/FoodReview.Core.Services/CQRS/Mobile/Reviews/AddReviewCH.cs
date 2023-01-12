@@ -44,7 +44,7 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
                 {
                     return !(await dbContext.Reviews
                         .AnyAsync(r => r.User.Id == cmd.Context.UserId
-                            && r.Restaurant.Id == cmd.Command.RestaurantId));
+                            && r.Restaurant.Id == cmd.Command.RestaurantId && r.Dish == null));
                 }
             })
             .WithCode(AddReview.ErrorCodes.UserAlreadyRated)

@@ -39,6 +39,7 @@ export const DishDetailsScreen = ({
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [dish, setDish] = useState<DishDetailsResponse | undefined>(undefined);
+  const [displayError, setDisplayError] = useState(false);
   const [reviews, setReviews] = useState<ReviewResponse[] | undefined>(
     undefined
   );
@@ -65,6 +66,7 @@ export const DishDetailsScreen = ({
     run: addReviewRun,
     requestSuccessful,
     isLoading: isAddReviewLoading,
+    error,
   } = useAddReviewCommand(addReviewReq);
   const {
     isLoading: isSignInLoading,
@@ -92,6 +94,12 @@ export const DishDetailsScreen = ({
       setTotalCount(reviewsResponse.totalCount);
     }
   }, [reviewsResponse]);
+
+  useEffect(() => {
+    if (error !== null) {
+      setDisplayError(true);
+    }
+  }, [error])
 
   const onEndReached = () => {
     if (currentPage * defaultPageSize >= totalCount || currentPage == 0) {
@@ -169,6 +177,7 @@ export const DishDetailsScreen = ({
               isLoading={isAddReviewLoading}
               description={null}
               rating={null}
+              displayError={displayError}
             />
           ) : null}
           <FlatList
@@ -215,12 +224,14 @@ export const DishDetailsScreen = ({
                     {isSignInLoading ? (
                       <Spinner status='warning' />
                     ) : (
-                      <Button
-                        style={styles.button}
-                        onPress={() => onReviewClicked()}
-                      >
-                        Rate
-                      </Button>
+                      <>
+                        <Button
+                          style={styles.button}
+                          onPress={() => onReviewClicked()}
+                        >
+                          Rate
+                        </Button>
+                      </>
                     )}
                   </View>
                 </View>
