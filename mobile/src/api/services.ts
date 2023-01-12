@@ -25,6 +25,7 @@ import DeleteReviewRequest from '../requestTypes.ts/DeleteReviewRequest';
 import EditReviewRequest from '../requestTypes.ts/EditReviewRequest';
 import FeedRequest from '../requestTypes.ts/FeedRequest';
 import Tag from '../responseTypes/Tag';
+import PhotoUploadLinkRequest from '../requestTypes.ts/PhotoUploadLinkRequest';
 
 export const useFeedQuery = (req: FeedRequest) => (
     useAxios<PaginatedResult<Dish>, FeedRequest>(RequestType.Query, 'Dishes.Feed', req)
@@ -69,6 +70,10 @@ export const useMyProfileQuery = (req: {}) => (
 export const useMyReviewsQuery = (req: PaginatedRequest) => (
     useAxios<PaginatedResult<MyReviewResponse>, PaginatedRequest>(RequestType.Query, 'Users.MyReviews', req)
 )
+
+export const usePhotoUploadLinkQuery = (req: PhotoUploadLinkRequest) => (
+    useAxios<string, PhotoUploadLinkRequest>(RequestType.Query, 'Users.PhotoUploadLink', req)
+);
 
 export const useAddReviewCommand = (req: AddReviewRequest) => (
     useAxios<any, AddReviewRequest>(RequestType.Command, 'Reviews.AddReview', req)

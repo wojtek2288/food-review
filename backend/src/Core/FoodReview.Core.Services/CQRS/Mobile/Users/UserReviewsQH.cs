@@ -24,7 +24,7 @@ public class UserReviewsQH : QueryHandler<UserReviews, PaginatedResult<UserRevie
             .CountAsync(context.CancellationToken);
 
         var reviews = await dbContext.Reviews
-            .Where(r => r.User.Id == query.UserId)
+            .Where(r => r.User.Id == query.UserId && r.Restaurant.IsVisible)
             .Join(
                 dbContext.Restaurants,
                 r => r.Restaurant.Id,

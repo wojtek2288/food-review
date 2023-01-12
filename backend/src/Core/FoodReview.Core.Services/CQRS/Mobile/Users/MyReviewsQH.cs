@@ -24,7 +24,7 @@ public class MyReviewsQH : QueryHandler<MyReviews, PaginatedResult<MyReviewDTO>>
             .CountAsync(context.CancellationToken);
 
         var reviews = await dbContext.Reviews
-            .Where(r => r.User.Id == context.UserId)
+            .Where(r => r.User.Id == context.UserId && r.Restaurant.IsVisible)
             .OrderByDescending(r => r.DateAdded)
             .Join(
                 dbContext.Restaurants,
