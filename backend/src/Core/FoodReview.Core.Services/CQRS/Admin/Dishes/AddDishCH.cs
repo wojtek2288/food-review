@@ -23,6 +23,17 @@ public class AddDishCV : AbstractValidator<CommandRequest<AddDish, Unit>>
                 .WithCode(AddDish.ErrorCodes.RestaurantIdNotProvided)
                 .WithMessage("Restaurant ID must be provided.");
         
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) => 
+            {
+                var restaurantExists = await dbContext.Restaurants
+                    .AnyAsync(r => r.Id.ToString() == x.Command.RestaurantId, x.Context.CancellationToken);
+        
+                return restaurantExists;
+            })
+            .WithCode(AddDish.ErrorCodes.RestaurantDoesNotExist)
+            .WithMessage("Restaurant with specified Id does not exist.");
+        
         RuleFor(x => x.Command.Name)
             .NotEmpty()
                 .WithCode(AddDish.ErrorCodes.NameIsEmpty)
@@ -49,6 +60,17 @@ public class AddDishCV : AbstractValidator<CommandRequest<AddDish, Unit>>
             .GreaterThan(0)
             .WithCode(AddDish.ErrorCodes.NegativePrice)
             .WithMessage("Price cannot be negative or zero");
+        
+        RuleFor(x => x)
+            .MustAsync(async (x, cancellation) =>
+            {
+                var tagsFound = x.Command.Tags.Distinct()
+                    .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);
+        
+                return tagsFound == x.Command.Tags.Count;
+            })
+            .WithCode(AddDish.ErrorCodes.InvalidTagIdList)
+            .WithMessage("Invalid list of tag IDs.");
     }
 }
 
