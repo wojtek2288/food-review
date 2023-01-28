@@ -9,6 +9,8 @@ import { User } from "../users/model/user.interface";
 import { AddDishRequest } from "./model/add-dish-request";
 import { AddRestaurantRequest } from "./model/add-restaurat-request";
 import { ApiUser } from "./model/api-user";
+import { ChartSeries } from "./model/chart-series";
+import { ChartSeriesItem } from "./model/chart-series-item";
 import { DetailsRequest } from "./model/details-request";
 import { DishDetails } from "./model/dish-details";
 import { DishQueryCriteria } from "./model/dish-query-criteria";
@@ -109,5 +111,9 @@ export class ApiService {
 
     getTags(): Observable<Tag[]> {
         return this.http.post<Tag[]>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Tags.GetTags`, null);
+    }
+
+    getMostPopularRestaurants(): Observable<ChartSeriesItem<number>[]> {
+        return this.http.post<ChartSeriesItem<number>[]>(`${environment.apiURL}/api/query/FoodReview.Core.Contracts.Admin.Statistics.MostPopularRestaurants`, null);
     }
 }

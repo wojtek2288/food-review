@@ -1,0 +1,22 @@
+<mat-card class="card">
+    <div [ngClass]="{'hide-div': isLoading$ | async}">
+      <div class="card-header">
+        <h2 class="left">{{header}}</h2>
+    
+      </div>
+    </div>
+    <ngx-charts-bar-vertical
+        [legend]="legend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        xAxisLabel="Restaurant name"
+        yAxisLabel="Reviews"
+        [results]="multi"
+        [view]="[1750, 600]">
+        </ngx-charts-bar-vertical>
+    <div>
+      <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
+    </div>
+  </mat-card>

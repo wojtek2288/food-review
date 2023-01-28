@@ -23,7 +23,6 @@ export class ReviewApiService {
 
     constructor(
         private apiService: ApiService,
-        private authService: AuthService,
         private dialog: MatDialog,
         private snackBar: MatSnackBar) {
     }

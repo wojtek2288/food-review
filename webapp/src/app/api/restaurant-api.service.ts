@@ -28,7 +28,6 @@ export class RestaurantApiService {
 
     constructor(
         private apiService: ApiService,
-        private authService: AuthService,
         private dialog: MatDialog,
         private snackBar: MatSnackBar,
         private router: Router,
