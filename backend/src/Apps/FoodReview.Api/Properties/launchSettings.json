@@ -7,7 +7,9 @@
         "SQL_CONNECTION_STRING": "Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false",
         "ASPNETCORE_URLS": "http://+:8000",
         "API_DOMAIN": "localhost:8000",
-        "BLOB_STORAGE_CONNECTION_STRING": ""
+        "BLOB_STORAGE_CONNECTION_STRING": "",
+        "ADMIN_EMAIL": "admin@admin.com",
+        "ADMIN_PASSWORD": "admin1234"
       }
     }
   }

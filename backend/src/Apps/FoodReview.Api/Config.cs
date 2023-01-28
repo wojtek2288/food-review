@@ -9,6 +9,12 @@ public static class Config
 
         public static string ApiBase(IConfiguration cfg) =>
             $"http://{ApiDomain(cfg)}";
+
+        public static string AdminEmail(IConfiguration cfg) =>
+            cfg.GetStringFromEnvVariable("adminEmail");
+        
+        public static string AdminPassword(IConfiguration cfg) =>
+            cfg.GetStringFromEnvVariable("adminPassword");
     }
 
     public static class SqlServer

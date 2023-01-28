@@ -23,6 +23,8 @@ services:
     environment:
       - SQL_CONNECTION_STRING=Server=mssql.local.pl;Database=FoodReview;User Id=sa;Password=Passw12#;Encrypt=false
       - API_DOMAIN=localhost:8080
+      - ADMIN_EMAIL=admin@admin.com,
+      - ADMIN_PASSWORD=admin1234
     depends_on:
       - mssql
 
