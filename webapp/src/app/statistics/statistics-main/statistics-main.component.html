@@ -5,7 +5,8 @@
     
       </div>
     </div>
-    <ngx-charts-bar-vertical
+    <div class="chart-container">
+        <ngx-charts-bar-vertical
         [legend]="legend"
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
@@ -14,8 +15,9 @@
         xAxisLabel="Restaurant name"
         yAxisLabel="Reviews"
         [results]="multi"
-        [view]="[1750, 600]">
+        [barPadding]="200">
         </ngx-charts-bar-vertical>
+    </div>
     <div>
       <mat-spinner color="primary" class="spinner" *ngIf="isLoading$ | async"></mat-spinner>
     </div>
