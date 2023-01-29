@@ -7,5 +7,4 @@ namespace FoodReview.Core.Contracts.Admin.Statistics;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class MostPopularRestaurants : QueryBase<MostPopularRestaurants, ChartSeriesItem<int>[]>
 {
-    
 }

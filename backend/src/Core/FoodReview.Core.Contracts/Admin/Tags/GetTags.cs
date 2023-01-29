@@ -7,5 +7,4 @@ namespace FoodReview.Core.Contracts.Admin.Tags;
 [Authorize(Roles = Auth.Roles.Admin)]
 public class GetTags: QueryBase<GetTags, List<TagDTO>>
 {
-    
 }

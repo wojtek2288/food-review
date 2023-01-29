@@ -48,12 +48,12 @@ public class EditReviewCV : AbstractValidator<CommandRequest<EditReview, Unit>>
             
         RuleFor(x => x.Command.Description)
             .MaximumLength(StringLengths.MediumString)
-                .WithCode(AddReview.ErrorCodes.DescriptionTooLong)
+                .WithCode(EditReview.ErrorCodes.DescriptionTooLong)
                 .WithMessage("Description is too long.");
 
         RuleFor(x => x.Command.Rating)
-            .Must(r => r >= 1 && r <= 10)
-                .WithCode(AddReview.ErrorCodes.RatingIsInvalid)
+            .Must(r => r is >= 1 and <= 10)
+                .WithCode(EditReview.ErrorCodes.RatingIsInvalid)
                 .WithMessage("Rating has to be within 1-10 range.");
     }
 }

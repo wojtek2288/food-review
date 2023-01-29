@@ -70,7 +70,7 @@ public class AddReviewCV : AbstractValidator<CommandRequest<AddReview, Unit>>
             .When(x => x.Command.Description is not null);
 
         RuleFor(x => x.Command.Rating)
-            .Must(r => r >= 1 && r <= 10)
+            .Must(r => r is >= 1 and <= 10)
                 .WithCode(AddReview.ErrorCodes.RatingIsInvalid)
                 .WithMessage("Rating has to be within 1-10 range.");
     }

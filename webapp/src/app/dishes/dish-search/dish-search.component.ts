@@ -11,9 +11,7 @@ import { Dish } from '../model/dish.interface';
     templateUrl: '../../main/base-search/base-search.component.html',
     styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class DishSearchComponent extends BaseSearchComponent<Dish> implements OnDestroy {
-    private unsubscribe$ = new Subject();
-
+export class DishSearchComponent extends BaseSearchComponent<Dish> {
     @Input() restaurantId: string = "";
     constructor(
         private dishService: DishApiService,
@@ -30,11 +28,6 @@ export class DishSearchComponent extends BaseSearchComponent<Dish> implements On
             this.dataSource.data = x.items;
             this.paginator.length = x.totalCount;
         });
-    }
-
-    ngOnDestroy(): void {
-        this.unsubscribe$.next(null);
-        this.unsubscribe$.complete();
     }
 
     override onSearch(): void {

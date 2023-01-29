@@ -11,12 +11,10 @@ import { Review } from '../model/review.interface';
     templateUrl: '../../main/base-search/base-search.component.html',
     styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class ReviewSearchComponent extends BaseSearchComponent<Review> implements OnDestroy {
+export class ReviewSearchComponent extends BaseSearchComponent<Review> {
     @Input() restaurantId: string = "";
     @Input() dishId: string = "";
     @Input() userId: string = "";
-
-    private unsubscribe$ = new Subject();
 
     constructor(
         private reviewService: ReviewApiService,
@@ -36,11 +34,6 @@ export class ReviewSearchComponent extends BaseSearchComponent<Review> implement
             this.dataSource.data = x.items;
             this.paginator.length = x.totalCount;
         });
-    }
-
-    ngOnDestroy(): void {
-        this.unsubscribe$.next(null);
-        this.unsubscribe$.complete();
     }
 
     override onSearch(): void {
