@@ -14,8 +14,7 @@ export class TagApiService {
     public tags$ = this.tagsSubject.asObservable();
 
     constructor(
-        private apiService: ApiService,
-        private authService: AuthService) {
+        private apiService: ApiService) {
     }
 
     public getTags() {

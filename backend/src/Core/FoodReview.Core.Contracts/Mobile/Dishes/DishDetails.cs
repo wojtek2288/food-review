@@ -19,6 +19,6 @@ public class DishDetailsDTO
     public string DishName { get; set; } = default!;
     public decimal Price { get; set; }
     public double? Rating { get; set; }
-    public string? Description { get; set; } = default!;
+    public string? Description { get; set; }
     public List<TagDTO> Tags { get; set; } = new();
 }

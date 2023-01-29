@@ -1,0 +1,443 @@
+{
+	"info": {
+		"_postman_id": "a30a3f1c-2fda-481c-9649-5a54fcfe798a",
+		"name": "User tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18519087"
+	},
+	"item": [
+		{
+			"name": "Register test user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check register user test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Email\": \"test@user.pl\",\n    \"Username\": \"{{test_user_name}}\",\n    \"Password\": \"{{test_user_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Mobile.Users.Register",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Mobile.Users.Register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login test user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check login user test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.globals.set(\"test_user_token\", responseJson.access_token);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "client_app",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{test_user_name}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{test_user_name}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "secret",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{auth_address}}/connect/token",
+					"host": [
+						"{{auth_address}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit user description",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check changing user description test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{test_user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Description\": \"{{test_restaurant_updated_description}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Mobile.Users.EditMyDescription",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Mobile.Users.EditMyDescription"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if user description was updated",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if updating description was successful test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.description).equal(pm.globals.get(\"test_restaurant_updated_description\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{test_user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Mobile.Users.MyProfile",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Mobile.Users.MyProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete user account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check deleting user account test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{test_user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Mobile.Users.DeleteMyAccount",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Mobile.Users.DeleteMyAccount"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if login credentials are invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check login user after deleting account test\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "client_app",
+							"type": "text"
+						},
+						{
+							"key": "grant_type",
+							"value": "password",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "{{test_user_name}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{test_user_name}}",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "secret",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{auth_address}}/connect/token",
+					"host": [
+						"{{auth_address}}"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{admin_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"function isValidDate(d) {",
+					"  return d instanceof Date && !isNaN(d);",
+					"}",
+					"",
+					"let adminExpDate = new Date(pm.globals.get(\"admin_token_expiry\"));",
+					"if (!isValidDate(adminExpDate) || adminExpDate < new Date()) {",
+					"    console.log(\"Requesting new admin access token\");",
+					"    const req = {",
+					"        url: pm.environment.get(\"auth_address\") + \"/connect/token\",",
+					"        method: \"POST\",",
+					"        body: {",
+					"            mode: \"urlencoded\",",
+					"            urlencoded: [",
+					"                { key: \"client_id\", value: \"client_app\", disabled: false },",
+					"                { key: \"grant_type\", value: \"password\", disabled: false },",
+					"                { key: \"username\", value: pm.globals.get(\"admin_username\"), disabled: false },",
+					"                { key: \"password\", value: pm.globals.get(\"admin_password\"), disabled: false }",
+					"            ]",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(req, function (err, response) {",
+					"        if (err) {",
+					"            console.warn(err);",
+					"        } else {",
+					"            let obj = response.json();",
+					"            if (obj.error) {",
+					"                console.error(\"Error\", obj.error, \"-\", obj.error_description);",
+					"                pm.globals.unset(\"admin_token\");",
+					"                pm.globals.unset(\"admin_token_expiry\");",
+					"            } else {",
+					"                let expDate = new Date();",
+					"                expDate.setSeconds(expDate.getSeconds() + obj.expires_in * 0.25);",
+					"                pm.globals.set(\"admin_token\", obj.access_token);",
+					"                pm.globals.set(\"admin_token_expiry\", expDate);",
+					"            }",
+					"        }",
+					"    });",
+					"} else {",
+					"    console.log(\"Admin token is still valid\")",
+					"}",
+					"",
+					"let userExpDate = new Date(pm.globals.get(\"user_token_expiry\"));",
+					"if (!isValidDate(userExpDate) || userExpDate < new Date()) {",
+					"    console.log(\"Requesting new user access token\");",
+					"    const req = {",
+					"        url: pm.environment.get(\"auth_address\") + \"/connect/token\",",
+					"        method: \"POST\",",
+					"        body: {",
+					"            mode: \"urlencoded\",",
+					"            urlencoded: [",
+					"                { key: \"client_id\", value: \"client_app\", disabled: false },",
+					"                { key: \"grant_type\", value: \"password\", disabled: false },",
+					"                { key: \"username\", value: pm.globals.get(\"user_username\"), disabled: false },",
+					"                { key: \"password\", value: pm.globals.get(\"user_password\"), disabled: false }",
+					"            ]",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(req, function (err, response) {",
+					"        if (err) {",
+					"            console.warn(err);",
+					"        } else {",
+					"            let obj = response.json();",
+					"            if (obj.error) {",
+					"                console.error(\"Error\", obj.error, \"-\", obj.error_description);",
+					"                pm.globals.unset(\"user_token\");",
+					"                pm.globals.unset(\"user_token_expiry\");",
+					"            } else {",
+					"                let expDate = new Date();",
+					"                expDate.setSeconds(expDate.getSeconds() + obj.expires_in * 0.25);",
+					"                pm.globals.set(\"user_token\", obj.access_token);",
+					"                pm.globals.set(\"user_token_expiry\", expDate);",
+					"            }",
+					"        }",
+					"    });",
+					"} else {",
+					"    console.log(\"User token is still valid\")",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

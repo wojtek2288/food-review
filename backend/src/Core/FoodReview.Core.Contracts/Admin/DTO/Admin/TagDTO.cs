@@ -2,7 +2,7 @@ namespace FoodReview.Core.Contracts.Admin.DTO.Admin;
 
 public class TagDTO
 {
-    public Guid Id { get; set; } = default!;
+    public Guid Id { get; set; }
     public string Name { get; set; } = default!;
     public string ColorHex { get; set; } = default!;
 }

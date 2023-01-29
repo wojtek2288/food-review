@@ -14,7 +14,6 @@ public class Restaurant : IAggregateRoot
     public ICollection<Tag> Tags { get; set; } = default!;
 
     private List<Dish> dishes = new();
-    private List<TagToRestaurant> tags = new();
 
     private Restaurant() { }
 
@@ -58,7 +57,7 @@ public class Restaurant : IAggregateRoot
 
     public void EditDish(Guid dishId, string name, string? description, string imageUrl, decimal price)
     {
-        if (!Dishes.Any(d => d.Id == dishId))
+        if (Dishes.All(d => d.Id != dishId))
         {
             throw new InvalidOperationException($"Dish with specified Id {dishId} does not exist.");
         }

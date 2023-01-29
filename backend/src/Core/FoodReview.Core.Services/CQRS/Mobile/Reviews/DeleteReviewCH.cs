@@ -27,7 +27,7 @@ public class DeleteReviewCV : AbstractValidator<CommandRequest<DeleteReview, Uni
 
                 return reviewExists;
             })
-            .WithCode(EditReview.ErrorCodes.ReviewWithSpecifiedIdDoesNotExist)
+            .WithCode(DeleteReview.ErrorCodes.ReviewWithSpecifiedIdDoesNotExist)
             .WithMessage("Review with specified Id does not exist.");
 
         RuleFor(x => x)
@@ -43,7 +43,7 @@ public class DeleteReviewCV : AbstractValidator<CommandRequest<DeleteReview, Uni
 
                 return review is null || review.UserId == cmd.Context.UserId;
             })
-            .WithCode(EditReview.ErrorCodes.UserDoesNotOwnTheReview)
+            .WithCode(DeleteReview.ErrorCodes.UserDoesNotOwnTheReview)
             .WithMessage("User does not own the review.");
     }
 }

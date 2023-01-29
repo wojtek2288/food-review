@@ -41,11 +41,11 @@ export class AuthService {
             this.isUserLoggedIn$.next(true);
             this.isLoadingSubject.next(false);
         },
-            () => {
-                this.snackBar.open("Login failed", "", { duration: 3000 });
-                this.isLoadingSubject.next(false);
-            },
-            () => this.router.navigate(['/restaurants']));
+        () => {
+            this.snackBar.open("Login failed", "", { duration: 3000 });
+            this.isLoadingSubject.next(false);
+        },
+        () => this.router.navigate(['/restaurants']));
     }
 
     logout(): void {

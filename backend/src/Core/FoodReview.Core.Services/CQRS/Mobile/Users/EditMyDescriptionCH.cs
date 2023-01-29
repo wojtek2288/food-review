@@ -1,6 +1,5 @@
 using FluentValidation;
 using FoodReview.Core.Contracts.Common;
-using FoodReview.Core.Contracts.Mobile.Reviews;
 using FoodReview.Core.Contracts.Mobile.Users;
 using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
@@ -17,7 +16,7 @@ public class EditMyDescriptionCV : AbstractValidator<CommandRequest<EditMyDescri
     {    
         RuleFor(x => x.Command.Description)
             .MaximumLength(StringLengths.MediumString)
-                .WithCode(AddReview.ErrorCodes.DescriptionTooLong)
+                .WithCode(EditMyDescription.ErrorCodes.DescriptionTooLong)
                 .WithMessage("Description is too long.");
     }
 }

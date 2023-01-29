@@ -11,9 +11,7 @@ import { User } from '../model/user.interface';
     templateUrl: '../../main/base-search/base-search.component.html',
     styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class UserSearchComponent extends BaseSearchComponent<User> implements OnDestroy {
-    private unsubscribe$ = new Subject();
-
+export class UserSearchComponent extends BaseSearchComponent<User> {
     constructor(
         private userService: UserApiService,
         private router: Router) {
@@ -29,11 +27,6 @@ export class UserSearchComponent extends BaseSearchComponent<User> implements On
             this.dataSource.data = x.items;
             this.paginator.length = x.totalCount;
         });
-    }
-
-    ngOnDestroy(): void {
-        this.unsubscribe$.next(null);
-        this.unsubscribe$.complete();
     }
 
     override onSearch(): void {

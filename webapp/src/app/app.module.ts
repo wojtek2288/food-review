@@ -11,6 +11,7 @@ import { DishesModule } from './dishes/dishes.module';
 import { UsersModule } from './users/users.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { HttpErrorInterceptor } from './api/http-error-interceptor';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { HttpErrorInterceptor } from './api/http-error-interceptor';
     RestaurantsModule,
     DishesModule,
     UsersModule,
-    ReviewsModule
+    ReviewsModule,
+    StatisticsModule
   ],
   providers: [ { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true }],
   bootstrap: [AppComponent]

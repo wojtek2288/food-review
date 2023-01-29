@@ -62,7 +62,7 @@ public class AddDishCV : AbstractValidator<CommandRequest<AddDish, Unit>>
             .WithMessage("Price cannot be negative or zero");
         
         RuleFor(x => x)
-            .MustAsync(async (x, cancellation) =>
+            .Must(x =>
             {
                 var tagsFound = x.Command.Tags.Distinct()
                     .Count(y => this.dbContext.Tags.SingleOrDefault(z => z.Id.ToString() == y) != null);

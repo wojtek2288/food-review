@@ -1,0 +1,554 @@
+{
+	"info": {
+		"_postman_id": "dd2f8600-d14c-4d01-b28b-24195f55d3a5",
+		"name": "Restaurants tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18519087"
+	},
+	"item": [
+		{
+			"name": "Add restaurant",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Adding restaurant test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"{{test_restaurant_name}}\",\n    \"Description\": \"Description\",\n    \"IsVisible\": false,\n    \"ImageUrl\": \"https://image.com/image.png\",\n    \"Tags\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Admin.Restaurants.AddRestaurant",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Admin.Restaurants.AddRestaurant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if visible to admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not visible to client test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.totalCount).greaterThan(0);",
+							"    pm.globals.set(\"test_restaurant_guid\", responseJson.items[0].id);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"PageCount\": 0,\n    \"PageSize\": 10,\n    \"SearchPhrase\": \"{{test_restaurant_name}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Admin.Restaurants.SearchRestaurants",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Admin.Restaurants.SearchRestaurants"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if not visible to client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check not visible to client test\", function () {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RestaurantId\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Mobile.Restaurants.RestaurantDetails",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Mobile.Restaurants.RestaurantDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add dish to restaurant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add a test dish to the restaurant\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RestaurantId\": \"{{test_restaurant_guid}}\",\n    \"Name\": \"Test dish\",\n    \"Descritpion\": \"To test restaurant\",\n    \"ImageUrl\": \"test\",\n    \"Price\": 12,\n    \"Tags\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Admin.Dishes.AddDish",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Admin.Dishes.AddDish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Change restaurant visibility",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check toggling visibility test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Admin.Restaurants.ToggleRestaurantVisibility",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Admin.Restaurants.ToggleRestaurantVisibility"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if visible to client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check visible to client test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.restaurantName).equal(pm.globals.get(\"test_restaurant_name\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{user_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"RestaurantId\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Mobile.Restaurants.RestaurantDetails",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Mobile.Restaurants.RestaurantDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit restaurant details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Edit restaurant test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"{{test_restaurant_guid}}\",\n    \"Name\": \"{{test_restaurant_name}}\",\n    \"Description\": \"{{test_restaurant_updated_description}}\",\n    \"ImageUrl\": \"test\",\n    \"Tags\": []\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Admin.Restaurants.EditRestaurant",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Admin.Restaurants.EditRestaurant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if editing was successful in restaurant details",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check if editing was successful test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.description).equal(pm.globals.get(\"test_restaurant_updated_description\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete restaurant",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check removing restaurant test\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/command/FoodReview.Core.Contracts.Admin.Restaurants.DeleteRestaurant",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"command",
+						"FoodReview.Core.Contracts.Admin.Restaurants.DeleteRestaurant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check if restaurant does not exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Check restaurant not exists test\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Id\": \"{{test_restaurant_guid}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{api_address}}/query/FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails",
+					"host": [
+						"{{api_address}}"
+					],
+					"path": [
+						"query",
+						"FoodReview.Core.Contracts.Admin.Restaurants.RestaurantDetails"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{admin_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"function isValidDate(d) {",
+					"  return d instanceof Date && !isNaN(d);",
+					"}",
+					"",
+					"let adminExpDate = new Date(pm.globals.get(\"admin_token_expiry\"));",
+					"if (!isValidDate(adminExpDate) || adminExpDate < new Date()) {",
+					"    console.log(\"Requesting new admin access token\");",
+					"    const req = {",
+					"        url: pm.environment.get(\"auth_address\") + \"/connect/token\",",
+					"        method: \"POST\",",
+					"        body: {",
+					"            mode: \"urlencoded\",",
+					"            urlencoded: [",
+					"                { key: \"client_id\", value: \"client_app\", disabled: false },",
+					"                { key: \"grant_type\", value: \"password\", disabled: false },",
+					"                { key: \"username\", value: pm.globals.get(\"admin_username\"), disabled: false },",
+					"                { key: \"password\", value: pm.globals.get(\"admin_password\"), disabled: false }",
+					"            ]",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(req, function (err, response) {",
+					"        if (err) {",
+					"            console.warn(err);",
+					"        } else {",
+					"            let obj = response.json();",
+					"            if (obj.error) {",
+					"                console.error(\"Error\", obj.error, \"-\", obj.error_description);",
+					"                pm.globals.unset(\"admin_token\");",
+					"                pm.globals.unset(\"admin_token_expiry\");",
+					"            } else {",
+					"                let expDate = new Date();",
+					"                expDate.setSeconds(expDate.getSeconds() + obj.expires_in * 0.25);",
+					"                pm.globals.set(\"admin_token\", obj.access_token);",
+					"                pm.globals.set(\"admin_token_expiry\", expDate);",
+					"            }",
+					"        }",
+					"    });",
+					"} else {",
+					"    console.log(\"Admin token is still valid\")",
+					"}",
+					"",
+					"let userExpDate = new Date(pm.globals.get(\"user_token_expiry\"));",
+					"if (!isValidDate(userExpDate) || userExpDate < new Date()) {",
+					"    console.log(\"Requesting new user access token\");",
+					"    const req = {",
+					"        url: pm.environment.get(\"auth_address\") + \"/connect/token\",",
+					"        method: \"POST\",",
+					"        body: {",
+					"            mode: \"urlencoded\",",
+					"            urlencoded: [",
+					"                { key: \"client_id\", value: \"client_app\", disabled: false },",
+					"                { key: \"grant_type\", value: \"password\", disabled: false },",
+					"                { key: \"username\", value: pm.globals.get(\"user_username\"), disabled: false },",
+					"                { key: \"password\", value: pm.globals.get(\"user_password\"), disabled: false }",
+					"            ]",
+					"        }",
+					"    };",
+					"    ",
+					"    pm.sendRequest(req, function (err, response) {",
+					"        if (err) {",
+					"            console.warn(err);",
+					"        } else {",
+					"            let obj = response.json();",
+					"            if (obj.error) {",
+					"                console.error(\"Error\", obj.error, \"-\", obj.error_description);",
+					"                pm.globals.unset(\"user_token\");",
+					"                pm.globals.unset(\"user_token_expiry\");",
+					"            } else {",
+					"                let expDate = new Date();",
+					"                expDate.setSeconds(expDate.getSeconds() + obj.expires_in * 0.25);",
+					"                pm.globals.set(\"user_token\", obj.access_token);",
+					"                pm.globals.set(\"user_token_expiry\", expDate);",
+					"            }",
+					"        }",
+					"    });",
+					"} else {",
+					"    console.log(\"User token is still valid\")",
+					"}"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

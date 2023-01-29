@@ -11,9 +11,7 @@ import { Restaurant } from '../model/restaurant.interface';
     templateUrl: '../../main/base-search/base-search.component.html',
     styleUrls: ['../../main/base-search/base-search.component.css']
 })
-export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> implements OnDestroy {
-    private unsubscribe$ = new Subject();
-
+export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> {
     constructor(
         private restaurantService: RestaurantApiService,
         private router: Router) {
@@ -30,11 +28,6 @@ export class RestaurantSearchComponent extends BaseSearchComponent<Restaurant> i
             this.dataSource.data = x.items;
             this.paginator.length = x.totalCount;
         });
-    }
-
-    ngOnDestroy(): void {
-        this.unsubscribe$.next(null);
-        this.unsubscribe$.complete();
     }
 
     override onSearch(): void {

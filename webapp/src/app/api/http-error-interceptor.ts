@@ -19,8 +19,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             if (error && error.status === 401) {
                 this.snackBar.open("Your session has expired. Please log in again", "", { duration: 3000 });
                 this.authService.logout();
+                return new Observable<HttpEvent<any>>()
             }
-            return new Observable<HttpEvent<any>>()
+            throw error;
         }));
     }
 

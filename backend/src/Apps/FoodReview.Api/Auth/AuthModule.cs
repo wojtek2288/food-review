@@ -39,14 +39,7 @@ public class AuthModule : IAppModule
             })
             .AddAspNetIdentity<AuthUser>();
 
-        if (hostEnv.IsDevelopment())
-        {
-            isConfig = isConfig.AddDeveloperSigningCredential();
-        }
-        else
-        {
-            isConfig = isConfig.AddSigningCredential(CreateSigningCredential());
-        }
+        isConfig = hostEnv.IsDevelopment() ? isConfig.AddDeveloperSigningCredential() : isConfig.AddSigningCredential(CreateSigningCredential());
 
         JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 

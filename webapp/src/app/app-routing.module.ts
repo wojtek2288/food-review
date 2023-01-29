@@ -9,6 +9,7 @@ import { NotFoundComponent } from './main/not-found/not-found.component';
 import { RestaurantDetailsComponent } from './restaurants/restaurant-details/restaurant-details.component';
 import { RestaurantSearchComponent } from './restaurants/restaurant-search/restaurant-search.component';
 import { ReviewSearchComponent } from './reviews/review-search/review-search.component';
+import { StatisticsMainComponent } from './statistics/statistics-main/statistics-main.component';
 import { UserDetailsComponent } from './users/user-details/user-details.component';
 import { UserSearchComponent } from './users/user-search/user-search.component';
 
@@ -54,6 +55,12 @@ const routes: Routes = [
     component: ReviewSearchComponent,
     canActivate: [LoggedInGuard],
     data: { animationState: 'reviews' }
+  },
+  {
+    path: 'statistics',
+    component: StatisticsMainComponent,
+    canActivate: [LoggedInGuard],
+    data: { animationState: 'statistics' }
   },
   {
     path: 'login',

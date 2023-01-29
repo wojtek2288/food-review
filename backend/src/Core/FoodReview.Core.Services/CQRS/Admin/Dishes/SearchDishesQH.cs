@@ -1,10 +1,7 @@
-using System.ComponentModel;
-using FoodReview.Core.Contracts.Admin;
 using FoodReview.Core.Contracts.Admin.Dishes;
 using FoodReview.Core.Contracts.Admin.DTO.Admin;
 using FoodReview.Core.Contracts.Common;
 using FoodReview.Core.Contracts.Shared;
-using FoodReview.Core.Domain;
 using FoodReview.Core.Services.CQRS.Common;
 using FoodReview.Core.Services.CQRS.Extensions;
 using FoodReview.Core.Services.DataAccess;
@@ -34,14 +31,14 @@ public class SearchDishedQH : QueryHandler<SearchDishes, PaginatedResult<DishDTO
                         x.Restaurant.Name.Trim().ToLower().Contains(searchPhrase))
             .Select(x => new
             {
-                Id = x.Id,
-                Name = x.Name,
-                Description = x.Description,
+                x.Id,
+                x.Name,
+                x.Description,
                 RestaurantName = x.Restaurant.Name,
                 RestaurantId = x.Restaurant.Id,
-                ImageUrl = x.ImageUrl,
-                Price = x.Price,
-                Tags = x.Tags
+                x.ImageUrl,
+                x.Price,
+                x.Tags
             });
         
         var sortedItems = await dbData.Sort(query.SortingField, query.SortingDirection);

@@ -25,7 +25,7 @@ public class ToggleRestuarantVisibilityCV : AbstractValidator<CommandRequest<Tog
         
                 return restaurantExists;
             })
-            .WithCode(RestaurantDetails.ErrorCodes.RestaurantDoesNotExist)
+            .WithCode(ToggleRestaurantVisibility.ErrorCodes.RestaurantDoesNotExist)
             .WithMessage("Restaurant with specified Id does not exist.");
     }
 }
