@@ -9,7 +9,6 @@ import { User } from "../users/model/user.interface";
 import { AddDishRequest } from "./model/add-dish-request";
 import { AddRestaurantRequest } from "./model/add-restaurat-request";
 import { ApiUser } from "./model/api-user";
-import { ChartSeries } from "./model/chart-series";
 import { ChartSeriesItem } from "./model/chart-series-item";
 import { DetailsRequest } from "./model/details-request";
 import { DishDetails } from "./model/dish-details";
