@@ -99,7 +99,7 @@ export const DishDetailsScreen = ({
     if (error !== null) {
       setDisplayError(true);
     }
-  }, [error])
+  }, [error]);
 
   const onEndReached = () => {
     if (currentPage * defaultPageSize >= totalCount || currentPage == 0) {
@@ -123,7 +123,6 @@ export const DishDetailsScreen = ({
   const onReviewAdd = async (description: string, rating: number) => {
     if (dish !== undefined) {
       const token = await SecureStore.getItemAsync('accessToken');
-      console.log(dish);
       addReviewRun(
         {
           restaurantId: dish.restaurantId,
