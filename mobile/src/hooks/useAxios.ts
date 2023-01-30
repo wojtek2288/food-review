@@ -86,10 +86,8 @@ export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: st
         let success = false;
 
         const url = requestType === RequestType.Command ? commandUrl(path) : queryUrl(path);
-        console.log(path);
 
         try {
-            console.log(req);
             const res = await axios<TResponse>({
                 method: 'post',
                 url: url,
@@ -105,7 +103,6 @@ export const useAxios = <TResponse, TRequest>(requestType: RequestType, path: st
             setRequestSuccessful(true);
             success = true;
         } catch (responseErr: any) {
-            console.log(responseErr);
             setError(responseErr.response.data);
         }
 

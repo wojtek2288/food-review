@@ -17,14 +17,21 @@ export default function Feed({ navigation }: any) {
   const [totalCount, setTotalCount] = useState(0);
   const [sortBy, setSortBy] = useState<IndexPath>();
   const [tags, setTags] = useState<Tag[]>(new Array<Tag>());
-  const [selectedTags, setSelectedTags] = useState<IndexPath[]>(new Array<IndexPath>());
+  const [selectedTags, setSelectedTags] = useState<IndexPath[]>(
+    new Array<IndexPath>()
+  );
   const [firstLoading, setFirstLoading] = useState(true);
 
   const feedRequest = {
     pageSize: defaultPageSize,
     pageCount: currentPage,
-    sortBy: sortBy === undefined ? 0 : (Array.isArray(sortBy) ? sortBy[0].row : sortBy.row),
-    tagIds: selectedTags.map(idx => tags[idx.row].id),
+    sortBy:
+      sortBy === undefined
+        ? 0
+        : Array.isArray(sortBy)
+        ? sortBy[0].row
+        : sortBy.row,
+    tagIds: selectedTags.map((idx) => tags[idx.row].id),
   };
 
   const feed = useFeedQuery(feedRequest);
@@ -41,7 +48,6 @@ export default function Feed({ navigation }: any) {
       setCurrentPage(currentPage + 1);
       setTotalCount(feed.response.totalCount);
       setFirstLoading(false);
-      console.log(feed.response.items);
     }
   }, [feed.response]);
 
@@ -49,13 +55,15 @@ export default function Feed({ navigation }: any) {
     if (tag.response) {
       setTags(tag.response);
     }
-  }, [tag.response])
+  }, [tag.response]);
 
   const onEndReached = () => {
-    if (currentPage * defaultPageSize >= totalCount
-      || currentPage == 0
-      || feed.isLoading
-      || tag.isLoading) {
+    if (
+      currentPage * defaultPageSize >= totalCount ||
+      currentPage == 0 ||
+      feed.isLoading ||
+      tag.isLoading
+    ) {
       return;
     }
     feed.run(feedRequest);
@@ -73,9 +81,9 @@ export default function Feed({ navigation }: any) {
       pageSize: defaultPageSize,
       pageCount: 0,
       sortBy: index.row,
-      tagIds: selectedTags.map(idx => tags[idx.row].id),
+      tagIds: selectedTags.map((idx) => tags[idx.row].id),
     });
-  }
+  };
 
   const onTagsSelectionChanged = (index: IndexPath[]) => {
     if (!feed.isLoading) {
@@ -87,28 +95,28 @@ export default function Feed({ navigation }: any) {
         pageSize: defaultPageSize,
         pageCount: 0,
         sortBy: sortBy === undefined ? 0 : sortBy.row,
-        tagIds: index.map(idx => tags[idx.row].id),
+        tagIds: index.map((idx) => tags[idx.row].id),
       });
     }
-  }
+  };
 
-  const sorts = ["Most popular", "Most recent"];
+  const sorts = ['Most popular', 'Most recent'];
 
   return (
     <View style={styles.container}>
-      {(feed.isLoading && firstLoading) || tag.isLoading
-        ? null
-        : <View style={styles.selectContainer}>
+      {(feed.isLoading && firstLoading) || tag.isLoading ? null : (
+        <View style={styles.selectContainer}>
           <Select
             style={styles.select}
             placeholder='Sort By'
             selectedIndex={sortBy}
             value={sortBy === undefined ? undefined : sorts[sortBy.row]}
-            onSelect={index => {
+            onSelect={(index) => {
               if (!Array.isArray(index)) {
                 onSortChanged(index);
               }
-            }}>
+            }}
+          >
             <SelectItem title={sorts[0]} />
             <SelectItem title={sorts[1]} />
           </Select>
@@ -117,15 +125,19 @@ export default function Feed({ navigation }: any) {
             placeholder='Filter'
             selectedIndex={selectedTags}
             multiSelect={true}
-            value={selectedTags.map(idx => tags[idx.row].name).join(", ")}
-            onSelect={index => {
+            value={selectedTags.map((idx) => tags[idx.row].name).join(', ')}
+            onSelect={(index) => {
               if (Array.isArray(index)) {
-                onTagsSelectionChanged(index)
+                onTagsSelectionChanged(index);
               }
-            }}>
-            {tags.map(t => <SelectItem key={t.id} title={t.name} />)}
+            }}
+          >
+            {tags.map((t) => (
+              <SelectItem key={t.id} title={t.name} />
+            ))}
           </Select>
-        </View>}
+        </View>
+      )}
       <DishesList
         dishes={dishes}
         isLoading={feed.isLoading}
@@ -160,6 +172,6 @@ const styles = StyleSheet.create({
   select: {
     flex: 1,
     borderRadius: 10,
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
 });

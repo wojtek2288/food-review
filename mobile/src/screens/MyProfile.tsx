@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { Text, View, Image, Pressable } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
@@ -10,7 +15,13 @@ import * as SecureStore from 'expo-secure-store';
 import UserDetailsResponse from '../responseTypes/UserDetailsResponse';
 import MyReviewResponse from '../responseTypes/MyReviewResponse';
 import { defaultPageSize } from '../constants/Pagination';
-import { useDeleteMyAccountCommand, useEditMyDescriptionCommand, useMyProfileQuery, useMyReviewsQuery, usePhotoUploadLinkQuery } from '../api/services';
+import {
+  useDeleteMyAccountCommand,
+  useEditMyDescriptionCommand,
+  useMyProfileQuery,
+  useMyReviewsQuery,
+  usePhotoUploadLinkQuery,
+} from '../api/services';
 import { RestaurantCard } from '../components/Restaurants/RestaurantCard';
 import { EditDescriptionModal } from '../components/Users/EditDescriptionModal';
 import { MyProfileDishCard } from '../components/Dishes/MyProfileDishCard';
@@ -24,62 +35,68 @@ export default function MyProfile({
   const [token, setToken] = useState('');
   const [popoverVisible, setPopoverVisible] = useState(false);
   const [descriptionModalVisible, setDescriptionModalVisible] = useState(false);
-  const [deleteAccountModalVisible, setDeleteAccountModalVisible] = useState(false);
-  const [selectedImage, setSelectedImage] = useState("");
+  const [deleteAccountModalVisible, setDeleteAccountModalVisible] =
+    useState(false);
+  const [selectedImage, setSelectedImage] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [totalCount, setTotalCount] = useState(0);
   const [user, setUser] = useState<UserDetailsResponse | undefined>(undefined);
-  const [reviews, setReviews] = useState<MyReviewResponse[] | undefined>(undefined);
+  const [reviews, setReviews] = useState<MyReviewResponse[] | undefined>(
+    undefined
+  );
   const [refreshReviews, setRefreshReviews] = useState(false);
   const [isImageLoading, setIsImageLoading] = useState(false);
   const detailsReq = {};
   const reviewsReq = {
     pageSize: defaultPageSize,
-    pageCount: currentPage
+    pageCount: currentPage,
   };
   const editMyDescriptionReq = {
     description: '',
   };
 
-  const { run: detailsRun, response: detailsResponse } = useMyProfileQuery(detailsReq);
-  const { run: reviewsRun, response: reviewsResponse, isLoading: areReviewsLoading } = useMyReviewsQuery(reviewsReq);
+  const { run: detailsRun, response: detailsResponse } =
+    useMyProfileQuery(detailsReq);
+  const {
+    run: reviewsRun,
+    response: reviewsResponse,
+    isLoading: areReviewsLoading,
+  } = useMyReviewsQuery(reviewsReq);
   const {
     run: editMyDescriptionRun,
     isLoading: editMyDescriptionLoading,
-    requestSuccessful: editRequestSuccessful
+    requestSuccessful: editRequestSuccessful,
   } = useEditMyDescriptionCommand(editMyDescriptionReq);
   const {
     run: deleteMyAccountRun,
     isLoading: deleteMyAccountLoading,
     requestSuccessful: deleteMyAccountRequestSuccessful,
   } = useDeleteMyAccountCommand({});
-  const photoUploadLink = usePhotoUploadLinkQuery({ extension: "" });
+  const photoUploadLink = usePhotoUploadLinkQuery({ extension: '' });
 
   const fetchData = async () => {
     const token = await SecureStore.getItemAsync('accessToken');
     if (token === null) {
       navigation.replace('Profile');
-    }
-    else {
+    } else {
       setToken(token);
       detailsRun(detailsReq, token);
       reviewsRun(reviewsReq, token);
     }
-  }
+  };
 
   const removeTokens = async () => {
     await SecureStore.deleteItemAsync('refreshToken');
     await SecureStore.deleteItemAsync('accessToken');
     await SecureStore.deleteItemAsync('accessTokenExpiration');
     navigation.replace('Profile');
-  }
+  };
 
   useEffect(() => {
     fetchData();
   }, []);
 
   useEffect(() => {
-    console.log(detailsResponse);
     setUser(detailsResponse);
   }, [detailsResponse]);
 
@@ -87,8 +104,7 @@ export default function MyProfile({
     if (reviewsResponse) {
       if (reviews !== undefined) {
         setReviews([...reviews, ...reviewsResponse.items]);
-      }
-      else {
+      } else {
         setReviews(reviewsResponse.items);
       }
       setCurrentPage(currentPage + 1);
@@ -99,9 +115,8 @@ export default function MyProfile({
   useEffect(() => {
     if (editRequestSuccessful === true) {
       setDescriptionModalVisible(false);
-      detailsRun(detailsReq, token)
-    }
-    else if (editRequestSuccessful === false) {
+      detailsRun(detailsReq, token);
+    } else if (editRequestSuccessful === false) {
       setDescriptionModalVisible(false);
     }
   }, [editRequestSuccessful]);
@@ -112,10 +127,13 @@ export default function MyProfile({
       setCurrentPage(0);
       setTotalCount(0);
       setReviews(undefined);
-      reviewsRun({
-        pageSize: defaultPageSize,
-        pageCount: 0,
-      }, token);
+      reviewsRun(
+        {
+          pageSize: defaultPageSize,
+          pageCount: 0,
+        },
+        token
+      );
     }
   }, [refreshReviews]);
 
@@ -123,10 +141,14 @@ export default function MyProfile({
     if (deleteMyAccountRequestSuccessful === true) {
       removeTokens();
     }
-  }, [deleteMyAccountRequestSuccessful])
+  }, [deleteMyAccountRequestSuccessful]);
 
   const onEndReached = () => {
-    if (currentPage * defaultPageSize >= totalCount || currentPage == 0 || areReviewsLoading) {
+    if (
+      currentPage * defaultPageSize >= totalCount ||
+      currentPage == 0 ||
+      areReviewsLoading
+    ) {
       return;
     }
     reviewsRun(reviewsReq, token);
@@ -134,11 +156,11 @@ export default function MyProfile({
 
   const onDescriptionEdited = (description: string) => {
     editMyDescriptionRun({ description }, token);
-  }
+  };
 
   const onAccountDeleted = () => {
     deleteMyAccountRun({}, token);
-  }
+  };
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -151,18 +173,17 @@ export default function MyProfile({
         photoUploadLink.run({ extension: extension }, token);
       }
     }
-  }
+  };
 
   useEffect(() => {
     if (photoUploadLink.response !== undefined) {
       uploadImage(photoUploadLink.response);
     }
-  }, [photoUploadLink.response])
+  }, [photoUploadLink.response]);
 
   const uploadImage = async (blobUrl: string) => {
     setIsImageLoading(true);
     const extension = selectedImage.split('.').pop();
-    console.log(selectedImage)
     const imageResponse = await fetch(selectedImage);
     const blob = await imageResponse.blob();
     const response = await fetch(blobUrl, {
@@ -171,25 +192,23 @@ export default function MyProfile({
       headers: {
         'Content-Type': `image/${extension}`,
         'x-ms-blob-type': 'BlockBlob',
-        'x-ms-blob-content-type': `image/${extension}`
+        'x-ms-blob-content-type': `image/${extension}`,
       },
     });
     if (response.ok) {
       setIsImageLoading(false);
-      console.log('Image uploaded successfully!');
       detailsRun(detailsReq, token);
     } else {
-      console.log(response);
     }
-  }
+  };
 
   return (
     <>
-      {user === undefined ?
+      {user === undefined ? (
         <View style={styles.container}>
           <Spinner status='warning' />
         </View>
-        :
+      ) : (
         <FlatList
           ListHeaderComponent={() => (
             <>
@@ -198,36 +217,42 @@ export default function MyProfile({
                   onClose={setDescriptionModalVisible}
                   isLoading={editMyDescriptionLoading}
                   onDescriptionEdited={onDescriptionEdited}
-                  description={user.description} />
+                  description={user.description}
+                />
               ) : null}
               {deleteAccountModalVisible ? (
                 <DeleteAccountConfirmation
                   onClose={setDeleteAccountModalVisible}
                   isLoading={deleteMyAccountLoading}
-                  onAccountDelete={onAccountDeleted} />
+                  onAccountDelete={onAccountDeleted}
+                />
               ) : null}
               <View style={styles.container}>
                 <View style={styles.profile}>
                   <View style={styles.upperContainer}>
                     <View style={styles.avatarContainer}>
-                      <TouchableOpacity style={styles.editImageIcon} onPress={pickImage}>
-                        <AntDesign name="edit" size={30} color="black" />
+                      <TouchableOpacity
+                        style={styles.editImageIcon}
+                        onPress={pickImage}
+                      >
+                        <AntDesign name='edit' size={30} color='black' />
                       </TouchableOpacity>
-                      {isImageLoading
-                        ? <Spinner status='warning' />
-                        : <Image
+                      {isImageLoading ? (
+                        <Spinner status='warning' />
+                      ) : (
+                        <Image
                           style={styles.profileAvatar}
                           source={
                             user.imageUrl == null
                               ? require('../assets/images/userEmpty.png')
                               : { uri: user.imageUrl }
                           }
-                        />}
-
+                        />
+                      )}
                     </View>
                     <View style={styles.settingsContainer}>
                       <Popover
-                        anchor={() =>
+                        anchor={() => (
                           <Pressable
                             onPress={() => setPopoverVisible(true)}
                             style={({ pressed }) => ({
@@ -239,36 +264,45 @@ export default function MyProfile({
                               size={30}
                               color={Colors.darkText}
                             />
-                          </Pressable>}
+                          </Pressable>
+                        )}
                         visible={popoverVisible}
                         placement='bottom end'
                         style={styles.popover}
-                        onBackdropPress={() => setPopoverVisible(false)}>
+                        onBackdropPress={() => setPopoverVisible(false)}
+                      >
                         <>
                           <View style={styles.signOutContainer}>
-                            <Pressable onPress={async () => {
-                              await SecureStore.deleteItemAsync('refreshToken');
-                              await SecureStore.deleteItemAsync('accessToken');
-                              await SecureStore.deleteItemAsync('accessTokenExpiration');
-                              navigation.replace('Profile');
-                            }}>
-                              <Text style={styles.signOutText}>
-                                Sign Out
-                              </Text>
+                            <Pressable
+                              onPress={async () => {
+                                await SecureStore.deleteItemAsync(
+                                  'refreshToken'
+                                );
+                                await SecureStore.deleteItemAsync(
+                                  'accessToken'
+                                );
+                                await SecureStore.deleteItemAsync(
+                                  'accessTokenExpiration'
+                                );
+                                navigation.replace('Profile');
+                              }}
+                            >
+                              <Text style={styles.signOutText}>Sign Out</Text>
                             </Pressable>
                           </View>
                           <View style={styles.deleteAccountContainer}>
-                            <Pressable onPress={() => {
-                              setPopoverVisible(false);
-                              setDeleteAccountModalVisible(true)
-                            }}>
+                            <Pressable
+                              onPress={() => {
+                                setPopoverVisible(false);
+                                setDeleteAccountModalVisible(true);
+                              }}
+                            >
                               <Text style={styles.signOutText}>
                                 Delete my account
                               </Text>
                             </Pressable>
                           </View>
                         </>
-
                       </Popover>
                     </View>
                   </View>
@@ -291,9 +325,19 @@ export default function MyProfile({
           data={reviews}
           renderItem={(review) => (
             <View style={styles.card}>
-              {review.item.dishReview !== null
-                ? <MyProfileDishCard dish={review.item.dishReview} navigation={navigation} setRefreshReviews={setRefreshReviews} />
-                : <MyProfileRestaurantCard restaurant={review.item.restaurantReview!} navigation={navigation} setRefreshReviews={setRefreshReviews} />}
+              {review.item.dishReview !== null ? (
+                <MyProfileDishCard
+                  dish={review.item.dishReview}
+                  navigation={navigation}
+                  setRefreshReviews={setRefreshReviews}
+                />
+              ) : (
+                <MyProfileRestaurantCard
+                  restaurant={review.item.restaurantReview!}
+                  navigation={navigation}
+                  setRefreshReviews={setRefreshReviews}
+                />
+              )}
             </View>
           )}
           keyExtractor={(item, index) => {
@@ -301,8 +345,8 @@ export default function MyProfile({
           }}
           showsVerticalScrollIndicator={false}
           onEndReached={onEndReached}
-        />}
-
+        />
+      )}
     </>
   );
 }
@@ -410,13 +454,13 @@ const styles = StyleSheet.create({
   },
   signOutText: {
     fontWeight: 'bold',
-    color: 'white'
+    color: 'white',
   },
   card: {
     width: '85 %',
     alignSelf: 'center',
   },
   editImageIcon: {
-    marginBottom: '2 %'
-  }
+    marginBottom: '2 %',
+  },
 });

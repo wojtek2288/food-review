@@ -41,7 +41,6 @@ export const useSignIn = () => {
                 }
             }
         }
-        console.log(params);
         try {
             const res = await axios.post(
                 authUrl,
