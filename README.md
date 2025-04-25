@@ -1,4 +1,4 @@
-# Development and implementation of a multi-layered system to rate meals and restaurants
+# Multi-layered system to rate meals and restaurants
 
 This repository contains the full implementation and documentation of the bachelor's thesis prepared as part of the Computer Science and Information Systems bachelor's program at Warsaw University of Technology.
 
