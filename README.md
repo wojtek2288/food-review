@@ -1,7 +1,7 @@
-# Uruchomienie
-Aby uruchomić backend oraz aplikację webową, należy użyć docker-compose:
+# Running the Application  
+To run the backend and the web application, use docker-compose:  
 `docker compose up`
 
-Aplikacje można uruchamiać niezależnie:
-- backend - `docker compose up api`
-- aplikacja webowa - `docker compose up webapp`
+You can also run the applications independently:  
+- backend – `docker compose up api`  
+- web application – `docker compose up webapp`
