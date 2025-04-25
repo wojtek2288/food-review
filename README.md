@@ -1,4 +1,4 @@
-# Resume analysis using nachine learning to optimize recruitment processes
+# Development and implementation of a multi-layered system to rate meals and restaurants
 
 This repository contains the full implementation and documentation of the bachelor's thesis prepared as part of the Computer Science and Information Systems bachelor's program at Warsaw University of Technology.
 
@@ -27,3 +27,8 @@ You can also run the applications independently:
 ![szukajka](https://github.com/user-attachments/assets/bc875a84-9d6e-42e8-9abc-5a027490f9b1)
 
 ## Admin UI
+
+![detale-dania](https://github.com/user-attachments/assets/b5772cfb-2ea4-4fe8-bc59-5a932bad17a8)
+![detale-restauracji](https://github.com/user-attachments/assets/24a41feb-8c1c-46cb-bc4d-57f7abae06e7)
+![login](https://github.com/user-attachments/assets/108fc517-ce68-42ee-aabe-9a1e62df0895)
+![restauracje](https://github.com/user-attachments/assets/0382e12c-26e6-4ef3-9840-53d676b125fa)
