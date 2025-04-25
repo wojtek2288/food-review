@@ -1,6 +1,7 @@
-# Uruchomienie
-1. Instalacja node -  https://nodejs.org/
-2. Instalacja expo-cli:
-``npm install -g expo-cli``
-3. Przejście do folderu /src
-4. ``npm start``
+# Getting Started  
+
+1. Install Node - https://nodejs.org/  
+2. Install expo-cli:  
+``npm install -g expo-cli``  
+3. Navigate to the `/src` folder  
+4. Run ``npm start``
